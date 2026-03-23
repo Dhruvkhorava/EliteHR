@@ -35,6 +35,11 @@ class RoleAndPermissionSeeder extends Seeder
             
             // Payroll
             'payroll.manage',
+            
+            // Recruitment
+            'view recruitment',
+            'manage jobs',
+            'manage candidates',
         ];
 
         foreach ($permissions as $permission) {
@@ -42,6 +47,9 @@ class RoleAndPermissionSeeder extends Seeder
         }
 
         // Create roles and assign permissions
+        $superAdminRole = Role::updateOrCreate(['name' => 'super_admin']);
+        $superAdminRole->syncPermissions(Permission::all());
+
         $adminRole = Role::updateOrCreate(['name' => 'admin']);
         $adminRole->syncPermissions(Permission::all());
 
@@ -55,6 +63,9 @@ class RoleAndPermissionSeeder extends Seeder
             'leave.apply',
             'leave.view_all',
             'payroll.manage',
+            'view recruitment',
+            'manage jobs',
+            'manage candidates',
         ]);
 
         $employeeRole = Role::updateOrCreate(['name' => 'employee']);
@@ -64,6 +75,15 @@ class RoleAndPermissionSeeder extends Seeder
         ]);
 
         // Create/Update default users
+        $superAdmin = User::updateOrCreate(
+            ['email' => 'superadmin@elitehr.com'],
+            [
+                'name' => 'Super Admin User',
+                'password' => Hash::make('password'),
+            ]
+        );
+        $superAdmin->assignRole($superAdminRole);
+
         $admin = User::updateOrCreate(
             ['email' => 'admin@elitehr.com'],
             [

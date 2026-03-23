@@ -71,37 +71,6 @@
                                     </td>
                                 </tr>
 
-                                <!-- Feedback Modal -->
-                                <div class="modal fade" id="feedbackModal{{ $interview->id }}" tabindex="-1" role="dialog" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content" style="border-radius: 15px;">
-                                            <div class="modal-header border-0 pb-0">
-                                                <h5 class="modal-title font-weight-bold">Interview Feedback</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <form action="{{ route('recruitment.interviews.update', $interview->id) }}" method="POST">
-                                                @csrf @method('PUT')
-                                                <div class="modal-body p-4">
-                                                    <div class="mb-4">
-                                                        <label class="form-label font-weight-bold">Status</label>
-                                                        <select name="status" class="form-control" required>
-                                                            <option value="Scheduled" {{ $interview->status == 'Scheduled' ? 'selected' : '' }}>Scheduled</option>
-                                                            <option value="Completed" {{ $interview->status == 'Completed' ? 'selected' : '' }}>Completed</option>
-                                                            <option value="Cancelled" {{ $interview->status == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="mb-4">
-                                                        <label class="form-label font-weight-bold">Notes / Feedback</label>
-                                                        <textarea name="feedback" rows="4" class="form-control" placeholder="Add interview feedback here...">{{ $interview->feedback }}</textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer border-0 pt-0">
-                                                    <button type="submit" class="btn btn-primary w-100">Save Feedback</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
                                 @endforeach
                             </tbody>
                         </table>
@@ -110,6 +79,40 @@
             </div>
         </div>
     </div>
+
+    <!-- Feedback Modals (Moved outside table) -->
+    @foreach($interviews as $interview)
+    <div class="modal fade" id="feedbackModal{{ $interview->id }}" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" style="border-radius: 15px;">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title font-weight-bold">Interview Feedback</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('recruitment.interviews.update', $interview->id) }}" method="POST">
+                    @csrf @method('PUT')
+                    <div class="modal-body p-4">
+                        <div class="mb-4">
+                            <label class="form-label font-weight-bold">Status</label>
+                            <select name="status" class="form-control" required>
+                                <option value="Scheduled" {{ $interview->status == 'Scheduled' ? 'selected' : '' }}>Scheduled</option>
+                                <option value="Completed" {{ $interview->status == 'Completed' ? 'selected' : '' }}>Completed</option>
+                                <option value="Cancelled" {{ $interview->status == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label font-weight-bold">Notes / Feedback</label>
+                            <textarea name="feedback" rows="4" class="form-control" placeholder="Add interview feedback here...">{{ $interview->feedback }}</textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="submit" class="btn btn-primary w-100">Save Feedback</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @endforeach
 
     <!-- Schedule Modal -->
     <div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-hidden="true">

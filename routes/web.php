@@ -138,11 +138,18 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
                 Route::resource('interviews', \App\Http\Controllers\InterviewController::class);
             });
 
-            // Advanced User Management (Strictly Admin)
-            Route::middleware(['role:admin'])->group(function() {
+        // Advanced User Management (Strictly Admin)
+            Route::middleware(['role:super_admin'])->group(function() {
                 Route::resource('admins', AdminManageController::class);
+            });
+            Route::middleware(['role:super_admin|admin'])->group(function() {
                 Route::resource('hrs', HrManageController::class);
             });
+
+            // User Profile
+            Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
+            Route::post('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+            Route::post('/profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password.update');
         });
     });
 /**

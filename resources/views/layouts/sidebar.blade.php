@@ -52,6 +52,15 @@
                 </a>
             </li>
 
+            <li class="menu {{ Request::routeIs('profile.index') ? 'active' : '' }}">
+                <a href="{{ route('profile.index') }}" aria-expanded="false" class="dropdown-toggle">
+                    <div class="">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        <span>Profile</span>
+                    </div>
+                </a>
+            </li>
+
             @can('user.view')
             <li class="menu {{ $catName == 'users' ? 'active' : '' }}">
                 <a href="#users" data-bs-toggle="collapse" aria-expanded="{{ $catName == 'users' ? 'true' : 'false' }}" class="dropdown-toggle">
@@ -64,14 +73,16 @@
                     </div>
                 </a>
                 <ul class="collapse submenu list-unstyled {{ $catName == 'users' ? 'show' : '' }}" id="users" data-bs-parent="#accordionExample">
-                    @role('admin')
+                    @role('super_admin')
                     <li>
                         <a href="{{ route('admins.index') }}"> Admin </a>
                     </li>
+                    @endrole
+                    @hasanyrole('super_admin|admin')
                     <li>
                         <a href="{{ route('hrs.index') }}"> HR </a>
                     </li>
-                    @endrole
+                    @endhasanyrole
                     <li>
                         <a href="{{ route('employees.index') }}"> Employee </a>
                     </li>

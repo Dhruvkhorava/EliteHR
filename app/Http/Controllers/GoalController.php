@@ -14,7 +14,9 @@ class GoalController extends Controller
         $user = Auth::user();
         if ($user->hasRole('admin') || $user->hasRole('hr')) {
             $goals = Goal::with('user')->orderBy('deadline', 'asc')->get();
-            $employees = User::all();
+            $employees = auth()->user()->hasRole('super_admin') 
+                ? User::all() 
+                : User::whereDoesntHave('roles', function($q) { $q->where('name', 'super_admin'); })->get();
         } else {
             $goals = Goal::where('user_id', $user->id)->orderBy('deadline', 'asc')->get();
             $employees = collect([$user]);

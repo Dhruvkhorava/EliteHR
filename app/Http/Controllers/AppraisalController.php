@@ -16,7 +16,9 @@ class AppraisalController extends Controller
         $user = Auth::user();
         if ($user->hasRole('admin') || $user->hasRole('hr')) {
             $appraisals = Appraisal::with('user')->orderBy('effective_date', 'desc')->get();
-            $employees = User::with('salary')->get();
+            $employees = auth()->user()->hasRole('super_admin') 
+                ? User::with('salary')->get() 
+                : User::with('salary')->whereDoesntHave('roles', function($q) { $q->where('name', 'super_admin'); })->get();
         } else {
             $appraisals = Appraisal::where('user_id', $user->id)->orderBy('effective_date', 'desc')->get();
             $employees = collect([$user->load('salary')]);

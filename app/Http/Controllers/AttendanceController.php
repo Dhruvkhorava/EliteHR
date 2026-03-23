@@ -191,7 +191,9 @@ class AttendanceController extends Controller
     public function daily(Request $request)
     {
         $date = $request->input('date', Carbon::today()->toDateString());
-        $users = User::all();
+        $users = auth()->user()->hasRole('super_admin') 
+            ? User::all() 
+            : User::whereDoesntHave('roles', function($q) { $q->where('name', 'super_admin'); })->get();
         $attendances = Attendance::where('date', $date)->get()->keyBy('user_id');
 
         $data = $users->map(function ($user) use ($attendances) {
@@ -217,7 +219,9 @@ class AttendanceController extends Controller
         $month = $request->input('month', Carbon::now()->month);
         $year = $request->input('year', Carbon::now()->year);
 
-        $users = User::all();
+        $users = auth()->user()->hasRole('super_admin') 
+            ? User::all() 
+            : User::whereDoesntHave('roles', function($q) { $q->where('name', 'super_admin'); })->get();
         $summary = [];
 
         foreach ($users as $user) {

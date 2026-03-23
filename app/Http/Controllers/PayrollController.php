@@ -28,7 +28,9 @@ class PayrollController extends Controller
 
     public function setup()
     {
-        $users = User::all();
+        $users = auth()->user()->hasRole('super_admin') 
+            ? User::all() 
+            : User::whereDoesntHave('roles', function($q) { $q->where('name', 'super_admin'); })->get();
         $salaries = Salary::with('user')->get();
         return view('payroll.setup', [
             'users' => $users,
@@ -83,7 +85,9 @@ class PayrollController extends Controller
         $month = $request->month;
         $year = $request->year;
 
-        $users = User::with('salary')->get();
+        $users = auth()->user()->hasRole('super_admin') 
+            ? User::with('salary')->get() 
+            : User::with('salary')->whereDoesntHave('roles', function($q) { $q->where('name', 'super_admin'); })->get();
         $workingDays = Carbon::create($year, $month)->daysInMonth;
 
         foreach ($users as $user) {

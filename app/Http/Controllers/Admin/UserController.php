@@ -20,6 +20,16 @@ class UserController extends Controller
         $roleFilter = $request->query('role');
         $query = User::with('roles');
 
+        if (auth()->user()->hasRole('admin')) {
+            $query->whereHas('roles', function ($q) {
+                $q->whereIn('name', ['hr', 'employee']);
+            });
+        } elseif (auth()->user()->hasRole('hr')) {
+            $query->whereHas('roles', function ($q) {
+                $q->where('name', 'employee');
+            });
+        }
+
         if ($roleFilter) {
             $query->whereHas('roles', function ($q) use ($roleFilter) {
                 $q->where('name', $roleFilter);
@@ -44,7 +54,13 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::all();
+        $roleQuery = Role::query();
+        if (auth()->user()->hasRole('admin')) {
+            $roleQuery->whereIn('name', ['hr', 'employee']);
+        } elseif (auth()->user()->hasRole('hr')) {
+            $roleQuery->where('name', 'employee');
+        }
+        $roles = $roleQuery->get();
         return view('admin.users.create', [
             'roles' => $roles,
             'catName' => 'users',
@@ -91,7 +107,14 @@ class UserController extends Controller
     public function edit(string $id)
     {
         $user = User::findOrFail($id);
-        $roles = Role::all();
+        
+        $roleQuery = Role::query();
+        if (auth()->user()->hasRole('admin')) {
+            $roleQuery->whereIn('name', ['hr', 'employee']);
+        } elseif (auth()->user()->hasRole('hr')) {
+            $roleQuery->where('name', 'employee');
+        }
+        $roles = $roleQuery->get();
         return view('admin.users.edit', [
             'user' => $user,
             'roles' => $roles,
