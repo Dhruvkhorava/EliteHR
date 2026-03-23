@@ -1,0 +1,15 @@
+body:not(.dark) .logo-light {
+    display: block;
+}
+
+body:not(.dark) .logo-dark {
+    display: none;
+}
+
+body.dark .logo-light {
+    display: none;
+}
+
+body.dark .logo-dark {
+    display: block;
+}

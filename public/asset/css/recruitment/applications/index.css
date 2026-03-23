@@ -1,0 +1,48 @@
+.kanban-container {
+    display: flex;
+    overflow-x: auto;
+    padding: 20px 0;
+    gap: 20px;
+    min-height: calc(100vh - 250px);
+}
+.kanban-column {
+    flex: 0 0 300px;
+    background: #f1f2f3;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+.dark .kanban-column { background: #1b2e4b; }
+
+.kanban-header {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.kanban-title { font-weight: 700; color: #3b3f5c; }
+.dark .kanban-title { color: #bfc9d4; }
+
+.kanban-card {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+.dark .kanban-card { background: #0e1726; border-color: #1b2e4b; }
+
+.kanban-card:hover { border-color: #4361ee; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+
+.stage-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 10px;
+}

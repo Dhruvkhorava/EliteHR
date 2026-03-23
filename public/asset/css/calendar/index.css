@@ -1,0 +1,6 @@
+.fc-event.bg-primary { background-color: #4361ee !important; border-color: #4361ee !important; color: #fff !important; }
+.fc-event.bg-success { background-color: #1abc9c !important; border-color: #1abc9c !important; color: #fff !important; }
+.fc-event.bg-danger { background-color: #e7515a !important; border-color: #e7515a !important; color: #fff !important; }
+.fc-event.bg-warning { background-color: #e2a03f !important; border-color: #e2a03f !important; color: #fff !important; }
+.fc-event { cursor: pointer; padding: 2px 5px; }
+.fc-header-toolbar { margin-bottom: 2rem !important; }

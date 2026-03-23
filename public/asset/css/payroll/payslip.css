@@ -1,0 +1,22 @@
+.payslip-container {
+    background: #fff;
+    padding: 50px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    color: #333;
+    font-family: 'Inter', sans-serif;
+} @media (prefers-color-scheme: dark) { .payslip-container { background: #ffffff; color: #bfc9d4; } }
+.payslip-header { border-bottom: 2px solid #f1f2f3; padding-bottom: 20px; margin-bottom: 30px; }
+.company-logo { font-size: 24px; font-weight: 800; color: #4361ee; letter-spacing: 1px; }
+.payslip-title { font-size: 20px; font-weight: 700; text-transform: uppercase; color: #888ea8; }
+.employee-info h6 { font-weight: 700; margin-bottom: 5px; }
+.employee-info p { margin-bottom: 2px; font-size: 13px; }
+.table-payslip th { background: #f8f9fa; border: none; font-weight: 700; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
+@media (prefers-color-scheme: dark) { .table-payslip th { background: #0e1726; color: #888ea8; } }
+.table-payslip td { border-top: 1px solid #f1f2f3; padding: 12px; }
+@media (prefers-color-scheme: dark) { .table-payslip td { border-top: 1px solid #191e3a; } }
+.total-row { background: #f8f9fa; font-weight: 700; }
+@media (prefers-color-scheme: dark) { .total-row { background: #0e1726; } }
+.net-salary-box { background: #4361ee; color: #fff; padding: 20px; border-radius: 10px; margin-top: 30px; }
+.net-salary-label { font-size: 14px; opacity: 0.8; }
+.net-salary-amount { font-size: 28px; font-weight: 800; }
