@@ -5,16 +5,19 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>
         @isset($title)
             @if ($title !== '')
-                {{ $title }} | Multipurpose Bootstrap Dashboard Template
+                {{ $title }} | {{ get_setting('site_name', 'EliteHR') }}
             @else
-                CORK Admin | Multipurpose Bootstrap Dashboard Template
+                {{ get_setting('site_name', 'EliteHR') }} | Intelligent HR Management System
             @endif
+        @else
+            {{ get_setting('site_name', 'EliteHR') }} | Intelligent HR Management System
         @endisset
     </title>
-    <link rel="icon" type="image/x-icon" href="{{ Vite::asset('resources/images/favicon.ico') }}" />
+    <link rel="icon" type="image/x-icon" href="{{ get_setting('site_favicon') ? asset('storage/' . get_setting('site_favicon')) : asset('asset/images/logo2.png') }}" />
     @vite(['resources/scss/layouts/vertical-light-menu/light/loader.scss'])
     @vite(['resources/scss/layouts/vertical-light-menu/dark/loader.scss'])
     @vite(['resources/layouts/vertical-light-menu/loader.js'])
@@ -152,6 +155,8 @@
 
         </div>
         <!-- END MAIN CONTAINER -->
+
+        @include('layouts.search-overlay')
 
     @endif
 

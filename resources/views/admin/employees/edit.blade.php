@@ -24,6 +24,18 @@
                                 @enderror
                             </div>
                             <div class="col">
+                                <label for="designation">Designation</label>
+                                <input type="text" name="designation"
+                                    class="form-control @error('designation') is-invalid @enderror" placeholder="e.g. Sr. Developer, Jr. Designer"
+                                    value="{{ old('designation', $user->designation) }}">
+                                @error('designation')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col">
                                 <label for="email">Email Address</label>
                                 <input type="email" name="email"
                                     class="form-control @error('email') is-invalid @enderror" placeholder="Enter Email"
@@ -31,6 +43,13 @@
                                 @error('email')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+                            </div>
+                            <div class="col">
+                                <label for="status">Status</label>
+                                <select name="status" class="form-control" required>
+                                    <option value="1" {{ $user->status ? 'selected' : '' }}>Active</option>
+                                    <option value="0" {{ !$user->status ? 'selected' : '' }}>Inactive</option>
+                                </select>
                             </div>
                         </div>
 
@@ -63,13 +82,6 @@
                                 @error('image')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                            </div>
-                            <div class="col">
-                                <label for="status">Status</label>
-                                <select name="status" class="form-control" required>
-                                    <option value="1" {{ $user->status ? 'selected' : '' }}>Active</option>
-                                    <option value="0" {{ !$user->status ? 'selected' : '' }}>Inactive</option>
-                                </select>
                             </div>
                         </div>
 

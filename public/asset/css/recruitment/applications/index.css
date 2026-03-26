@@ -1,48 +1,145 @@
 .kanban-container {
     display: flex;
+    gap: 1.25rem;
     overflow-x: auto;
-    padding: 20px 0;
-    gap: 20px;
-    min-height: calc(100vh - 250px);
+    padding: 10px 5px 30px;
+    align-items: flex-start;
+    min-height: calc(100vh - 220px);
 }
+
 .kanban-column {
-    flex: 0 0 300px;
-    background: #f1f2f3;
-    border-radius: 12px;
+    background: rgba(246, 247, 251, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    min-width: 320px;
+    max-width: 320px;
+    padding: 20px 15px;
     display: flex;
     flex-direction: column;
-    padding: 15px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    max-height: 100%;
+    border: 1px solid rgba(224, 230, 237, 0.8);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
 }
-.dark .kanban-column { background: #1b2e4b; }
 
 .kanban-header {
+    padding-bottom: 15px;
     margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    border-bottom: 1px solid rgba(224, 230, 237, 0.5);
 }
-.kanban-title { font-weight: 700; color: #3b3f5c; }
-.dark .kanban-title { color: #bfc9d4; }
+
+.stage-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.kanban-title {
+    font-weight: 800;
+    color: #1e293b;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+}
+
+.kanban-cards-wrapper {
+    min-height: 200px;
+    flex-grow: 1;
+    padding: 2px;
+}
 
 .kanban-card {
-    background: white;
-    border-radius: 10px;
-    padding: 15px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 18px;
     margin-bottom: 15px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     border: 1px solid transparent;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: grab;
+    position: relative;
+    overflow: hidden;
 }
-.dark .kanban-card { background: #0e1726; border-color: #1b2e4b; }
 
-.kanban-card:hover { border-color: #4361ee; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+.kanban-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: transparent;
+}
 
-.stage-badge {
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 10px;
-    text-transform: uppercase;
+.kanban-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transform: translateY(-3px);
+    border-color: rgba(67, 97, 238, 0.1);
+}
+
+.kanban-card:active {
+    cursor: grabbing;
+    transform: scale(1.02);
+}
+
+/* Status Specific Accent Colors */
+[data-stage="Applied"] .kanban-card::before { background: #e2a03f; }
+[data-stage="Screening"] .kanban-card::before { background: #2196f3; }
+[data-stage="Interview Scheduled"] .kanban-card::before { background: #3b3f5c; }
+[data-stage="Selected"] .kanban-card::before { background: #00abff; }
+[data-stage="Rejected"] .kanban-card::before { background: #e7515a; }
+[data-stage="Hired"] .kanban-card::before { background: #4361ee; }
+
+.candidate-name {
+    color: #1e293b;
+    font-size: 0.95rem;
+    letter-spacing: -0.01em;
+}
+
+.job-badge {
+    background: rgba(67, 97, 238, 0.08);
+    color: #4361ee;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.7rem;
     font-weight: 700;
-    margin-bottom: 10px;
+    display: inline-block;
+}
+
+.card-footer-info {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #64748b;
+}
+
+/* Dragula Mirror Styling */
+.gu-mirror {
+    position: fixed !important;
+    margin: 0 !important;
+    z-index: 9999 !important;
+    opacity: 0.95;
+    transform: rotate(2deg);
+    cursor: grabbing;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+    border: 1px solid rgba(67, 97, 238, 0.2) !important;
+}
+
+.gu-transit {
+    opacity: 0.15;
+    background-color: #e2e8f0 !important;
+    border: 2px dashed #cbd5e1 !important;
+    box-shadow: none !important;
+}
+
+/* Scrollbar */
+.scroll-container::-webkit-scrollbar {
+    height: 10px;
+}
+.scroll-container::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 20px;
+    border: 3px solid #f8fafc;
+}
+.scroll-container::-webkit-scrollbar-track {
+    background: transparent;
 }

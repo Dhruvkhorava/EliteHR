@@ -24,6 +24,7 @@
                         <thead>
                             <tr>
                                 <th>Employee</th>
+                                <th>Shift</th>
                                 <th>Check In</th>
                                 <th>Check Out</th>
                                 <th>Working Hours</th>
@@ -48,9 +49,23 @@
                                             <span>{{ $item['user']->name }}</span>
                                         </div>
                                     </td>
-                                    <td>{{ $item['attendance'] && $item['attendance']->check_in ? \Carbon\Carbon::parse($item['attendance']->check_in)->setTimezone('Asia/Kolkata')->format('h:i A') : '-' }}
+                                    <td>
+                                        <form action="{{ route('attendance.assign-shift') }}" method="POST" class="d-flex">
+                                            @csrf
+                                            <input type="hidden" name="user_id" value="{{ $item['user']->id }}">
+                                            <select name="shift_id" class="form-select form-select-sm" onchange="this.form.submit()">
+                                                <option value="">No Shift</option>
+                                                @foreach ($shifts as $shift)
+                                                    <option value="{{ $shift->id }}" {{ $item['user']->shift_id == $shift->id ? 'selected' : '' }}>
+                                                        {{ $shift->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </form>
                                     </td>
-                                    <td>{{ $item['attendance'] && $item['attendance']->check_out ? \Carbon\Carbon::parse($item['attendance']->check_out)->setTimezone('Asia/Kolkata')->format('h:i A') : '-' }}
+                                    <td>{{ $item['attendance'] && $item['attendance']->check_in ? \Carbon\Carbon::parse($item['attendance']->check_in)->format('h:i A') : '-' }}
+                                    </td>
+                                    <td>{{ $item['attendance'] && $item['attendance']->check_out ? \Carbon\Carbon::parse($item['attendance']->check_out)->format('h:i A') : '-' }}
                                     </td>
                                     <td>{{ $item['attendance'] ? $item['attendance']->working_hours : '-' }}</td>
                                     <td>

@@ -9,7 +9,7 @@
     <div class="col-xl-9 col-lg-10 col-md-12 layout-spacing">
         <div class="widget-content">
             <div class="d-flex justify-content-end mb-4 no-print">
-                <button onclick="window.print()" class="btn btn-secondary me-2"><i class="feather-printer"></i> Print</button>
+                <a href="{{ route('payroll.pdf', $payroll->id) }}" class="btn btn-primary me-2"><i class="feather-download"></i> Download PDF</a>
                 <a href="{{ route('payroll.index') }}" class="btn btn-outline-primary shadow-none">Back to History</a>
             </div>
 

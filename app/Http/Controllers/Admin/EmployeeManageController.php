@@ -28,7 +28,8 @@ class EmployeeManageController extends Controller
             if ($search = $request->input('search.value')) {
                 $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
-                        ->orWhere('email', 'like', "%{$search}%");
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('designation', 'like', "%{$search}%");
                 });
             }
 
@@ -59,6 +60,7 @@ class EmployeeManageController extends Controller
 
                 $data[] = [
                     'name' => $media,
+                    'designation' => $user->designation ?? '-',
                     'role' => '<p class="mb-0">' . ucfirst($this->role) . '</p><span class="text-success">Management</span>',
                     'status' => '<div class="text-center">' . $statusBadge . '</div>',
                     'action' => '<div class="text-center">' . $actions . '</div>',
@@ -102,7 +104,8 @@ class EmployeeManageController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Password::defaults()],
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'status' => 'required|in:0,1'
+            'status' => 'required|in:0,1',
+            'designation' => 'nullable|string|max:255',
         ]);
 
         $userData = [
@@ -110,6 +113,7 @@ class EmployeeManageController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'status' => $request->status,
+            'designation' => $request->designation,
         ];
 
         if ($request->hasFile('image')) {
@@ -146,13 +150,15 @@ class EmployeeManageController extends Controller
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => ['nullable', 'confirmed', Password::defaults()],
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'status' => 'required|in:0,1'
+            'status' => 'required|in:0,1',
+            'designation' => 'nullable|string|max:255',
         ]);
 
         $userData = [
             'name' => $request->name,
             'email' => $request->email,
             'status' => $request->status,
+            'designation' => $request->designation,
         ];
 
         if ($request->filled('password')) {

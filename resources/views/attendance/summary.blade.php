@@ -26,7 +26,7 @@
                                 </option>
                             @endforeach
                         </select>
-                        <button type="submit" class="btn btn-primary">Filter</button>
+                        <button type="submit" class="btn btn-primary" style="height: 48px;width: 245px;">Filter</button>
                     </form>
                 </div>
                 <hr>

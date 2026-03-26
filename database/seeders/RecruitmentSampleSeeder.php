@@ -114,7 +114,7 @@ class RecruitmentSampleSeeder extends Seeder
         ]);
 
         // 4. Create Interviews
-        $admin = User::role('Admin')->first();
+        $admin = User::role('admin')->first();
         if ($admin) {
             Interview::create([
                 'application_id' => $app1->id,

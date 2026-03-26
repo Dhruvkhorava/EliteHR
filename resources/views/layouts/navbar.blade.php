@@ -5,12 +5,17 @@
             <li class="nav-item theme-logo">
                 <a href="{{ getRouterValue() }}dashboard/analytics">
                     <img src="{{ asset('asset/images/logo1.png') }}" class="logo-light navbar-logo-g" alt="logo">
-                    <img src="{{ asset('asset/images/logo.png') }}" class="logo-dark navbar-logo-g" alt="logo">
+                    <img src="{{ asset('asset/images/logo1.png') }}" class="logo-dark navbar-logo-g" alt="logo">
                 </a>
             </li>
         </ul>
 
         <ul class="navbar-item flex-row ms-lg-auto ms-0 action-area">
+            <li class="nav-item search-animated">
+                <a href="javascript:void(0);" class="nav-link search-trigger" id="globalSearchTrigger">
+                    <span class="badge badge-secondary ms-2 d-none d-sm-inline-block" style="font-size: 0.65rem; padding: 2px 5px;">Ctrl + K</span>
+                </a>
+            </li>
             <li class="nav-item theme-toggle-item">
                 <a href="javascript:void(0);" class="nav-link theme-toggle">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"

@@ -14,8 +14,32 @@ use App\Http\Controllers\Auth\AuthController;
  *          Redirect / Auth
  * =======================
  */
-Route::get('/', [AuthController::class , 'showSignIn'])->name('login');
-Route::post('/', [AuthController::class , 'login']);
+/**
+ * =======================
+ *          Frontend
+ * =======================
+ */
+use App\Http\Controllers\FrontendController;
+
+Route::get('/', [FrontendController::class, 'index'])->name('front.index');
+Route::get('/about', [FrontendController::class, 'about'])->name('front.about');
+Route::get('/service', [FrontendController::class, 'service'])->name('front.service');
+Route::get('/contact', [FrontendController::class, 'contact'])->name('front.contact');
+Route::get('/price', [FrontendController::class, 'price'])->name('front.price');
+Route::get('/feature', [FrontendController::class, 'feature'])->name('front.feature');
+Route::get('/team', [FrontendController::class, 'team'])->name('front.team');
+Route::get('/testimonial', [FrontendController::class, 'testimonial'])->name('front.testimonial');
+Route::get('/quote', [FrontendController::class, 'quote'])->name('front.quote');
+Route::get('/blog', [FrontendController::class, 'blog'])->name('front.blog');
+Route::get('/blog/detail', [FrontendController::class, 'detail'])->name('front.detail');
+
+/**
+ * =======================
+ *          Redirect / Auth
+ * =======================
+ */
+Route::get('/login', [AuthController::class , 'showSignIn'])->name('login');
+Route::post('/login', [AuthController::class , 'login']);
 Route::post('/logout', [AuthController::class , 'logout'])->name('logout');
 
 use App\Http\Controllers\Admin\UserController;
@@ -27,6 +51,9 @@ use App\Http\Controllers\GoalController;
 use App\Http\Controllers\PerformanceController;
 use App\Http\Controllers\AppraisalController;
 use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\ShiftController;
+use App\Http\Controllers\MailController;
 
 /**
  * =======================
@@ -36,35 +63,14 @@ use App\Http\Controllers\LeaveController;
 Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
 
     // General Dashboard (Accessible by all authenticated users)
-    Route::get('/analytics', function () {
-            return view('admin/dashboard/analytics',
-            [
-            'catName' => 'dashboard',
-            'title' => 'EliteHR Analytics',
-            "breadcrumbs" => ["Dashboard", "Analytics"],
-            'scrollspy' => 0,
-            'simplePage' => 0
-            ]
-            );
-        }
-        )->name('analytics');
-
-        Route::get('/sales', function () {
-            return view('admin/dashboard/sales',
-            [
-            'catName' => 'dashboard',
-            'title' => 'Sales Admin',
-            "breadcrumbs" => ["Dashboard", "Sales"],
-            'scrollspy' => 0,
-            'simplePage' => 0,
-            ]
-            );
-        }
-        )->name('sales');
-
+    Route::get('/analytics', [\App\Http\Controllers\DashboardController::class, 'analytics'])->name('analytics');
         // Calendar
         Route::get('/calendar', [\App\Http\Controllers\CalendarController::class, 'index'])->name('calendar.index');
         Route::get('/calendar/events', [\App\Http\Controllers\CalendarController::class, 'events'])->name('calendar.events');
+        Route::post('/calendar/events', [\App\Http\Controllers\CalendarController::class, 'store'])->name('calendar.events.store');
+        Route::put('/calendar/events/{id}', [\App\Http\Controllers\CalendarController::class, 'update'])->name('calendar.events.update');
+        Route::delete('/calendar/events/{id}', [\App\Http\Controllers\CalendarController::class, 'destroy'])->name('calendar.events.destroy');
+        Route::get('/calendar/google-events', [\App\Http\Controllers\CalendarController::class, 'getGoogleCalendarEvents'])->name('calendar.google-events');
 
         // Attendance - My Attendance (Accessible by all authenticated users)
         Route::get('/attendance', [AttendanceController::class , 'index'])->name('attendance.index');
@@ -75,6 +81,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
 
         // Leave - My Leaves (Accessible by all authenticated users)
         Route::get('/leaves', [LeaveController::class, 'index'])->name('leaves.index');
+        Route::get('/api/unified-search', [\App\Http\Controllers\SearchController::class, 'unifiedSearch'])->name('api.unified-search');
         Route::get('/leaves/apply', [LeaveController::class, 'create'])->name('leaves.create');
         Route::post('/leaves', [LeaveController::class, 'store'])->name('leaves.store');
 
@@ -103,6 +110,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
             Route::middleware(['permission:attendance.manage'])->group(function() {
                 Route::get('/attendance/daily', [AttendanceController::class , 'daily'])->name('attendance.daily');
                 Route::get('/attendance/summary', [AttendanceController::class , 'summary'])->name('attendance.summary');
+                Route::post('/attendance/assign-shift', [AttendanceController::class , 'assignShift'])->name('attendance.assign-shift');
+                Route::resource('shifts', ShiftController::class);
             });
 
             // Leave Management (View History)
@@ -126,6 +135,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
                 Route::get('/generate', [\App\Http\Controllers\PayrollController::class, 'generate'])->name('payroll.generate');
                 Route::post('/generate', [\App\Http\Controllers\PayrollController::class, 'storeGenerate'])->name('payroll.store-generate');
                 Route::get('/{id}', [\App\Http\Controllers\PayrollController::class, 'show'])->name('payroll.show');
+                Route::get('/{id}/pdf', [\App\Http\Controllers\PayrollController::class, 'downloadPdf'])->name('payroll.pdf');
             });
 
             // Recruitment Management
@@ -138,11 +148,11 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
                 Route::resource('interviews', \App\Http\Controllers\InterviewController::class);
             });
 
-        // Advanced User Management (Strictly Admin)
-            Route::middleware(['role:super_admin'])->group(function() {
+        // Advanced User Management (Strictly Admin/HR via permissions)
+            Route::middleware(['permission:admin.view'])->group(function() {
                 Route::resource('admins', AdminManageController::class);
             });
-            Route::middleware(['role:super_admin|admin'])->group(function() {
+            Route::middleware(['permission:hr.view'])->group(function() {
                 Route::resource('hrs', HrManageController::class);
             });
 
@@ -150,6 +160,32 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
             Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
             Route::post('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
             Route::post('/profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password.update');
+
+            // Roles & Permissions
+            Route::resource('roles', \App\Http\Controllers\Admin\RoleController::class);
+
+            // General Settings
+            Route::get('/settings', [SettingController::class, 'index'])->name('settings');
+            Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
+
+            // Documents
+            Route::get('/documents', [App\Http\Controllers\DocumentController::class, 'index'])->name('documents.index');
+            Route::get('/documents/category/{category}', [App\Http\Controllers\DocumentController::class, 'category'])->name('documents.category');
+            Route::post('/documents', [App\Http\Controllers\DocumentController::class, 'store'])->name('documents.store');
+            Route::delete('/documents/{id}', [App\Http\Controllers\DocumentController::class, 'destroy'])->name('documents.destroy');
+            Route::get('/documents/{id}/download', [App\Http\Controllers\DocumentController::class, 'download'])->name('documents.download');
+
+            // Mail
+            Route::group(['prefix' => 'mail', 'as' => 'mail.'], function () {
+                Route::get('/', [MailController::class, 'index'])->name('index');
+                Route::get('/sent', [MailController::class, 'sent'])->name('sent');
+                Route::get('/drafts', [MailController::class, 'drafts'])->name('drafts');
+                Route::get('/trash', [MailController::class, 'trash'])->name('trash');
+                Route::get('/compose/{id?}', [MailController::class, 'compose'])->name('compose');
+                Route::post('/send', [MailController::class, 'send'])->name('send');
+                Route::get('/{mail}', [MailController::class, 'show'])->name('show');
+                Route::delete('/{mail}', [MailController::class, 'destroy'])->name('destroy');
+            });
         });
     });
 /**

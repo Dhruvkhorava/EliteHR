@@ -10,6 +10,7 @@ use App\Models\Salary;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class PayrollController extends Controller
 {
@@ -213,5 +214,16 @@ class PayrollController extends Controller
             'scrollspy' => 0,
             'simplePage' => 0
         ]);
+    }
+
+    public function downloadPdf($id)
+    {
+        $payroll = Payroll::with(['user', 'details'])->findOrFail($id);
+        $pdf = PDF::loadView('payroll.pdf_payslip', [
+            'payroll' => $payroll,
+        ])->setPaper('a4', 'portrait');
+
+        $fileName = 'Payslip_' . $payroll->user->name . '_' . Carbon::create($payroll->year, $payroll->month)->format('M_Y') . '.pdf';
+        return $pdf->download($fileName);
     }
 }

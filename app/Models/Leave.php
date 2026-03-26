@@ -19,6 +19,7 @@ class Leave extends Model
         'status',
         'approved_by',
         'comment',
+        'google_event_id',
     ];
 
     public function user()

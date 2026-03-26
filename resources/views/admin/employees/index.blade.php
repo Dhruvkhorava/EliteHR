@@ -22,6 +22,7 @@
                     <thead>
                         <tr>
                             <th scope="col">Name</th>
+                            <th scope="col">Designation</th>
                             <th scope="col">Role</th>
                             <th class="text-center" scope="col">Status</th>
                             <th class="text-center" scope="col">Action</th>

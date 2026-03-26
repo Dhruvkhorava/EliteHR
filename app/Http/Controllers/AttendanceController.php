@@ -11,23 +11,63 @@ use Illuminate\Support\Facades\Auth;
 
 class AttendanceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
-        $today = Carbon::today()->toDateString();
+        $today = Carbon::today();
+
+        // Dynamic Filtering
+        $month = $request->query('month');
+        $year = $request->query('year', $today->year);
+        $rangeDays = $request->query('days', 30);
+
+        if ($month) {
+            $startDate = Carbon::createFromDate($year, $month, 1)->startOfMonth();
+            $endDate = $startDate->copy()->endOfMonth();
+            // Don't show future dates in history unless it's for planning (but here it's "history")
+            if ($endDate->greaterThan($today)) {
+                $endDate = $today;
+            }
+        } else {
+            $startDate = $today->copy()->subDays($rangeDays - 1);
+            $endDate = $today;
+        }
+
         $attendance = Attendance::where('user_id', $user->id)
-            ->where('date', $today)
+            ->where('date', $today->toDateString())
             ->first();
 
+        // Get attendance history for the calculated range
         $history = Attendance::where('user_id', $user->id)
+            ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
             ->orderBy('date', 'desc')
             ->get();
+
+        // Get approved leaves for the calculated range
+        $leaves = $user->leaves()
+            ->where(function($q) use ($startDate, $endDate) {
+                $q->whereBetween('from_date', [$startDate->toDateString(), $endDate->toDateString()])
+                  ->orWhereBetween('to_date', [$startDate->toDateString(), $endDate->toDateString()]);
+            })
+            ->where('status', 'approved')
+            ->with('leaveType')
+            ->get();
+
         $user->load('shift');
+
+        // Fetch pending leave requests for the "Requests" tab
+        $pendingRequestsCount = $user->leaves()->where('status', 'pending')->count();
+        $pendingRequests = $user->leaves()->where('status', 'pending')->with('leaveType')->get();
 
         return view('attendance.index', [
             'user' => $user,
             'attendance' => $attendance,
             'history' => $history,
+            'leaves' => $leaves,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'pendingRequestsCount' => $pendingRequestsCount,
+            'pendingRequests' => $pendingRequests,
             'title' => 'Attendance Dashboard',
             'catName' => 'attendance',
             'breadcrumbs' => ['Attendance', 'My Attendance'],
@@ -39,8 +79,8 @@ class AttendanceController extends Controller
     public function checkIn(Request $request)
     {
         $user = Auth::user();
-        $today = Carbon::today()->toDateString();
         $now = Carbon::now();
+        $today = $now->toDateString();
 
         $existing = Attendance::where('user_id', $user->id)
             ->where('date', $today)
@@ -54,7 +94,6 @@ class AttendanceController extends Controller
         $status = 'present';
 
         if ($shift) {
-            // Assume today's date for shift timing comparison
             $startTime = Carbon::parse($today . ' ' . $shift->start_time);
             $graceTime = $startTime->copy()->addMinutes($shift->grace_period);
 
@@ -64,21 +103,22 @@ class AttendanceController extends Controller
         }
 
         Attendance::updateOrCreate(
-        ['user_id' => $user->id, 'date' => $today],
-        [
-            'check_in' => $now->toTimeString(),
-            'status' => $status,
-        ]
+            ['user_id' => $user->id, 'date' => $today],
+            [
+                'check_in' => $now->toTimeString(),
+                'status' => $status,
+                'total_break_seconds' => 0,
+            ]
         );
 
-        return back()->with('success', 'Checked in successfully at ' . $now->setTimezone('Asia/Kolkata')->format('h:i A'));
+        return back()->with('success', 'Checked in successfully at ' . $now->format('h:i A'));
     }
 
     public function checkOut(Request $request)
     {
         $user = Auth::user();
-        $today = Carbon::today()->toDateString();
         $now = Carbon::now();
+        $today = $now->toDateString();
 
         $attendance = Attendance::where('user_id', $user->id)
             ->where('date', $today)
@@ -92,17 +132,22 @@ class AttendanceController extends Controller
             return back()->with('error', 'Already checked out for today.');
         }
 
+        // Ensure total_break_seconds is not null
+        if ($attendance->total_break_seconds === null) {
+            $attendance->total_break_seconds = 0;
+        }
+
         // If still on break, stop the break first
         if ($attendance->is_on_break) {
             $breakStart = Carbon::parse($attendance->current_break_start);
-            $secondsOnBreak = $now->diffInSeconds($breakStart);
+            $secondsOnBreak = $now->diffInSeconds($breakStart, true);
             $attendance->total_break_seconds += $secondsOnBreak;
             $attendance->is_on_break = false;
             $attendance->current_break_start = null;
         }
 
         $checkIn = Carbon::parse($today . ' ' . $attendance->check_in);
-        $totalSeconds = $now->diffInSeconds($checkIn);
+        $totalSeconds = $now->diffInSeconds($checkIn, true);
         
         // Subtract break time
         $workingSeconds = $totalSeconds - $attendance->total_break_seconds;
@@ -115,7 +160,7 @@ class AttendanceController extends Controller
         if ($shift) {
             $shiftEnd = Carbon::parse($today . ' ' . $shift->end_time);
             if ($now->greaterThan($shiftEnd)) {
-                $overtime = $now->diffInMinutes($shiftEnd) / 60;
+                $overtime = $now->diffInMinutes($shiftEnd, true) / 60;
             }
         }
 
@@ -124,6 +169,8 @@ class AttendanceController extends Controller
             $status = 'absent';
         } elseif ($workingHours < 7.5) {
             $status = 'half_day';
+        } else {
+            $status = 'present';
         }
 
         $attendance->update([
@@ -136,7 +183,7 @@ class AttendanceController extends Controller
             'total_break_seconds' => $attendance->total_break_seconds,
         ]);
 
-        return back()->with('success', 'Checked out successfully at ' . $now->setTimezone('Asia/Kolkata')->format('h:i A') . '. Total hours: ' . round($workingHours, 2));
+        return back()->with('success', 'Checked out successfully at ' . $now->format('h:i A') . '. Total hours: ' . round($workingHours, 2));
     }
 
     public function startBreak()
@@ -166,7 +213,8 @@ class AttendanceController extends Controller
     public function stopBreak()
     {
         $user = Auth::user();
-        $today = Carbon::today()->toDateString();
+        $now = Carbon::now();
+        $today = $now->toDateString();
         $attendance = Attendance::where('user_id', $user->id)
             ->where('date', $today)
             ->first();
@@ -175,17 +223,16 @@ class AttendanceController extends Controller
             return back()->with('error', 'You are not currently on a break.');
         }
 
-        $now = Carbon::now();
         $breakStart = Carbon::parse($attendance->current_break_start);
-        $secondsOnBreak = $now->diffInSeconds($breakStart);
+        $secondsOnBreak = $now->diffInSeconds($breakStart, true);
 
         $attendance->update([
             'is_on_break' => false,
             'current_break_start' => null,
-            'total_break_seconds' => $attendance->total_break_seconds + $secondsOnBreak,
+            'total_break_seconds' => ($attendance->total_break_seconds ?? 0) + $secondsOnBreak,
         ]);
 
-        return back()->with('success', 'Break stopped at ' . $now->setTimezone('Asia/Kolkata')->format('h:i A'));
+        return back()->with('success', 'Break stopped at ' . $now->format('h:i A'));
     }
 
     public function daily(Request $request)
@@ -206,6 +253,7 @@ class AttendanceController extends Controller
         return view('attendance.daily', [
             'data' => $data,
             'date' => $date,
+            'shifts' => Shift::all(),
             'title' => 'Daily Attendance List',
             'catName' => 'attendance',
             'breadcrumbs' => ['Attendance', 'Daily List'],
@@ -250,5 +298,18 @@ class AttendanceController extends Controller
             'scrollspy' => 0,
             'simplePage' => 0
         ]);
+    }
+
+    public function assignShift(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'shift_id' => 'required|exists:shifts,id',
+        ]);
+
+        $user = User::findOrFail($request->user_id);
+        $user->update(['shift_id' => $request->shift_id]);
+
+        return back()->with('success', 'Shift assigned to ' . $user->name . ' successfully.');
     }
 }

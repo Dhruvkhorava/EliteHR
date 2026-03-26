@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Leave;
 use App\Models\LeaveType;
 use App\Models\LeaveBalance;
+use App\Services\GoogleCalendarService;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -66,7 +67,9 @@ class LeaveController extends Controller
                 ->withInput();
         }
 
-        Leave::create([
+        $leaveType = LeaveType::find($request->leave_type_id);
+
+        $leave = Leave::create([
             'user_id' => $user->id,
             'leave_type_id' => $request->leave_type_id,
             'from_date' => $request->from_date,
@@ -75,6 +78,26 @@ class LeaveController extends Controller
             'reason' => $request->reason,
             'status' => 'pending',
         ]);
+
+        // Sync to Google Calendar (silently fails if credentials missing)
+        try {
+            $gcal = new GoogleCalendarService();
+            $googleEventId = $gcal->createLeaveEvent(
+                employeeName: $user->name,
+                leaveType: $leaveType->name ?? 'Leave',
+                fromDate: $request->from_date,
+                toDate: $request->to_date,
+                reason: $request->reason,
+                status: 'Pending'
+            );
+
+            if ($googleEventId) {
+                $leave->update(['google_event_id' => $googleEventId]);
+            }
+        } catch (\Exception $e) {
+            // Non-blocking: leave is created regardless of Google Calendar sync failure
+            \Log::warning('Google Calendar sync failed: ' . $e->getMessage());
+        }
 
         return redirect()->route('leaves.index')
             ->with('success', 'Leave application submitted successfully.');

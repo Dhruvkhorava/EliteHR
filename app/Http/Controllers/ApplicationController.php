@@ -62,26 +62,52 @@ class ApplicationController extends Controller
             'status' => 'required|in:Applied,Screening,Interview Scheduled,Selected,Rejected,Hired',
         ]);
 
-        $application->update(['status' => $validated['status']]);
+        DB::beginTransaction();
+        try {
+            $application->update(['status' => $validated['status']]);
 
-        return response()->json(['success' => true]);
+            if ($validated['status'] === 'Hired') {
+                $this->performConversion($application);
+            }
+
+            DB::commit();
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+        }
     }
 
     public function convertToEmployee(Application $application)
     {
-        if ($application->status !== 'Selected') {
-            return redirect()->back()->with('error', 'Only selected candidates can be converted to employees.');
+        if (!in_array($application->status, ['Selected', 'Hired'])) {
+            return redirect()->back()->with('error', 'Candidate must be Selected or Hired to be converted to an employee.');
+        }
+
+        try {
+            $this->performConversion($application);
+            return redirect()->route('employees.index')->with('success', 'Candidate converted to employee successfully. Default password: password123');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to convert to employee: ' . $e->getMessage());
+        }
+    }
+
+    private function performConversion(Application $application)
+    {
+        $candidate = $application->candidate;
+
+        // Check if user already exists
+        if (User::where('email', $candidate->email)->exists()) {
+            // If they are already an employee, we just return success
+            $user = User::where('email', $candidate->email)->first();
+            if ($user->hasRole('employee')) {
+                return;
+            }
+            throw new \Exception('A user with this email already exists but is not an employee.');
         }
 
         DB::beginTransaction();
         try {
-            $candidate = $application->candidate;
-
-            // Check if user already exists
-            if (User::where('email', $candidate->email)->exists()) {
-                throw new \Exception('A user with this email already exists.');
-            }
-
             // Create User account
             $user = User::create([
                 'name' => $candidate->name,
@@ -90,17 +116,16 @@ class ApplicationController extends Controller
                 'status' => 1, // Active
             ]);
 
-            // Assign Employee role
-            $user->assignRole('Employee');
+            // Assign employee role
+            $user->assignRole('employee');
 
             // Update application status to Hired
             $application->update(['status' => 'Hired']);
 
             DB::commit();
-            return redirect()->route('employees.index')->with('success', 'Candidate converted to employee successfully. Default password: password123');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'Failed to convert to employee: ' . $e->getMessage());
+            throw $e;
         }
     }
 

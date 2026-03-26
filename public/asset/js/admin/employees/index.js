@@ -8,6 +8,7 @@ $(document).ready(function() {
         },
         "columns": [
             { "data": "name" },
+            { "data": "designation" },
             { "data": "role" },
             { "data": "status" },
             { "data": "action" }
@@ -26,7 +27,7 @@ $(document).ready(function() {
         "lengthMenu": [7, 10, 20, 50],
         "pageLength": 10,
         "columnDefs": [
-            { "orderable": false, "targets": [3] }
+            { "orderable": false, "targets": [4] }
         ]
     });
 

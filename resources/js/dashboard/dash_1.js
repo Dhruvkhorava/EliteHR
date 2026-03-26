@@ -275,14 +275,14 @@ window.addEventListener("load", function(){
           colors: ['transparent']
       },
       series: [{
-          name: 'Direct',
-          data: [58, 44, 55, 57, 56, 61, 58, 63, 60, 66, 56, 63]
+          name: 'Attendance',
+          data: (window.dashboardData && window.dashboardData.attendanceSeries) ? window.dashboardData.attendanceSeries : [0,0,0,0,0,0,0]
       }, {
-          name: 'Organic',
-          data: [91, 76, 85, 101, 98, 87, 105, 91, 114, 94, 66, 70]
+          name: 'Leave Requests',
+          data: (window.dashboardData && window.dashboardData.leaveSeries) ? window.dashboardData.leaveSeries : [0,0,0,0,0,0,0]
       }],
       xaxis: {
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          categories: (window.dashboardData && window.dashboardData.attendanceLabels) ? window.dashboardData.attendanceLabels : ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
       },
       fill: {
         type: 'gradient',
@@ -344,10 +344,10 @@ window.addEventListener("load", function(){
           width: 2,
       },
       series: [{
-        name: 'Sales',
-        data: [38, 60, 38, 52, 36, 40, 28 ]
+        name: 'Attendance',
+        data: (window.dashboardData && window.dashboardData.attendanceSeries) ? window.dashboardData.attendanceSeries : [0,0,0,0,0,0,0]
       }],
-      labels: ['1', '2', '3', '4', '5', '6', '7'],
+      labels: (window.dashboardData && window.dashboardData.attendanceLabels) ? window.dashboardData.attendanceLabels : ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
       yaxis: {
         min: 0
       },
@@ -399,10 +399,10 @@ window.addEventListener("load", function(){
           width: 2,
       },
       series: [{
-        name: 'Sales',
-        data: [ 60, 28, 52, 38, 40, 36, 38]
+        name: 'Leaves',
+        data: (window.dashboardData && window.dashboardData.leaveSeries) ? window.dashboardData.leaveSeries : [0,0,0,0,0,0,0]
       }],
-      labels: ['1', '2', '3', '4', '5', '6', '7'],
+      labels: (window.dashboardData && window.dashboardData.attendanceLabels) ? window.dashboardData.attendanceLabels : ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
       yaxis: {
         min: 0
       },
@@ -457,10 +457,10 @@ window.addEventListener("load", function(){
           opacity: 1,
         },
         series: [{
-          name: 'Sales',
-          data: [28, 50, 36, 60, 38, 52, 38 ]
+          name: 'Attendance',
+          data: (window.dashboardData && window.dashboardData.attendanceSeries) ? window.dashboardData.attendanceSeries : [0,0,0,0,0,0,0]
         }],
-        labels: ['1', '2', '3', '4', '5', '6', '7'],
+        labels: (window.dashboardData && window.dashboardData.attendanceLabels) ? window.dashboardData.attendanceLabels : ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
         yaxis: {
           min: 0
         },
@@ -767,14 +767,14 @@ window.addEventListener("load", function(){
           colors: ['transparent']
       },
       series: [{
-          name: 'Direct',
-          data: [58, 44, 55, 57, 56, 61, 58, 63, 60, 66, 56, 63]
+          name: 'Attendance',
+          data: (window.dashboardData && window.dashboardData.attendanceSeries) ? window.dashboardData.attendanceSeries : [0,0,0,0,0,0,0]
       }, {
-          name: 'Organic',
-          data: [91, 76, 85, 101, 98, 87, 105, 91, 114, 94, 66, 70]
+          name: 'Leave Requests',
+          data: (window.dashboardData && window.dashboardData.leaveSeries) ? window.dashboardData.leaveSeries : [0,0,0,0,0,0,0]
       }],
       xaxis: {
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          categories: (window.dashboardData && window.dashboardData.attendanceLabels) ? window.dashboardData.attendanceLabels : ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
       },
       fill: {
         type: 'gradient',
@@ -836,10 +836,10 @@ window.addEventListener("load", function(){
           width: 2,
       },
       series: [{
-        name: 'Sales',
-        data: [38, 60, 38, 52, 36, 40, 28 ]
+        name: 'Attendance',
+        data: (window.dashboardData && window.dashboardData.attendanceSeries) ? window.dashboardData.attendanceSeries : [0,0,0,0,0,0,0]
       }],
-      labels: ['1', '2', '3', '4', '5', '6', '7'],
+      labels: (window.dashboardData && window.dashboardData.attendanceLabels) ? window.dashboardData.attendanceLabels : ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
       yaxis: {
         min: 0
       },
@@ -891,10 +891,10 @@ window.addEventListener("load", function(){
           width: 2,
       },
       series: [{
-        name: 'Sales',
-        data: [ 60, 28, 52, 38, 40, 36, 38]
+        name: 'Leaves',
+        data: (window.dashboardData && window.dashboardData.leaveSeries) ? window.dashboardData.leaveSeries : [0,0,0,0,0,0,0]
       }],
-      labels: ['1', '2', '3', '4', '5', '6', '7'],
+      labels: (window.dashboardData && window.dashboardData.attendanceLabels) ? window.dashboardData.attendanceLabels : ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
       yaxis: {
         min: 0
       },
@@ -949,10 +949,10 @@ window.addEventListener("load", function(){
           opacity: 1,
         },
         series: [{
-          name: 'Sales',
-          data: [28, 50, 36, 60, 38, 52, 38 ]
+          name: 'Attendance',
+          data: (window.dashboardData && window.dashboardData.attendanceSeries) ? window.dashboardData.attendanceSeries : [0,0,0,0,0,0,0]
         }],
-        labels: ['1', '2', '3', '4', '5', '6', '7'],
+        labels: (window.dashboardData && window.dashboardData.attendanceLabels) ? window.dashboardData.attendanceLabels : ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
         yaxis: {
           min: 0
         },

@@ -25,9 +25,9 @@ class RecruitmentPermissionSeeder extends Seeder
             \Spatie\Permission\Models\Permission::firstOrCreate(['name' => $permission]);
         }
 
-        $admin = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'Admin']);
-        $hr = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'HR']);
-        $employee = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'Employee']);
+        $admin = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin']);
+        $hr = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'hr']);
+        $employee = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'employee']);
 
         $admin->givePermissionTo($permissions);
         $hr->givePermissionTo($permissions);

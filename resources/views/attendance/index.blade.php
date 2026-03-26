@@ -5,6 +5,117 @@
     @vite(['resources/scss/dark/plugins/table/datatable/dt-global_style.scss'])
     @vite(['resources/scss/light/plugins/table/datatable/custom_dt_custom.scss'])
     @vite(['resources/scss/dark/plugins/table/datatable/custom_dt_custom.scss'])
+    <style>
+        /* Modern Attendance Styles */
+        .attendance-tab-nav .nav-link {
+            border: none;
+            padding: 10px 25px;
+            font-weight: 600;
+            color: #515365;
+            background: #f1f2f3;
+            border-radius: 6px;
+            margin-right: 10px;
+        }
+        .attendance-tab-nav .nav-link.active {
+            background: #fff;
+            color: #4361ee;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .filter-section {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #e0e6ed;
+        }
+        .btn-filter {
+            background: #fff;
+            border: 1px solid #e0e6ed;
+            color: #515365;
+            padding: 5px 15px;
+            font-size: 13px;
+        }
+        .btn-filter.active {
+            background: #4361ee;
+            color: #fff;
+            border-color: #4361ee;
+        }
+        
+        /* Attendance Visual Timeline */
+        .attendance-visual {
+            width: 100%;
+            height: 8px;
+            background: #ebedf2;
+            border-radius: 10px;
+            display: flex;
+            position: relative;
+            margin: 5px 0;
+        }
+        .visual-segment {
+            height: 100%;
+            border-radius: 4px;
+        }
+        .segment-work { background: #00abff; opacity: 0.6; }
+        .segment-break { background: #e2a03f; opacity: 0.4; }
+        .timeline-markers {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding-top: 5px;
+        }
+        .marker {
+            width: 1px;
+            height: 5px;
+            background: #bfc9d4;
+        }
+
+        /* Progress Circle for Hours */
+        .hours-circle {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+            position: relative;
+        }
+        .circle-full { background: #00abff; }
+        .circle-half { 
+            background: linear-gradient(90deg, #00abff 50%, #ebedf2 50%);
+        }
+        
+        .attendance-table th {
+            text-transform: uppercase;
+            font-size: 11px;
+            font-weight: 700;
+            color: #888ea8;
+            border-bottom: 1px solid #e0e6ed;
+            background: #f8f9fa;
+        }
+        .attendance-table td {
+            vertical-align: middle;
+            padding: 15px 12px;
+            font-weight: 500;
+            color: #3b3f5c;
+        }
+        
+        /* Special Row Styling */
+        .row-special {
+            background-color: #f9f9f9 !important;
+            color: #888ea8;
+            text-align: center;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        .row-leave { background-color: #f3f0ff !important; }
+        
+        .badge-wfh { background: #e7f7ff; color: #00abff; }
+        .badge-hldy { background: #fff9ed; color: #e2a03f; }
+        .badge-woff { background: #f1f2f3; color: #888ea8; }
+        .badge-pnlty { background: #ffe7e7; color: #e7515a; }
+        .badge-leave { background: #f3f0ff; color: #805dca; }
+    </style>
 @endsection
 
 @section('content')
@@ -59,7 +170,7 @@
                                             data-on-break="{{ $attendance->is_on_break ? '1' : '0' }}"
                                             data-break-start="{{ $attendance->current_break_start ? \Carbon\Carbon::parse($attendance->current_break_start)->toIso8601String() : '' }}"
                                             data-total-break-seconds="{{ $attendance->total_break_seconds }}">
-                                            In @ {{ \Carbon\Carbon::parse($attendance->check_in)->setTimezone('Asia/Kolkata')->format('h:i A') }}
+                                            In @ {{ \Carbon\Carbon::parse($attendance->check_in)->format('h:i A') }}
                                         </span>
                                     </div>
                                     <div class="d-flex gap-2">
@@ -130,62 +241,252 @@
         </div>
 
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 layout-spacing">
-            <div class="widget widget-table-two">
-                <div class="widget-heading px-4 pt-4">
-                    <h5 class="">Attendance History</h5>
+            <!-- Logs & Requests Header -->
+            <div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+                <div class="d-flex align-items-center">
+                    <h4 class="mb-0 fw-bold me-4">Logs & Requests</h4>
+                    <ul class="nav nav-pills attendance-tab-nav" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="pills-log-tab" data-bs-toggle="pill" data-bs-target="#pills-log" type="button" role="tab">Attendance Log</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pills-request-tab" data-bs-toggle="pill" data-bs-target="#pills-request" type="button" role="tab">
+                                Attendance Requests <span class="badge badge-danger rounded-circle ms-1" style="padding: 2px 6px; font-size: 10px;">{{ $pendingRequestsCount }}</span>
+                            </button>
+                        </li>
+                    </ul>
                 </div>
-                <div class="widget-content">
-                    <div class="table-responsive">
-                        <table id="attendance-history-table" class="table dt-table-hover">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <div class="th-content">Date</div>
-                                    </th>
-                                    <th>
-                                        <div class="th-content">Check In</div>
-                                    </th>
-                                    <th>
-                                        <div class="th-content">Check Out</div>
-                                    </th>
-                                    <th>
-                                        <div class="th-content">Working Hours</div>
-                                    </th>
-                                    <th>
-                                        <div class="th-content">Status</div>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($history as $record)
-                                    <tr>
-                                        <td>{{ \Carbon\Carbon::parse($record->date)->format('d M Y') }}</td>
-                                        <td>{{ $record->check_in ? \Carbon\Carbon::parse($record->check_in)->setTimezone('Asia/Kolkata')->format('h:i A') : '-' }}
-                                        </td>
-                                        <td>{{ $record->check_out ? \Carbon\Carbon::parse($record->check_out)->setTimezone('Asia/Kolkata')->format('h:i A') : '-' }}
-                                        </td>
-                                        <td>{{ $record->working_hours ?? '-' }}</td>
-                                        <td>
-                                            @php
-                                                $badgeClass =
-                                                    [
-                                                        'present' => 'badge-light-success',
-                                                        'late' => 'badge-light-warning',
-                                                        'absent' => 'badge-light-danger',
-                                                        'half_day' => 'badge-light-info',
-                                                    ][$record->status] ?? 'badge-light-secondary';
-                                            @endphp
-                                            <span class="badge {{ $badgeClass }}">{{ ucfirst($record->status) }}</span>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="5" class="text-center">No records found</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                <div class="form-check form-switch d-flex align-items-center">
+                    <input class="form-check-input me-2" type="checkbox" id="hourFormat">
+                    <label class="form-check-label mb-0 text-muted small fw-bold" for="hourFormat">24 hour format</label>
+                </div>
+            </div>
+
+            <div class="tab-content" id="pills-tabContent">
+                <!-- Attendance Log Tab -->
+                <div class="tab-pane fade show active" id="pills-log" role="tabpanel">
+                    <div class="widget widget-card-four mb-0" style="padding: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0;">
+                        <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 fw-bold">{{ request('month') ? \Carbon\Carbon::createFromDate(null, request('month'), 1)->format('F Y') : 'Last 30 Days' }}</h5>
+                            <div class="d-flex gap-2">
+                                <div class="btn-group" role="group">
+                                    <a href="{{ route('attendance.index', ['days' => 30]) }}" class="btn btn-filter {{ !request('month') ? 'active' : '' }}">30 Days</a>
+                                    @php
+                                        $displayMonths = [
+                                            now()->month => now()->format('M'),
+                                            now()->subMonth()->month => now()->subMonth()->format('M'),
+                                            now()->subMonths(2)->month => now()->subMonths(2)->format('M'),
+                                            now()->subMonths(3)->month => now()->subMonths(3)->format('M'),
+                                            now()->subMonths(4)->month => now()->subMonths(4)->format('M'),
+                                        ];
+                                    @endphp
+                                    @foreach($displayMonths as $num => $name)
+                                        <a href="{{ route('attendance.index', ['month' => $num]) }}" class="btn btn-filter {{ request('month') == $num ? 'active' : '' }}">{{ $name }}</a>
+                                    @endforeach
+                                </div>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-filter active">12 hr format</button>
+                                    <button type="button" class="btn btn-filter">24 hr format</button>
+                                </div>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-filter active px-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button>
+                                    <button type="button" class="btn btn-filter px-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+                    <div class="widget widget-table-two" style="border-top-left-radius: 0; border-top-right-radius: 0;">
+                        <div class="widget-content">
+                            <div class="table-responsive">
+                                <table class="table attendance-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 15%">Date</th>
+                                            <th style="width: 30%">Attendance Visual</th>
+                                            <th style="width: 15%">Effective Hours</th>
+                                            <th style="width: 15%">Gross Hours</th>
+                                            <th style="width: 15%">Arrival</th>
+                                            <th style="width: 10%">Log</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $period = collect($startDate->daysUntil($endDate))->reverse();
+                                        @endphp
+                                        @foreach($period as $date)
+                                            @php
+                                                $dateStr = $date->toDateString();
+                                                $record = $history->firstWhere('date', $dateStr);
+                                                $leave = $leaves->filter(function($l) use ($dateStr) {
+                                                    return $dateStr >= $l->from_date && $dateStr <= $l->to_date;
+                                                })->first();
+                                                $isWeekend = $date->isWeekend();
+                                            @endphp
+
+                                            @if($leave)
+                                                <tr class="row-leave" data-bs-toggle="tooltip" data-bs-placement="top" title="Leave: {{ $leave->leaveType->name }} (Approved)">
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="me-2">{{ $date->format('M d, D') }}</span>
+                                                            <span class="badge badge-leave small px-1 py-0" style="font-size: 10px;">LEAVE</span>
+                                                        </div>
+                                                    </td>
+                                                    <td colspan="5" class="text-center py-3">
+                                                        <span class="text-muted small fw-bold uppercase">ON {{ strtoupper($leave->leaveType->name) }}</span>
+                                                    </td>
+                                                </tr>
+                                            @elseif($isWeekend && !$record)
+                                                <tr class="row-special">
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="me-2">{{ $date->format('M d, D') }}</span>
+                                                            <span class="badge badge-woff small px-1 py-0" style="font-size: 10px;">W-OFF</span>
+                                                        </div>
+                                                    </td>
+                                                    <td colspan="5" class="py-3">WEEKLY-OFF</td>
+                                                </tr>
+                                            @elseif(!$record && !$date->isToday())
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="me-2">{{ $date->format('M d, D') }}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td colspan="4" class="text-center py-3 text-muted small fw-bold">NO TIME ENTRIES LOGGED</td>
+                                                    <td class="text-center">
+                                                        <span class="text-muted">...</span>
+                                                    </td>
+                                                </tr>
+                                            @else
+                                                <tr @if($record) data-bs-toggle="tooltip" data-bs-placement="top" title="In: {{ $record->check_in ? \Carbon\Carbon::parse($record->check_in)->format('h:i A') : '-' }} | Out: {{ $record->check_out ? \Carbon\Carbon::parse($record->check_out)->format('h:i A') : 'Active' }}" @endif>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="me-2">{{ $date->format('M d, D') }}</span>
+                                                            @if($record && $record->status == 'present' && $record->working_hours > 8)
+                                                                <span class="badge badge-wfh small px-1 py-0" style="font-size: 10px;">WFH</span>
+                                                            @endif
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        @if($record)
+                                                            @php
+                                                                $totalShiftSeconds = 9 * 3600; // 9 hours standard
+                                                                $workingSeconds = $record->working_hours * 3600;
+                                                                $breakSeconds = $record->total_break_seconds ?? 0;
+                                                                
+                                                                $workWidth = ($workingSeconds / $totalShiftSeconds) * 100;
+                                                                $breakWidth = ($breakSeconds / $totalShiftSeconds) * 100;
+                                                                $startOffset = 25; // Simulating start at 9:00 or similar
+                                                            @endphp
+                                                            <div class="attendance-visual" data-bs-toggle="tooltip" title="Worked: {{ number_format($record->working_hours, 2) }}h | Break: {{ round($breakSeconds/60) }}m">
+                                                                <div class="visual-segment segment-work" style="width: {{ $workWidth / 2 }}%; margin-left: {{ $startOffset }}%;"></div>
+                                                                @if($breakWidth > 2)
+                                                                    <div class="visual-segment segment-break" style="width: {{ $breakWidth }}%;"></div>
+                                                                @endif
+                                                                <div class="visual-segment segment-work" style="width: {{ $workWidth / 2 }}%;"></div>
+                                                            </div>
+                                                            <div class="timeline-markers small">
+                                                                @for($i=0; $i<12; $i++) <div class="marker"></div> @endfor
+                                                            </div>
+                                                        @else
+                                                            <div class="text-center">
+                                                                <span class="badge badge-light-primary rounded-pill px-3 py-1" style="font-size: 10px; cursor: pointer;">Apply Leave</span>
+                                                            </div>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="hours-circle {{ $record && $record->working_hours >= 8 ? 'circle-full' : 'circle-half' }}"></div>
+                                                            <span>{{ $record ? number_format($record->working_hours, 2) : '0.00' }} hrs</span>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{ $record ? number_format($record->working_hours, 2) : '0.00' }} hrs</td>
+                                                    <td>
+                                                        @if($record && $record->check_in)
+                                                            @php
+                                                                $isLate = false;
+                                                                $lateDiff = '';
+                                                                if ($user->shift) {
+                                                                    $checkInTime = \Carbon\Carbon::parse($record->check_in);
+                                                                    $shiftStartTime = \Carbon\Carbon::parse($user->shift->start_time)->addMinutes($user->shift->grace_period);
+                                                                    if ($checkInTime->greaterThan($shiftStartTime)) {
+                                                                        $isLate = true;
+                                                                        $diff = $checkInTime->diff($shiftStartTime);
+                                                                        $lateDiff = sprintf('%02d:%02d:%02d', $diff->h, $diff->i, $diff->s);
+                                                                    }
+                                                                }
+                                                            @endphp
+                                                            @if($isLate)
+                                                                <span class="text-dark small fw-bold">{{ $lateDiff }} Late <span style="font-size: 16px;">🐌</span></span>
+                                                            @else
+                                                                <span class="text-dark small">On Time</span>
+                                                            @endif
+                                                        @else
+                                                            -
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-center">
+                                                        @if($record && $record->check_out)
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00abff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                                        @elseif($record)
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e2a03f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                                        @else
+                                                            <span class="text-muted">...</span>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attendance Requests Tab Content -->
+                <div class="tab-pane fade" id="pills-request" role="tabpanel">
+                    @if($pendingRequestsCount > 0)
+                        <div class="widget widget-table-two mt-0">
+                            <div class="widget-content">
+                                <div class="table-responsive">
+                                    <table class="table attendance-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Type</th>
+                                                <th>From</th>
+                                                <th>To</th>
+                                                <th>Total Days</th>
+                                                <th>Reason</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($pendingRequests as $req)
+                                                <tr>
+                                                    <td><span class="badge badge-leave rounded-pill px-3">{{ $req->leaveType->name }}</span></td>
+                                                    <td>{{ \Carbon\Carbon::parse($req->from_date)->format('d M Y') }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($req->to_date)->format('d M Y') }}</td>
+                                                    <td>{{ $req->total_days }}</td>
+                                                    <td><small class="text-muted">{{ Str::limit($req->reason, 30) }}</small></td>
+                                                    <td><span class="badge badge-light-warning">Pending Review</span></td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    @else
+                        <div class="widget widget-card-four text-center py-5">
+                            <div class="py-5">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#bfc9d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                <h5 class="mt-3 text-muted">No pending requests</h5>
+                                <p class="text-muted small">All your attendance adjustment and leave requests will appear here.</p>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -196,4 +497,33 @@
 @section('scripts')
     <script src="{{ asset('plugins/src/table/datatable/datatables.js') }}"></script>
     <script src="{{ asset('asset/js/attendance/index.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle Filter Button States
+            const filterButtons = document.querySelectorAll('.btn-filter');
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Find brother buttons and remove active
+                    this.parentElement.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Tab Switching Logic (Bootstrap already handles this, but ensuring UI consistency)
+            const triggerTabList = [].slice.call(document.querySelectorAll('#pills-tab button'));
+            triggerTabList.forEach(function (triggerEl) {
+                const tabTrigger = new bootstrap.Tab(triggerEl);
+                triggerEl.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    tabTrigger.show();
+                });
+            });
+
+            // Initialize Bootstrap Tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+        });
+    </script>
 @endsection

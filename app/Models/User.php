@@ -7,16 +7,18 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model; // Added for Candidate and RecruitmentJob
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Laravel\Scout\Searchable; // Added for Searchable trait
 
-#[Fillable(['name', 'email', 'password', 'image', 'status', 'shift_id'])]
+#[Fillable(['name', 'email', 'password', 'image', 'status', 'shift_id', 'designation'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable, HasRoles, Searchable; // Added Searchable
 
     /**
      * Get the attributes that should be cast.
@@ -74,5 +76,10 @@ class User extends Authenticatable
     public function appraisals()
     {
         return $this->hasMany(Appraisal::class);
+    }
+
+    public function documents()
+    {
+        return $this->hasMany(Document::class);
     }
 }

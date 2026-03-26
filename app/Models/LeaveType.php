@@ -20,4 +20,9 @@ class LeaveType extends Model
         'carry_forward' => 'boolean',
         'is_paid' => 'boolean',
     ];
+
+    public function leaves()
+    {
+        return $this->hasMany(Leave::class);
+    }
 }

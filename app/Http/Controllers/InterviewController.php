@@ -15,7 +15,7 @@ class InterviewController extends Controller
         return view('recruitment.interviews.index', [
             'interviews' => $interviews,
             'applications' => Application::with(['candidate', 'job'])->whereNotIn('status', ['Rejected', 'Hired'])->get(),
-            'interviewers' => User::role(['Admin', 'HR'])->get(),
+            'interviewers' => User::role(['admin', 'hr'])->get(),
             'catName' => 'recruitment',
             'title' => 'Interviews',
             'breadcrumbs' => ['Recruitment', 'Interviews']
