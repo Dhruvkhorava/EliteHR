@@ -121,37 +121,55 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Employee</label>
-                                <select name="user_id" class="form-select" required>
+                                <select name="user_id" class="form-select @error('user_id') is-invalid @enderror">
+                                    <option value="">Select Employee</option>
                                     @foreach($employees as $emp)
-                                        <option value="{{ $emp->id }}">{{ $emp->name }}</option>
+                                        <option value="{{ $emp->id }}" {{ old('user_id') == $emp->id ? 'selected' : '' }}>{{ $emp->name }}</option>
                                     @endforeach
                                 </select>
+                                @error('user_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Review Type</label>
-                                <select name="type" class="form-select" required>
-                                    <option value="monthly">Monthly</option>
-                                    <option value="quarterly">Quarterly</option>
-                                    <option value="yearly">Yearly Appraisal</option>
+                                <select name="type" class="form-select @error('type') is-invalid @enderror">
+                                    <option value="">Select Type</option>
+                                    <option value="monthly" {{ old('type') == 'monthly' ? 'selected' : '' }}>Monthly</option>
+                                    <option value="quarterly" {{ old('type') == 'quarterly' ? 'selected' : '' }}>Quarterly</option>
+                                    <option value="yearly" {{ old('type') == 'yearly' ? 'selected' : '' }}>Yearly Appraisal</option>
                                 </select>
+                                @error('type')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Rating (1-5)</label>
-                                <select name="rating" class="form-select" required>
-                                    <option value="5">5 - Excellent</option>
-                                    <option value="4">4 - Very Good</option>
-                                    <option value="3">3 - Good</option>
-                                    <option value="2">2 - Needs Improvement</option>
-                                    <option value="1">1 - Poor</option>
+                                <select name="rating" class="form-select @error('rating') is-invalid @enderror">
+                                    <option value="">Select Rating</option>
+                                    <option value="5" {{ old('rating') == '5' ? 'selected' : '' }}>5 - Excellent</option>
+                                    <option value="4" {{ old('rating') == '4' ? 'selected' : '' }}>4 - Very Good</option>
+                                    <option value="3" {{ old('rating') == '3' ? 'selected' : '' }}>3 - Good</option>
+                                    <option value="2" {{ old('rating') == '2' ? 'selected' : '' }}>2 - Needs Improvement</option>
+                                    <option value="1" {{ old('rating') == '1' ? 'selected' : '' }}>1 - Poor</option>
                                 </select>
+                                @error('rating')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Review Date</label>
-                                <input type="date" name="review_date" class="form-control" value="{{ date('Y-m-d') }}" required>
+                                <input type="date" name="review_date" class="form-control @error('review_date') is-invalid @enderror" value="{{ old('review_date', date('Y-m-d')) }}">
+                                @error('review_date')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-12 mb-3">
                                 <label class="form-label">Feedback</label>
-                                <textarea name="feedback" class="form-control" rows="4" placeholder="Enter detailed performance feedback..." required></textarea>
+                                <textarea name="feedback" class="form-control @error('feedback') is-invalid @enderror" rows="4" placeholder="Enter detailed performance feedback...">{{ old('feedback') }}</textarea>
+                                @error('feedback')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                     </div>

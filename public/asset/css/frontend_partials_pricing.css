@@ -1,0 +1,167 @@
+.pricing-comparison-section {
+    background-color: #f8f9fa;
+    padding: 80px 0;
+}
+
+.pricing-table-container {
+    overflow-x: auto;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    background: #fff;
+    margin-top: 40px;
+}
+
+.pricing-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+}
+
+.pricing-table th, .pricing-table td {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+.pricing-table th:first-child, .pricing-table td:first-child {
+    text-align: left;
+    padding-left: 30px;
+    font-weight: 600;
+    color: #333;
+    width: 30%;
+    background: #fdfdfd;
+    position: sticky;
+    left: 0;
+    z-index: 5;
+}
+
+.pricing-table thead th {
+    background: #fff;
+    font-size: 1.1rem;
+    color: #06A3DA;
+    border-top: 4px solid #06A3DA;
+}
+
+.pricing-table thead th.plan-column {
+    width: 17.5%;
+}
+
+.pricing-table tr:hover td {
+    background-color: #f1f9ff;
+}
+
+.plan-header-card {
+    padding: 20px 0;
+}
+
+.plan-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.plan-price {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #333;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.plan-price small {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #777;
+}
+
+.plan-subtitle {
+    font-size: 0.85rem;
+    color: #888;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.btn-plan {
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-plan-outline {
+    border: 2px solid #06A3DA;
+    color: #06A3DA;
+}
+
+.btn-plan-outline:hover {
+    background: #06A3DA;
+    color: #fff;
+}
+
+.feature-category {
+    background: #f1f5f9 !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    color: #444 !important;
+}
+
+.check-icon {
+    color: #28a745;
+    font-size: 1.2rem;
+}
+
+.cross-icon {
+    color: #dc3545;
+    font-size: 1.2rem;
+}
+
+.limited-text {
+    font-weight: 600;
+    color: #e67e22;
+}
+
+.addon-text {
+    font-weight: 600;
+    color: #9b59b6;
+    font-size: 0.85rem;
+}
+
+.unlimited-text {
+    font-weight: 600;
+    color: #27ae60;
+}
+
+/* Sticker for best value */
+.best-value {
+    position: relative;
+}
+
+.best-value::after {
+    content: "POPULAR";
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #FFD700;
+    color: #000;
+    padding: 2px 12px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+    .pricing-table th, .pricing-table td {
+        padding: 12px;
+    }
+    .pricing-table th:first-child, .pricing-table td:first-child {
+        padding-left: 15px;
+        width: 40%;
+    }
+}

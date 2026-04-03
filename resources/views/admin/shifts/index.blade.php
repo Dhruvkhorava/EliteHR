@@ -80,25 +80,37 @@
                                                 <div class="modal-body">
                                                     <div class="mb-3">
                                                         <label class="form-label">Shift Name</label>
-                                                        <input type="text" name="name" class="form-control"
-                                                            value="{{ $shift->name }}" required>
+                                                        <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
+                                                            value="{{ $shift->name }}">
+                                                        @error('name')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-md-6 mb-3">
                                                             <label class="form-label">Start Time</label>
-                                                            <input type="time" name="start_time" class="form-control"
-                                                                value="{{ $shift->start_time }}" required>
+                                                            <input type="time" name="start_time" class="form-control @error('start_time') is-invalid @enderror"
+                                                                value="{{ $shift->start_time }}">
+                                                            @error('start_time')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                            @enderror
                                                         </div>
                                                         <div class="col-md-6 mb-3">
                                                             <label class="form-label">End Time</label>
-                                                            <input type="time" name="end_time" class="form-control"
-                                                                value="{{ $shift->end_time }}" required>
+                                                            <input type="time" name="end_time" class="form-control @error('end_time') is-invalid @enderror"
+                                                                value="{{ $shift->end_time }}">
+                                                            @error('end_time')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label class="form-label">Grace Period (Minutes)</label>
-                                                        <input type="number" name="grace_period" class="form-control"
-                                                            value="{{ $shift->grace_period }}" min="0" required>
+                                                        <input type="number" name="grace_period" class="form-control @error('grace_period') is-invalid @enderror"
+                                                            value="{{ $shift->grace_period }}" min="0">
+                                                        @error('grace_period')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
@@ -131,22 +143,34 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Shift Name</label>
-                            <input type="text" name="name" class="form-control" placeholder="e.g. Morning Shift"
-                                required>
+                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="e.g. Morning Shift"
+                                value="{{ old('name') }}">
+                            @error('name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Start Time</label>
-                                <input type="time" name="start_time" class="form-control" required>
+                                <input type="time" name="start_time" class="form-control @error('start_time') is-invalid @enderror" value="{{ old('start_time') }}">
+                                @error('start_time')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">End Time</label>
-                                <input type="time" name="end_time" class="form-control" required>
+                                <input type="time" name="end_time" class="form-control @error('end_time') is-invalid @enderror" value="{{ old('end_time') }}">
+                                @error('end_time')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Grace Period (Minutes)</label>
-                            <input type="number" name="grace_period" class="form-control" value="15" min="0" required>
+                            <input type="number" name="grace_period" class="form-control @error('grace_period') is-invalid @enderror" value="{{ old('grace_period', 15) }}" min="0">
+                            @error('grace_period')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                     <div class="modal-footer">

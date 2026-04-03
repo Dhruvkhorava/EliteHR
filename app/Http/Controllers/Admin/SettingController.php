@@ -46,4 +46,38 @@ class SettingController extends Controller
 
         return redirect()->back()->with('success', 'Settings updated successfully.');
     }
+
+    public function pricing()
+    {
+        $pricingData = Setting::where('key', 'pricing_data')->value('value');
+        if (!$pricingData) {
+            $pricingData = json_encode([
+                'plans' => config('pricing.plans', []),
+                'categories' => config('pricing.categories', []),
+            ]);
+        }
+        
+        return view('admin.settings.pricing', [
+            'pricingData' => $pricingData,
+            'catName' => 'settings',
+            'title' => 'Pricing Settings',
+            'breadcrumbs' => ['Settings', 'Pricing Settings'],
+            'scrollspy' => 0,
+            'simplePage' => 0,
+        ]);
+    }
+
+    public function updatePricing(Request $request)
+    {
+        $request->validate([
+            'pricing_data' => 'required|json'
+        ]);
+
+        Setting::updateOrCreate(
+            ['key' => 'pricing_data'],
+            ['value' => $request->pricing_data]
+        );
+
+        return redirect()->back()->with('success', 'Pricing updated successfully.');
+    }
 }

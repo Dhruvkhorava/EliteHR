@@ -3,54 +3,7 @@
 @section('styles')
     @vite(['resources/scss/light/assets/apps/mailbox.scss'])
     @vite(['resources/scss/dark/assets/apps/mailbox.scss'])
-    <style>
-        .mail-sidebar {
-            width: 250px;
-            background: #fff;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-        }
-        .mail-menu {
-            list-style: none;
-            padding: 0;
-        }
-        .mail-menu li a {
-            display: flex;
-            align-items: center;
-            padding: 10px 15px;
-            color: #3b3f5c;
-            text-decoration: none;
-            border-radius: 6px;
-            margin-bottom: 5px;
-            transition: all 0.3s;
-        }
-        .mail-menu li a:hover, .mail-menu li.active a {
-            background: #eaf1ff;
-            color: #4361ee;
-        }
-        .mail-menu li a svg {
-            width: 18px;
-            height: 18px;
-            margin-right: 12px;
-        }
-        .mail-content-container {
-            flex: 1;
-            margin-left: 20px;
-            background: #fff;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-        }
-        .mail-list-table th {
-            background: #f1f2f3;
-            border: none;
-        }
-        .unread {
-            font-weight: 700;
-            background-color: #f8f9ff;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('asset/css/admin_mail_layout.css') }}">
 @endsection
 
 @section('content')

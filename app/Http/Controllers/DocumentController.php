@@ -83,6 +83,18 @@ class DocumentController extends Controller
         return Storage::disk('public')->download($document->file_path, $document->title . '.' . pathinfo($document->file_path, PATHINFO_EXTENSION));
     }
 
+    public function view($id)
+    {
+        $document = Document::findOrFail($id);
+
+        // Check if user has permission to view this document
+        if ($document->user_id !== Auth::id() && !Auth::user()->hasAnyRole(['admin', 'super_admin', 'hr'])) {
+            abort(403);
+        }
+
+        return Storage::disk('public')->response($document->file_path);
+    }
+
     public function destroy($id)
     {
         $document = Document::findOrFail($id);

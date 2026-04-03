@@ -12,13 +12,24 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Laravel\Scout\Searchable; // Added for Searchable trait
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-#[Fillable(['name', 'email', 'password', 'image', 'status', 'shift_id', 'designation'])]
+#[Fillable(['name', 'first_name', 'last_name', 'date_of_birth', 'gender', 'profile_image', 'address', 'city', 'state', 'country', 'pincode', 'email', 'pan_number', 'uan_number', 'esi_number', 'password', 'image', 'status', 'shift_id', 'designation_id', 'manager_id'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, HasRoles, Searchable; // Added Searchable
+    use HasFactory, Notifiable, HasRoles, Searchable, SoftDeletes; // Added Searchable
+
+    public function manager()
+    {
+        return $this->belongsTo(User::class, 'manager_id');
+    }
+
+    public function designation()
+    {
+        return $this->belongsTo(Designation::class);
+    }
 
     /**
      * Get the attributes that should be cast.
@@ -58,6 +69,11 @@ class User extends Authenticatable
         return $this->hasOne(Salary::class);
     }
 
+    public function loans()
+    {
+        return $this->hasMany(Loan::class);
+    }
+
     public function payrolls()
     {
         return $this->hasMany(Payroll::class);
@@ -81,5 +97,10 @@ class User extends Authenticatable
     public function documents()
     {
         return $this->hasMany(Document::class);
+    }
+
+    public function loginHistories()
+    {
+        return $this->hasMany(LoginHistory::class);
     }
 }

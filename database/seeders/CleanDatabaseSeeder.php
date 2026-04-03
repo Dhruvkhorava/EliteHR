@@ -19,18 +19,18 @@ class CleanDatabaseSeeder extends Seeder
     {
         Schema::disableForeignKeyConstraints();
 
-        $tables = [
-            'users', 'shifts', 'attendances', 'leave_types', 'leaves', 'leave_balances', 
-            'recruitment_jobs', 'candidates', 'applications', 'interviews', 
-            'salaries', 'payrolls', 'payroll_details', 'goals', 'performances', 'appraisals',
-            'roles', 'permissions', 'role_has_permissions', 'model_has_roles', 'model_has_permissions'
-        ];
+        // $tables = [
+        //     'users', 'shifts', 'attendances', 'leave_types', 'leaves', 'leave_balances',
+        //     'recruitment_jobs', 'candidates', 'applications', 'interviews',
+        //     'salaries', 'payrolls', 'payroll_details', 'goals', 'performances', 'appraisals',
+        //     'roles', 'permissions', 'role_has_permissions', 'model_has_roles', 'model_has_permissions'
+        // ];
 
-        foreach ($tables as $table) {
-            if (Schema::hasTable($table)) {
-                DB::table($table)->truncate();
-            }
-        }
+        // foreach ($tables as $table) {
+        //     if (Schema::hasTable($table)) {
+        //         DB::table($table)->truncate();
+        //     }
+        // }
 
         Schema::enableForeignKeyConstraints();
 
@@ -54,7 +54,7 @@ class CleanDatabaseSeeder extends Seeder
 
         $employeeRole = Role::create(['name' => 'employee']);
         $employeeRole->syncPermissions(['leave.apply', 'attendance.view']);
-        
+
         Role::create(['name' => 'manager']);
         Role::create(['name' => 'intern']);
 
@@ -138,9 +138,9 @@ class CleanDatabaseSeeder extends Seeder
             $candidateIds[] = DB::table('candidates')->insertGetId([
                 'name' => 'Candidate ' . $i,
                 'email' => 'candidate' . $i . '@example.com',
-                'phone' => '987654321'.$i,
-                'resume' => 'resume_'.$i.'.pdf',
-                'experience' => $i.' years',
+                'phone' => '987654321' . $i,
+                'resume' => 'resume_' . $i . '.pdf',
+                'experience' => $i . ' years',
                 'skills' => 'PHP, Laravel, Vue',
                 'created_at' => now(), 'updated_at' => now()
             ]);
@@ -210,7 +210,7 @@ class CleanDatabaseSeeder extends Seeder
                 'created_at' => now(), 'updated_at' => now()
             ]);
         }
-        
+
         // 13. Performances (5 records)
         $perfIds = [];
         for ($i = 0; $i < 5; $i++) {
@@ -239,7 +239,7 @@ class CleanDatabaseSeeder extends Seeder
                 'created_at' => now(), 'updated_at' => now()
             ]);
         }
-        
+
         // 15. Leaves (5 requests)
         for ($i = 0; $i < 5; $i++) {
             DB::table('leaves')->insert([

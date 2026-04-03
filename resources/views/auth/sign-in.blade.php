@@ -56,14 +56,20 @@
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label class="form-label">Email</label>
-                                            <input type="email" name="email" class="form-control"
-                                                value="{{ old('email') }}" required autofocus>
+                                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                                                value="{{ old('email') }}" autofocus>
+                                            @error('email')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         <div class="mb-4">
                                             <label class="form-label">Password</label>
-                                            <input type="password" name="password" class="form-control" required>
+                                            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror">
+                                            @error('password')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-12">

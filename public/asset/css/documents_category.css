@@ -1,0 +1,218 @@
+.upload-area {
+    border: 2px dashed #4361ee;
+    border-radius: 15px;
+    padding: 40px;
+    text-align: center;
+    background: rgba(67, 97, 238, 0.05);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.upload-area:hover {
+    background: rgba(67, 97, 238, 0.1);
+    border-style: solid;
+}
+.doc-list-card {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+.dark .doc-list-card {
+    background: #191e3a;
+}
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-block;
+}
+.status-uploaded {
+    background: rgba(67, 97, 238, 0.1);
+    color: #4361ee;
+}
+.status-verified {
+    background: rgba(0, 171, 85, 0.1);
+    color: #00ab55;
+}
+.status-rejected {
+    background: rgba(231, 81, 90, 0.1);
+    color: #e7515a;
+}
+
+/* File Grid Styles */
+.file-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 25px;
+    padding: 10px;
+}
+
+.file-card {
+    background: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid #f1f2f3;
+    position: relative;
+    text-decoration: none !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.file-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border-color: #4361ee;
+}
+
+.dark .file-card {
+    background: #1b2e4b;
+    border-color: #253b5c;
+}
+
+.file-status-container {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.file-icon-wrapper {
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.document-icon {
+    width: 60px;
+    height: 80px;
+    background-color: #fff;
+    border: 1px solid #e0e6ed;
+    border-radius: 4px;
+    position: relative;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.06);
+    background-image:
+        linear-gradient(
+            90deg,
+            #fff 10px,
+            transparent 10px,
+            transparent 50px,
+            #fff 50px
+        ),
+        linear-gradient(#d1d8e0 1px, transparent 1px);
+    background-size: 100% 10px;
+    background-position: 0 25px;
+    margin: 0 auto;
+}
+
+/* Folded Corner */
+.document-icon::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 16px 16px 0;
+    border-color: transparent transparent #f8f9fa transparent;
+    z-index: 2;
+}
+
+.document-icon::after {
+    content: "";
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(135deg, transparent 50%, #e0e6ed 50%);
+    border-bottom-left-radius: 3px;
+    box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.1);
+    z-index: 3;
+}
+
+.file-info {
+    width: 100%;
+    margin-top: auto;
+}
+
+.file-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #3b3f5c;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 4px;
+}
+
+.file-date {
+    font-size: 11px;
+    color: #888ea8;
+    display: block;
+}
+
+.dark .file-title {
+    color: #bfc9d4;
+}
+.dark .file-date {
+    color: #515365;
+}
+
+.file-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    display: flex;
+    gap: 5px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 4px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.dark .file-actions {
+    background: rgba(27, 46, 75, 0.9);
+}
+
+.file-card:hover .file-actions {
+    opacity: 1;
+}
+
+.action-btn {
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+    background: transparent;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-view-file {
+    color: #4361ee;
+}
+.btn-view-file:hover {
+    background: rgba(67, 97, 238, 0.1);
+}
+
+.btn-download-file {
+    color: #00ab55;
+}
+.btn-download-file:hover {
+    background: rgba(0, 171, 85, 0.1);
+}
+
+.btn-delete-file {
+    color: #e7515a;
+}
+.btn-delete-file:hover {
+    background: rgba(231, 81, 90, 0.1);
+}

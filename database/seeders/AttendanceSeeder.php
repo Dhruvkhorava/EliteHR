@@ -16,7 +16,7 @@ class AttendanceSeeder extends Seeder
     {
         $users = User::all();
         $daysToSeed = 30;
-        $now = Carbon::now();
+        $faker = \Faker\Factory::create();
 
         foreach ($users as $user) {
             for ($i = $daysToSeed; $i >= 0; $i--) {
@@ -29,28 +29,28 @@ class AttendanceSeeder extends Seeder
 
                 // Randomize attendance
                 if (rand(0, 100) > 10) { // 90% attendance rate
-                    $this->createAttendance($user, $date);
+                    $this->createAttendance($user, $date, $faker);
                 }
             }
         }
     }
 
-    private function createAttendance($user, $date)
+    private function createAttendance($user, $date, $faker)
     {
         $dateStr = $date->toDateString();
         
-        // Random check-in between 08:30 and 10:30
-        $checkInHour = rand(8, 10);
-        $checkInMin = rand(0, 59);
+        // Random check-in between 08:30 and 10:15
+        $checkInHour = $faker->numberBetween(8, 9);
+        $checkInMin = ($checkInHour == 8) ? $faker->numberBetween(30, 59) : $faker->numberBetween(0, 30);
         $checkIn = Carbon::parse("$dateStr $checkInHour:$checkInMin:00");
 
-        // Random check-out between 17:00 and 20:00
-        $checkOutHour = rand(17, 19);
-        $checkOutMin = rand(0, 59);
+        // Random check-out between 17:00 and 19:30
+        $checkOutHour = $faker->numberBetween(17, 18);
+        $checkOutMin = $faker->numberBetween(0, 59);
         $checkOut = Carbon::parse("$dateStr $checkOutHour:$checkOutMin:00");
 
         // Break time between 30 and 60 minutes
-        $breakSeconds = rand(30, 60) * 60;
+        $breakSeconds = $faker->numberBetween(30, 60) * 60;
         
         $totalSeconds = $checkOut->diffInSeconds($checkIn, true);
         $workingSeconds = $totalSeconds - $breakSeconds;

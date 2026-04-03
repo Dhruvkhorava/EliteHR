@@ -30,6 +30,14 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
 
+            // Record login history
+            \App\Models\LoginHistory::create([
+                'user_id' => Auth::id(),
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'login_at' => now(),
+            ]);
+
             return redirect()->intended('dashboard/analytics');
         }
 

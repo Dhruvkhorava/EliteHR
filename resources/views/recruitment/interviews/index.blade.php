@@ -1,16 +1,14 @@
 @extends('layouts.app')
 
 @section('styles')
-    @vite(['resources/scss/light/plugins/table/datatable/dt-global_style.scss'])
-    @vite(['resources/scss/dark/plugins/table/datatable/dt-global_style.scss'])
-    @vite(['resources/scss/light/plugins/table/datatable/custom_dt_custom.scss'])
     @vite(['resources/scss/dark/plugins/table/datatable/custom_dt_custom.scss'])
+    <link rel="stylesheet" href="{{ asset('asset/css/recruitment_common.css') }}">
 @endsection
 
 @section('content')
     <div class="row layout-top-spacing">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 layout-spacing">
-            <div class="widget widget-card-four text-white mb-4" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border: none; border-radius: 15px; box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);">
+            <div class="widget widget-card-four text-white mb-4 recruitment-card-warning">
                 <div class="widget-content p-4 d-flex justify-content-between align-items-center">
                     <div>
                         <h4 class="value text-white mb-1 font-weight-bold">Interview Management</h4>
@@ -24,7 +22,7 @@
         </div>
 
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 layout-spacing">
-            <div class="widget widget-table-two border-0 shadow-sm" style="border-radius: 15px; overflow: hidden;">
+            <div class="widget widget-table-two border-0 shadow-sm recruitment-widget-table">
                 <div class="widget-heading px-4 pt-4">
                     <h5 class="font-weight-bold">Upcoming & Past Interviews</h5>
                 </div>
@@ -94,11 +92,14 @@
                     <div class="modal-body p-4">
                         <div class="mb-4">
                             <label class="form-label font-weight-bold">Status</label>
-                            <select name="status" class="form-control" required>
-                                <option value="Scheduled" {{ $interview->status == 'Scheduled' ? 'selected' : '' }}>Scheduled</option>
-                                <option value="Completed" {{ $interview->status == 'Completed' ? 'selected' : '' }}>Completed</option>
-                                <option value="Cancelled" {{ $interview->status == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
+                            <select name="status" class="form-control @error('status') is-invalid @enderror">
+                                <option value="Scheduled" {{ (old('status') ?? $interview->status) == 'Scheduled' ? 'selected' : '' }}>Scheduled</option>
+                                <option value="Completed" {{ (old('status') ?? $interview->status) == 'Completed' ? 'selected' : '' }}>Completed</option>
+                                <option value="Cancelled" {{ (old('status') ?? $interview->status) == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
                             </select>
+                            @error('status')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="mb-4">
                             <label class="form-label font-weight-bold">Notes / Feedback</label>
@@ -127,30 +128,42 @@
                     <div class="modal-body p-4">
                         <div class="mb-4">
                             <label class="form-label font-weight-bold">Select Application</label>
-                            <select name="application_id" class="form-control" required>
+                            <select name="application_id" class="form-control @error('application_id') is-invalid @enderror">
                                 <option value="">Choose candidate application...</option>
                                 @foreach($applications as $app)
-                                <option value="{{ $app->id }}">{{ $app->candidate->name ?? 'Unknown' }} - {{ $app->job->title ?? 'Unknown' }}</option>
+                                <option value="{{ $app->id }}" {{ old('application_id') == $app->id ? 'selected' : '' }}>{{ $app->candidate->name ?? 'Unknown' }} - {{ $app->job->title ?? 'Unknown' }}</option>
                                 @endforeach
                             </select>
+                            @error('application_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="mb-4">
                             <label class="form-label font-weight-bold">Assign Interviewer</label>
-                            <select name="interviewer_id" class="form-control" required>
+                            <select name="interviewer_id" class="form-control @error('interviewer_id') is-invalid @enderror">
                                 <option value="">Choose interviewer...</option>
                                 @foreach($interviewers as $interviewer)
-                                <option value="{{ $interviewer->id }}">{{ $interviewer->name }} ({{ ucfirst($interviewer->getRoleNames()->first()) }})</option>
+                                <option value="{{ $interviewer->id }}" {{ old('interviewer_id') == $interviewer->id ? 'selected' : '' }}>{{ $interviewer->name }} ({{ ucfirst($interviewer->getRoleNames()->first()) }})</option>
                                 @endforeach
                             </select>
+                            @error('interviewer_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-4">
                                 <label class="form-label font-weight-bold">Date</label>
-                                <input type="date" name="date" class="form-control" required min="{{ date('Y-m-d') }}">
+                                <input type="date" name="date" class="form-control @error('date') is-invalid @enderror" min="{{ date('Y-m-d') }}" value="{{ old('date') }}">
+                                @error('date')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label class="form-label font-weight-bold">Time</label>
-                                <input type="time" name="time" class="form-control" required>
+                                <input type="time" name="time" class="form-control @error('time') is-invalid @enderror" value="{{ old('time') }}">
+                                @error('time')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                     </div>

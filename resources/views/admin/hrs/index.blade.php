@@ -22,7 +22,9 @@
                     <thead>
                         <tr>
                             <th scope="col">Name</th>
-                            <th scope="col">Role</th>
+                            @if(auth()->user()->hasRole('super_admin'))
+                                <th scope="col">Role</th>
+                            @endif
                             <th class="text-center" scope="col">Status</th>
                             <th class="text-center" scope="col">Action</th>
                         </tr>
@@ -37,6 +39,9 @@
 @endsection
 
 @section('scripts')
+<script>
+    window.showRoleColumn = {{ auth()->user()->hasRole('super_admin') ? 'true' : 'false' }};
+</script>
 <script src="{{asset('plugins/src/table/datatable/datatables.js')}}"></script>
 <script src="{{ asset('asset/js/admin/hrs/index.js') }}"></script>
 @endsection

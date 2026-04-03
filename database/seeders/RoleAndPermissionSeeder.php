@@ -34,12 +34,37 @@ class RoleAndPermissionSeeder extends Seeder
             'leave_type.manage',
             
             // Payroll
+            'payroll.view',
             'payroll.manage',
+            'payroll.view_own',
             
             // Recruitment
             'view recruitment',
             'manage jobs',
             'manage candidates',
+
+            // Performance
+            'performance.view',
+            'performance.manage',
+
+            // Documents
+            'document.view',
+            'document.manage',
+
+            // Mail
+            'mail.view',
+            'mail.manage',
+
+            // Calendar
+            'calendar.view',
+            'calendar.manage',
+
+            // Settings
+            'settings.view',
+            'settings.manage',
+
+            // Roles (Super Admin Only)
+            'roles.manage',
         ];
 
         foreach ($permissions as $permission) {
@@ -52,6 +77,8 @@ class RoleAndPermissionSeeder extends Seeder
 
         $adminRole = Role::updateOrCreate(['name' => 'admin']);
         $adminRole->syncPermissions(Permission::all());
+        // Remove roles.manage from admin (only for super_admin)
+        $adminRole->revokePermissionTo('roles.manage');
 
         $hrRole = Role::updateOrCreate(['name' => 'hr']);
         $hrRole->syncPermissions([
@@ -62,16 +89,32 @@ class RoleAndPermissionSeeder extends Seeder
             'attendance.manage',
             'leave.apply',
             'leave.view_all',
+            'payroll.view',
             'payroll.manage',
             'view recruitment',
             'manage jobs',
             'manage candidates',
+            'performance.view',
+            'performance.manage',
+            'document.view',
+            'document.manage',
+            'mail.view',
+            'mail.manage',
+            'calendar.view',
+            'calendar.manage',
+            'settings.view',
         ]);
 
         $employeeRole = Role::updateOrCreate(['name' => 'employee']);
         $employeeRole->syncPermissions([
-            'leave.apply',
             'attendance.view',
+            'leave.apply',
+            'performance.view',
+            'document.view',
+            'mail.view',
+            'mail.manage',
+            'calendar.view',
+            'payroll.view_own',
         ]);
 
         // Create/Update default users

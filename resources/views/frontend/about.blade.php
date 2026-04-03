@@ -1,5 +1,9 @@
 @extends('frontend.layouts.page')
 
+@section('meta_title', 'About Us | EliteHR - HR Management System')
+@section('meta_description', 'Learn about EliteHR, a state-of-the-art Human Resource Management System built for modern businesses aiming to manage and grow their workforce efficiently.')
+@section('meta_keywords', 'About EliteHR, HR Solutions, Workforce Management')
+
 @section('page_title', 'About EliteHR')
 
 @section('page_content')

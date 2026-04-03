@@ -3,32 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Payslip - {{ $payroll->user->name }}</title>
-    <style>
-        body { font-family: 'Helvetica', sans-serif; font-size: 13px; color: #333; line-height: 1.5; margin: 0; padding: 0; }
-        .payslip-container { padding: 30px; }
-        .header { border-bottom: 2px solid #f1f2f3; padding-bottom: 15px; margin-bottom: 25px; display: table; width: 100%; }
-        .logo { font-size: 24px; font-weight: bold; color: #4361ee; display: table-cell; vertical-align: middle; }
-        .logo span { color: #333; }
-        .title-box { display: table-cell; text-align: right; vertical-align: middle; }
-        .payslip-title { font-size: 18px; font-weight: bold; color: #888ea8; text-transform: uppercase; margin: 0; }
-        .info-row { display: table; width: 100%; margin-bottom: 30px; }
-        .info-col { display: table-cell; width: 50%; }
-        .info-col.right { text-align: right; }
-        .section-label { text-transform: uppercase; font-size: 10px; letter-spacing: 1px; color: #888ea8; margin-bottom: 5px; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        th { background: #f8f9fa; text-align: left; padding: 10px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #f1f2f3; }
-        td { padding: 10px; border-bottom: 1px solid #f1f2f3; }
-        .text-right { text-align: right; }
-        .total-row { background: #f8f9fa; font-weight: bold; }
-        .net-salary-box { background: #4361ee; color: #fff; padding: 20px; margin-top: 30px; display: table; width: 100%; }
-        .net-salary-info { display: table-cell; vertical-align: middle; }
-        .net-salary-label { font-size: 12px; opacity: 0.9; text-transform: uppercase; }
-        .net-salary-amount { font-size: 24px; font-weight: bold; }
-        .net-salary-words { display: table-cell; text-align: right; vertical-align: middle; }
-        .footer { margin-top: 50px; padding-top: 20px; border-top: 1px dashed #f1f2f3; text-align: center; color: #888ea8; font-size: 10px; }
-        .text-danger { color: #e7515a; }
-        @page { margin: 0; }
-    </style>
+    <link rel="stylesheet" href="{{ asset('asset/css/payroll_pdf_payslip.css') }}">
 </head>
 <body>
     <div class="payslip-container">

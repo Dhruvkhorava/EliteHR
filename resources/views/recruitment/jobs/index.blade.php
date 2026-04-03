@@ -1,16 +1,14 @@
 @extends('layouts.app')
 
 @section('styles')
-    @vite(['resources/scss/light/plugins/table/datatable/dt-global_style.scss'])
-    @vite(['resources/scss/dark/plugins/table/datatable/dt-global_style.scss'])
-    @vite(['resources/scss/light/plugins/table/datatable/custom_dt_custom.scss'])
     @vite(['resources/scss/dark/plugins/table/datatable/custom_dt_custom.scss'])
+    <link rel="stylesheet" href="{{ asset('asset/css/recruitment_common.css') }}">
 @endsection
 
 @section('content')
     <div class="row layout-top-spacing">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 layout-spacing">
-            <div class="widget widget-card-four text-white" style="background: linear-gradient(135deg, #4361ee 0%, #1e3a8a 100%); border: none; border-radius: 15px; box-shadow: 0 10px 30px rgba(67, 97, 238, 0.3);">
+            <div class="widget widget-card-four text-white recruitment-card-primary">
                 <div class="widget-content p-4">
                     <div class="w-header d-flex justify-content-between align-items-center">
                         <div class="w-info">
@@ -30,7 +28,7 @@
         </div>
 
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 layout-spacing">
-            <div class="widget widget-table-two border-0 shadow-sm" style="border-radius: 15px; overflow: hidden;">
+            <div class="widget widget-table-two border-0 shadow-sm recruitment-widget-table">
                 <div class="widget-heading px-4 pt-4 d-flex justify-content-between align-items-center">
                     <h5 class="font-weight-bold">Current Job Openings</h5>
                 </div>

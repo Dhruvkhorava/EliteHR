@@ -16,27 +16,39 @@
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <label for="name">Leave Type Name</label>
-                                <input type="text" name="name" class="form-control" value="{{ $leaveType->name }}" required>
+                                <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $leaveType->name) }}">
+                                @error('name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6">
                                 <label for="days_allowed">Days Allowed (Per Year)</label>
-                                <input type="number" name="days_allowed" class="form-control" value="{{ $leaveType->days_allowed }}" min="0" required>
+                                <input type="number" name="days_allowed" class="form-control @error('days_allowed') is-invalid @enderror" value="{{ old('days_allowed', $leaveType->days_allowed) }}" min="0">
+                                @error('days_allowed')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <label for="carry_forward">Carry Forward</label>
-                                <select name="carry_forward" class="form-control" required>
-                                    <option value="0" {{ !$leaveType->carry_forward ? 'selected' : '' }}>No</option>
-                                    <option value="1" {{ $leaveType->carry_forward ? 'selected' : '' }}>Yes</option>
+                                <select name="carry_forward" class="form-control @error('carry_forward') is-invalid @enderror">
+                                    <option value="0" {{ old('carry_forward', $leaveType->carry_forward) == '0' ? 'selected' : '' }}>No</option>
+                                    <option value="1" {{ old('carry_forward', $leaveType->carry_forward) == '1' ? 'selected' : '' }}>Yes</option>
                                 </select>
+                                @error('carry_forward')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6">
                                 <label for="is_paid">Payment Type</label>
-                                <select name="is_paid" class="form-control" required>
-                                    <option value="1" {{ $leaveType->is_paid ? 'selected' : '' }}>Paid</option>
-                                    <option value="0" {{ !$leaveType->is_paid ? 'selected' : '' }}>Unpaid</option>
+                                <select name="is_paid" class="form-control @error('is_paid') is-invalid @enderror">
+                                    <option value="1" {{ old('is_paid', $leaveType->is_paid) == '1' ? 'selected' : '' }}>Paid</option>
+                                    <option value="0" {{ old('is_paid', $leaveType->is_paid) == '0' ? 'selected' : '' }}>Unpaid</option>
                                 </select>
+                                @error('is_paid')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="row">

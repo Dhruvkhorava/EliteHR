@@ -19,48 +19,48 @@
                         <div class="row">
                             <div class="col-md-6 mb-4">
                                 <label for="title" class="form-label font-weight-bold">Job Title *</label>
-                                <input type="text" name="title" id="title" class="form-control" placeholder="e.g. Laravel Developer" required>
-                                @error('title') <span class="text-danger small">{{ $message }}</span> @enderror
+                                <input type="text" name="title" id="title" class="form-control @error('title') is-invalid @enderror" placeholder="e.g. Laravel Developer" value="{{ old('title') }}">
+                                @error('title') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label for="department" class="form-label font-weight-bold">Department *</label>
-                                <select name="department" id="department" class="form-control" required>
+                                <select name="department" id="department" class="form-control @error('department') is-invalid @enderror">
                                     <option value="">Select Department</option>
-                                    <option value="IT / Development">IT / Development</option>
-                                    <option value="Human Resources">Human Resources</option>
-                                    <option value="Marketing">Marketing</option>
-                                    <option value="Sales">Sales</option>
-                                    <option value="Finance">Finance</option>
-                                    <option value="Operations">Operations</option>
+                                    <option value="IT / Development" {{ old('department') == 'IT / Development' ? 'selected' : '' }}>IT / Development</option>
+                                    <option value="Human Resources" {{ old('department') == 'Human Resources' ? 'selected' : '' }}>Human Resources</option>
+                                    <option value="Marketing" {{ old('department') == 'Marketing' ? 'selected' : '' }}>Marketing</option>
+                                    <option value="Sales" {{ old('department') == 'Sales' ? 'selected' : '' }}>Sales</option>
+                                    <option value="Finance" {{ old('department') == 'Finance' ? 'selected' : '' }}>Finance</option>
+                                    <option value="Operations" {{ old('department') == 'Operations' ? 'selected' : '' }}>Operations</option>
                                 </select>
-                                @error('department') <span class="text-danger small">{{ $message }}</span> @enderror
+                                @error('department') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-4">
                                 <label for="location" class="form-label font-weight-bold">Location *</label>
-                                <input type="text" name="location" id="location" class="form-control" placeholder="e.g. Ahmedabad, Remote" required>
-                                @error('location') <span class="text-danger small">{{ $message }}</span> @enderror
+                                <input type="text" name="location" id="location" class="form-control @error('location') is-invalid @enderror" placeholder="e.g. Ahmedabad, Remote" value="{{ old('location') }}">
+                                @error('location') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label for="salary_range" class="form-label font-weight-bold">Salary Range</label>
-                                <input type="text" name="salary_range" id="salary_range" class="form-control" placeholder="e.g. $50k - $70k">
-                                @error('salary_range') <span class="text-danger small">{{ $message }}</span> @enderror
+                                <input type="text" name="salary_range" id="salary_range" class="form-control @error('salary_range') is-invalid @enderror" placeholder="e.g. $50k - $70k" value="{{ old('salary_range') }}">
+                                @error('salary_range') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
                         </div>
 
                         <div class="mb-4">
                             <label for="required_skills" class="form-label font-weight-bold">Required Skills</label>
-                            <input type="text" name="required_skills" id="required_skills" class="form-control" placeholder="e.g. PHP, Laravel, MySQL, JavaScript">
+                            <input type="text" name="required_skills" id="required_skills" class="form-control @error('required_skills') is-invalid @enderror" placeholder="e.g. PHP, Laravel, MySQL, JavaScript" value="{{ old('required_skills') }}">
                             <small class="text-muted">Comma separated values</small>
-                            @error('required_skills') <span class="text-danger small">{{ $message }}</span> @enderror
+                            @error('required_skills') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
 
                         <div class="mb-4">
                             <label for="description" class="form-label font-weight-bold">Job Description *</label>
-                            <textarea name="description" id="description" rows="6" class="form-control" placeholder="Detailed job description and responsibilities..." required></textarea>
-                            @error('description') <span class="text-danger small">{{ $message }}</span> @enderror
+                            <textarea name="description" id="description" rows="6" class="form-control @error('description') is-invalid @enderror" placeholder="Detailed job description and responsibilities...">{{ old('description') }}</textarea>
+                            @error('description') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
 
                         <div class="d-flex justify-content-end">

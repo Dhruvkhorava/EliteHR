@@ -1,9 +1,13 @@
 @extends('layouts.app')
 
+@section('styles')
+    <link rel="stylesheet" href="{{ asset('asset/css/recruitment_common.css') }}">
+@endsection
+
 @section('content')
     <div class="row layout-top-spacing">
         <div class="col-xl-8 col-lg-10 col-md-12 col-sm-12 layout-spacing mx-auto">
-            <div class="widget widget-card-four border-0 shadow-sm" style="border-radius: 15px;">
+            <div class="widget widget-card-four border-0 shadow-sm recruitment-widget-table">
                 <div class="widget-content p-4">
                     <div class="w-header mb-4 d-flex justify-content-between align-items-center">
                         <div class="w-info text-success font-weight-bold">

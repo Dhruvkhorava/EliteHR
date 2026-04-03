@@ -15,27 +15,39 @@
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <label for="name">Leave Type Name</label>
-                                <input type="text" name="name" class="form-control" placeholder="e.g. Casual Leave" required>
+                                <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="e.g. Casual Leave" value="{{ old('name') }}">
+                                @error('name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6">
                                 <label for="days_allowed">Days Allowed (Per Year)</label>
-                                <input type="number" name="days_allowed" class="form-control" value="0" min="0" required>
+                                <input type="number" name="days_allowed" class="form-control @error('days_allowed') is-invalid @enderror" value="{{ old('days_allowed', 0) }}" min="0">
+                                @error('days_allowed')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <label for="carry_forward">Carry Forward</label>
-                                <select name="carry_forward" class="form-control" required>
-                                    <option value="0">No</option>
-                                    <option value="1">Yes</option>
+                                <select name="carry_forward" class="form-control @error('carry_forward') is-invalid @enderror">
+                                    <option value="0" {{ old('carry_forward') == '0' ? 'selected' : '' }}>No</option>
+                                    <option value="1" {{ old('carry_forward') == '1' ? 'selected' : '' }}>Yes</option>
                                 </select>
+                                @error('carry_forward')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6">
                                 <label for="is_paid">Payment Type</label>
-                                <select name="is_paid" class="form-control" required>
-                                    <option value="1">Paid</option>
-                                    <option value="0">Unpaid</option>
+                                <select name="is_paid" class="form-control @error('is_paid') is-invalid @enderror">
+                                    <option value="1" {{ old('is_paid') == '1' ? 'selected' : '' }}>Paid</option>
+                                    <option value="0" {{ old('is_paid') == '0' ? 'selected' : '' }}>Unpaid</option>
                                 </select>
+                                @error('is_paid')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="row">

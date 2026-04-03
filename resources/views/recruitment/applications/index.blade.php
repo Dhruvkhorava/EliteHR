@@ -4,12 +4,13 @@
     <link rel="stylesheet" href="{{ asset('plugins/src/drag-and-drop/dragula/dragula.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/src/notification/snackbar/snackbar.min.css') }}">
     <link rel="stylesheet" href="{{ asset('asset/css/recruitment/applications/index.css') }}">
+    <link rel="stylesheet" href="{{ asset('asset/css/recruitment_applications_extra.css') }}">
 @endsection
 
 @section('content')
     <div class="row layout-top-spacing">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 layout-spacing">
-            <div class="widget widget-card-four text-white mb-4" style="background: linear-gradient(135deg, #4361ee 0%, #1e3a8a 100%); border: none; border-radius: 15px;">
+            <div class="widget widget-card-four text-white mb-4 pipeline-header">
                 <div class="widget-content p-4 d-flex justify-content-between align-items-center">
                     <div>
                         <h4 class="value text-white mb-1 font-weight-bold">Talent Pipeline</h4>
@@ -22,8 +23,8 @@
             </div>
 
             <div class="active-pipeline-section mb-5">
-                <h5 class="section-title mb-4" style="font-weight: 800; color: #3b3f5c; letter-spacing: 0.5px; display: flex; align-items: center;">
-                    <span class="badge badge-primary me-2" style="width: 12px; height: 12px; border-radius: 50%; padding: 0;">&nbsp;</span>
+                <h5 class="section-title mb-4">
+                    <span class="badge badge-primary me-2 title-badge">&nbsp;</span>
                     ACTIVE PIPELINE
                 </h5>
                 <div class="kanban-container scroll-container">
@@ -44,7 +45,7 @@
                                 <h6 class="kanban-title mb-0 me-2">{{ $stage }}</h6>
                             </div>
                             <div class="d-flex align-items-center gap-2">
-                                <span class="badge badge-light-secondary rounded-pill" id="count-{{ Str::slug($stage) }}" style="font-weight: 800; font-size: 0.7rem;">{{ count($board[$stage] ?? []) }}</span>
+                                <span class="badge badge-light-secondary rounded-pill count-badge" id="count-{{ Str::slug($stage) }}">{{ count($board[$stage] ?? []) }}</span>
                                 <a href="javascript:void(0);" class="text-muted" data-bs-toggle="modal" data-bs-target="#applyModal">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
                                 </a>
@@ -86,7 +87,7 @@
                                         {{ $app->created_at->format('M d, Y') }}
                                     </div>
                                     <div class="candidate-avatar">
-                                        <span class="badge badge-light-primary rounded-circle" style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">{{ substr($app->candidate?->name, 0, 1) }}</span>
+                                        <span class="badge badge-light-primary rounded-circle avatar-badge">{{ substr($app->candidate?->name, 0, 1) }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -98,13 +99,13 @@
             </div>
 
             <div class="finalized-section">
-                <h5 class="section-title mb-4" style="font-weight: 800; color: #64748b; letter-spacing: 0.5px; display: flex; align-items: center;">
-                    <span class="badge badge-secondary me-2" style="width: 12px; height: 12px; border-radius: 50%; padding: 0; background-color: #64748b;">&nbsp;</span>
+                <h5 class="section-title-finalized mb-4">
+                    <span class="badge badge-secondary me-2 title-badge" style="background-color: #64748b;">&nbsp;</span>
                     FINALIZED STAGES
                 </h5>
                 <div class="kanban-container scroll-container">
                     @foreach(['Rejected', 'Hired'] as $stage)
-                    <div class="kanban-column" style="background: rgba(226, 232, 240, 0.4);">
+                    <div class="kanban-column kanban-column-finalized">
                         <div class="kanban-header d-flex justify-content-between align-items-center mb-3">
                             <div class="d-flex align-items-center">
                                 @php
@@ -140,7 +141,7 @@
                                     </div>
                                 </div>
                                 <div class="mb-2">
-                                    <span class="job-badge" style="background: rgba(100, 116, 139, 0.1); color: #64748b;">{{ $app->job?->title }}</span>
+                                    <span class="job-badge job-badge-finalized">{{ $app->job?->title }}</span>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top" style="border-top: 1px dashed #e0e6ed !important;">
                                     <div class="card-footer-info d-flex align-items-center small">
@@ -148,7 +149,7 @@
                                         {{ $app->created_at->format('M d') }}
                                     </div>
                                     <div class="candidate-avatar">
-                                        <span class="badge badge-light-secondary rounded-circle" style="width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 10px;">{{ substr($app->candidate?->name, 0, 1) }}</span>
+                                        <span class="badge badge-light-secondary rounded-circle avatar-badge-small">{{ substr($app->candidate?->name, 0, 1) }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -164,7 +165,7 @@
     <!-- Application Modal ... (rest of the modal remains same) -->
     <div class="modal fade" id="applyModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content" style="border-radius: 15px;">
+            <div class="modal-content modal-content-rounded">
                 <div class="modal-header border-0 pb-0">
                     <h5 class="modal-title font-weight-bold">New Job Application</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -174,21 +175,27 @@
                     <div class="modal-body p-4">
                         <div class="mb-4">
                             <label class="form-label font-weight-bold">Select Candidate</label>
-                            <select name="candidate_id" class="form-control" required>
+                            <select name="candidate_id" class="form-control @error('candidate_id') is-invalid @enderror">
                                 <option value="">Choose a candidate...</option>
                                 @foreach($candidates as $candidate)
-                                <option value="{{ $candidate->id }}">{{ $candidate->name }} ({{ $candidate->email }})</option>
+                                <option value="{{ $candidate->id }}" {{ old('candidate_id') == $candidate->id ? 'selected' : '' }}>{{ $candidate->name }} ({{ $candidate->email }})</option>
                                 @endforeach
                             </select>
+                            @error('candidate_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="mb-4">
                             <label class="form-label font-weight-bold">Select Job Position</label>
-                            <select name="job_id" class="form-control" required>
+                            <select name="job_id" class="form-control @error('job_id') is-invalid @enderror">
                                 <option value="">Choose a position...</option>
                                 @foreach($jobs as $job)
-                                <option value="{{ $job->id }}">{{ $job->title }} - {{ $job->department }}</option>
+                                <option value="{{ $job->id }}" {{ old('job_id') == $job->id ? 'selected' : '' }}>{{ $job->title }} - {{ $job->department }}</option>
                                 @endforeach
                             </select>
+                            @error('job_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                     <div class="modal-footer border-0 pt-0">

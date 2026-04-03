@@ -4,73 +4,7 @@
     @vite(['resources/scss/light/assets/users/user-profile.scss'])
     @vite(['resources/scss/light/assets/users/account-setting.scss'])
     @vite(['resources/scss/light/assets/components/tabs.scss'])
-    <style>
-        .profile-hero {
-            background: linear-gradient(135deg, #4361ee 0%, #160d3d 100%);
-            border-radius: 12px;
-            color: white;
-            padding: 40px 20px;
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 30px;
-        }
-        .profile-hero::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -20%;
-            width: 100%;
-            height: 200%;
-            background: rgba(255, 255, 255, 0.05);
-            transform: rotate(45deg);
-        }
-        .profile-hero .avatar-xl {
-            width: 130px;
-            height: 130px;
-            border: 4px solid rgba(255, 255, 255, 0.2);
-            padding: 4px;
-            background: white;
-            border-radius: 50%;
-        }
-        .stat-box {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 4px 12px 0 rgba(0,0,0,0.05);
-            height: 100%;
-            transition: transform 0.3s ease;
-        }
-        .stat-box:hover {
-            transform: translateY(-5px);
-        }
-        .stat-box svg {
-            width: 28px;
-            height: 28px;
-            color: #4361ee;
-            margin-bottom: 10px;
-        }
-        .nav-tabs .nav-link {
-            padding: 15px 25px;
-            font-weight: 600;
-            border: none;
-            color: #515365;
-            border-bottom: 2px solid transparent;
-        }
-        .nav-tabs .nav-link.active {
-            background: transparent;
-            color: #4361ee;
-            border-bottom: 2px solid #4361ee;
-        }
-        .salary-blur {
-            filter: blur(5px);
-            transition: filter 0.3s ease;
-            cursor: pointer;
-        }
-        .salary-blur:hover {
-            filter: blur(0);
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('asset/css/admin_profile_index.css') }}">
 @endsection
 
 @section('content')
@@ -142,6 +76,9 @@
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="security-tab" data-bs-toggle="tab" data-bs-target="#security" type="button" role="tab">Security & Password</button>
                 </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="login-history-tab" data-bs-toggle="tab" data-bs-target="#login-history" type="button" role="tab">Login History</button>
+                </li>
             </ul>
             
             <div class="tab-content p-4" id="profileTabsContent">
@@ -152,17 +89,93 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-6 mb-4">
-                                <label class="fw-bold mb-2">Display Name</label>
-                                <input type="text" name="name" class="form-control" value="{{ $user->name }}" required>
+                                <label class="fw-bold mb-2">First Name</label>
+                                <input type="text" name="first_name" class="form-control @error('first_name') is-invalid @enderror" value="{{ old('first_name', $user->first_name) }}">
+                                @error('first_name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label class="fw-bold mb-2">Last Name</label>
+                                <input type="text" name="last_name" class="form-control @error('last_name') is-invalid @enderror" value="{{ old('last_name', $user->last_name) }}">
+                                @error('last_name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label class="fw-bold mb-2">Email Address</label>
-                                <input type="email" name="email" class="form-control" value="{{ $user->email }}" required>
+                                <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $user->email) }}">
+                                @error('email')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
+                            <div class="col-md-3 mb-4">
+                                <label class="fw-bold mb-2">Date of Birth</label>
+                                <input type="date" name="date_of_birth" class="form-control @error('date_of_birth') is-invalid @enderror" value="{{ old('date_of_birth', $user->date_of_birth) }}">
+                                @error('date_of_birth')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-3 mb-4">
+                                <label class="fw-bold mb-2">Gender</label>
+                                <select name="gender" class="form-control @error('gender') is-invalid @enderror">
+                                    <option value="male" {{ old('gender', $user->gender) == 'male' ? 'selected' : '' }}>Male</option>
+                                    <option value="female" {{ old('gender', $user->gender) == 'female' ? 'selected' : '' }}>Female</option>
+                                    <option value="other" {{ old('gender', $user->gender) == 'other' ? 'selected' : '' }}>Other</option>
+                                </select>
+                                @error('gender')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            
                             <div class="col-12 mb-4">
-                                <label class="fw-bold mb-2">Change Profile Image</label>
-                                <input type="file" name="image" class="form-control" onchange="previewImage(this)">
+                                <label class="fw-bold mb-2">Permanent Address</label>
+                                <textarea name="address" class="form-control @error('address') is-invalid @enderror" rows="2">{{ old('address', $user->address) }}</textarea>
+                                @error('address')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
+
+                            <div class="col-md-3 mb-4">
+                                <label class="fw-bold mb-2">City</label>
+                                <input type="text" name="city" class="form-control @error('city') is-invalid @enderror" value="{{ old('city', $user->city) }}">
+                                @error('city')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-3 mb-4">
+                                <label class="fw-bold mb-2">State</label>
+                                <input type="text" name="state" class="form-control @error('state') is-invalid @enderror" value="{{ old('state', $user->state) }}">
+                                @error('state')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-3 mb-4">
+                                <label class="fw-bold mb-2">Country</label>
+                                <input type="text" name="country" class="form-control @error('country') is-invalid @enderror" value="{{ old('country', $user->country) }}">
+                                @error('country')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-3 mb-4">
+                                <label class="fw-bold mb-2">Pincode</label>
+                                <input type="text" name="pincode" class="form-control @error('pincode') is-invalid @enderror" value="{{ old('pincode', $user->pincode) }}">
+                                @error('pincode')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <label class="fw-bold mb-2">Change Profile Image</label>
+                                <input type="file" name="profile_image" class="form-control @error('profile_image') is-invalid @enderror" onchange="previewImage(this)">
+                                @error('profile_image')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <div class="mt-2 text-center text-md-start">
+                                    <img src="{{ $user->profile_image ? asset('storage/' . $user->profile_image) : ($user->image ? asset('storage/' . $user->image) : asset('asset/images/placeholder.png')) }}" id="img_preview" class="rounded-circle border" width="80" height="80" style="object-fit: cover;">
+                                </div>
+                            </div>
+
                             <div class="col-md-6 mb-4">
                                 <label class="fw-bold mb-2 d-block text-muted">Shift Schedule</label>
                                 <div class="bg-light p-3 rounded">
@@ -172,8 +185,10 @@
                                     @endif
                                 </div>
                             </div>
+
                             <div class="col-12">
-                                <button type="submit" class="btn btn-primary px-4">Save General Changes</button>
+                                <hr>
+                                <button type="submit" class="btn btn-primary px-4">Save Profile Changes</button>
                             </div>
                         </div>
                     </form>
@@ -245,15 +260,24 @@
                         <div class="row">
                             <div class="col-md-4 mb-4">
                                 <label class="fw-bold mb-2">Current Password</label>
-                                <input type="password" name="current_password" class="form-control" required>
+                                <input type="password" name="current_password" class="form-control @error('current_password') is-invalid @enderror">
+                                @error('current_password')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-4 mb-4">
                                 <label class="fw-bold mb-2">New Password</label>
-                                <input type="password" name="password" class="form-control" required>
+                                <input type="password" name="password" class="form-control @error('password') is-invalid @enderror">
+                                @error('password')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-4 mb-4">
                                 <label class="fw-bold mb-2">Confirm New Password</label>
-                                <input type="password" name="password_confirmation" class="form-control" required>
+                                <input type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror">
+                                @error('password_confirmation')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-12">
                                 <button type="submit" class="btn btn-warning px-4">Update Security Credentials</button>
@@ -261,20 +285,70 @@
                         </div>
                     </form>
                 </div>
+
+                <!-- Login History Tab -->
+                <div class="tab-pane fade" id="login-history" role="tabpanel">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr class="bg-light">
+                                    <th>Date & Time</th>
+                                    <th>IP Address</th>
+                                    <th>Device / Browser</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($loginHistories as $history)
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-in text-success me-2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+                                            <span class="fw-bold">{{ $history->login_at->format('M d, Y') }}</span>
+                                            <span class="text-muted ms-1 small">at {{ $history->login_at->format('h:i A') }}</span>
+                                        </div>
+                                    </td>
+                                    <td><code class="text-primary fw-bold">{{ $history->ip_address }}</code></td>
+                                    <td>
+                                        <span class="text-muted small" title="{{ $history->user_agent }}">
+                                            @php
+                                                $agent = $history->user_agent;
+                                                if (str_contains($agent, 'Chrome')) $icon = 'fa-chrome';
+                                                elseif (str_contains($agent, 'Firefox')) $icon = 'fa-firefox';
+                                                elseif (str_contains($agent, 'Safari')) $icon = 'fa-safari';
+                                                elseif (str_contains($agent, 'Edge')) $icon = 'fa-edge';
+                                                else $icon = 'fa-globe';
+
+                                                if (str_contains($agent, 'Windows')) $os = 'Windows';
+                                                elseif (str_contains($agent, 'Macintosh')) $os = 'Mac';
+                                                elseif (str_contains($agent, 'Linux')) $os = 'Linux';
+                                                elseif (str_contains($agent, 'iPhone')) $os = 'iOS';
+                                                elseif (str_contains($agent, 'Android')) $os = 'Android';
+                                                else $os = 'Unknown';
+                                            @endphp
+                                            <i class="fab {{ $icon }} me-1"></i> {{ $os }}
+                                        </span>
+                                    </td>
+                                    <td><span class="badge badge-light-success">Successful</span></td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="4" class="text-center py-4">
+                                        <p class="text-muted mb-0">No login history recorded yet.</p>
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-muted mt-3 mb-0 small"><i class="fas fa-info-circle me-1"></i> Showing the last 10 login sessions for security purposes.</p>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<script>
-    function previewImage(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                document.querySelector('.avatar-xl').src = e.target.result;
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-</script>
+@push('scripts')
+    <script src="{{ asset('asset/js/admin_profile_index.js') }}"></script>
+@endpush
 @endsection

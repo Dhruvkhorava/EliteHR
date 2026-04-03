@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\RecruitmentJob;
 use App\Models\Candidate;
 use App\Models\Interview;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Application extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'job_id',

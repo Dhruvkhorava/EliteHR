@@ -1,0 +1,109 @@
+/* Modern Attendance Styles */
+.attendance-tab-nav .nav-link {
+    border: none;
+    padding: 10px 25px;
+    font-weight: 600;
+    color: #515365;
+    background: #f1f2f3;
+    border-radius: 6px;
+    margin-right: 10px;
+}
+.attendance-tab-nav .nav-link.active {
+    background: #fff;
+    color: #4361ee;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+.filter-section {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #e0e6ed;
+}
+.btn-filter {
+    background: #fff;
+    border: 1px solid #e0e6ed;
+    color: #515365;
+    padding: 5px 15px;
+    font-size: 13px;
+}
+.btn-filter.active {
+    background: #4361ee;
+    color: #fff;
+    border-color: #4361ee;
+}
+
+/* Attendance Visual Timeline */
+.attendance-visual {
+    width: 100%;
+    height: 8px;
+    background: #ebedf2;
+    border-radius: 10px;
+    display: flex;
+    position: relative;
+    margin: 5px 0;
+}
+.visual-segment {
+    height: 100%;
+    border-radius: 4px;
+}
+.segment-work { background: #00abff; opacity: 0.6; }
+.segment-break { background: #e2a03f; opacity: 0.4; }
+.timeline-markers {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 5px;
+}
+.marker {
+    width: 1px;
+    height: 5px;
+    background: #bfc9d4;
+}
+
+/* Progress Circle for Hours */
+.hours-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+    position: relative;
+}
+.circle-full { background: #00abff; }
+.circle-half { 
+    background: linear-gradient(90deg, #00abff 50%, #ebedf2 50%);
+}
+
+.attendance-table th {
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 700;
+    color: #888ea8;
+    border-bottom: 1px solid #e0e6ed;
+    background: #f8f9fa;
+}
+.attendance-table td {
+    vertical-align: middle;
+    padding: 15px 12px;
+    font-weight: 500;
+    color: #3b3f5c;
+}
+
+/* Special Row Styling */
+.row-special {
+    background-color: #f9f9f9 !important;
+    color: #888ea8;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+.row-leave { background-color: #f3f0ff !important; }
+
+.badge-wfh { background: #e7f7ff; color: #00abff; }
+.badge-hldy { background: #fff9ed; color: #e2a03f; }
+.badge-woff { background: #f1f2f3; color: #888ea8; }
+.badge-pnlty { background: #ffe7e7; color: #e7515a; }
+.badge-leave { background: #f3f0ff; color: #805dca; }

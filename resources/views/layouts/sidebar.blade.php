@@ -9,8 +9,9 @@
             <div class="nav-logo">
                 <div class="nav-item theme-logo">
                     <a href="{{ getRouterValue() }}dashboard/analytics">
-                        @if(get_setting('site_logo'))
-                            <img src="{{ asset('storage/' . get_setting('site_logo')) }}" class="navbar-logo" alt="logo">
+                        @if (get_setting('site_logo'))
+                            <img src="{{ asset('storage/' . get_setting('site_logo')) }}" class="navbar-logo"
+                                alt="logo">
                         @else
                             <img src="{{ Vite::asset('resources/images/logo.svg') }}" class="navbar-logo" alt="logo">
                         @endif
@@ -52,8 +53,8 @@
                         </svg>
                     </div>
                 </a>
-                <ul class="collapse submenu list-unstyled {{ $catName === 'dashboard' ? 'show' : '' }} "
-                    id="dashboard" data-bs-parent="#accordionExample">
+                <ul class="collapse submenu list-unstyled {{ $catName === 'dashboard' ? 'show' : '' }} " id="dashboard"
+                    data-bs-parent="#accordionExample">
                     <li class="{{ Request::routeIs('analytics') ? 'active' : '' }}">
                         <a href="{{ getRouterValue() }}dashboard/analytics"> Analytics </a>
                     </li>
@@ -95,8 +96,16 @@
                             </li>
                         @endcan
                         @can('employee.view')
-                            <li>
+                            <li class="{{ Request::routeIs('employees.*') ? 'active' : '' }}">
                                 <a href="{{ route('employees.index') }}"> Employee </a>
+                            </li>
+                        @endcan
+                        @can('user.view')
+                            <li class="{{ Request::routeIs('designations.*') ? 'active' : '' }}">
+                                <a href="{{ route('designations.index') }}"> Designation </a>
+                            </li>
+                            <li class="{{ Request::routeIs('managers.*') ? 'active' : '' }}">
+                                <a href="{{ route('managers.index') }}"> Manager </a>
                             </li>
                         @endcan
                     </ul>
@@ -190,73 +199,103 @@
                 </ul>
             </li>
 
-            <li class="menu {{ Request::is('dashboard/payroll*') ? 'active' : '' }}">
-                <a href="#payroll" data-bs-toggle="collapse"
-                    aria-expanded="{{ Request::is('dashboard/payroll*') ? 'true' : 'false' }}"
-                    class="dropdown-toggle">
-                    <div class="">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="feather feather-dollar-sign">
-                            <line x1="12" y1="1" x2="12" y2="23"></line>
-                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                        </svg>
-                        <span>Payroll</span>
-                    </div>
-                    <div>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="feather feather-chevron-right">
-                            <polyline points="9 18 15 12 9 6"></polyline>
-                        </svg>
-                    </div>
-                </a>
-                <ul class="collapse submenu list-unstyled {{ Request::is('dashboard/payroll*') ? 'show' : '' }}"
-                    id="payroll" data-bs-parent="#accordionExample">
-                    <li class="{{ Request::routeIs('payroll.setup') ? 'active' : '' }}">
-                        <a href="{{ route('payroll.setup') }}"> Salary Setup </a>
-                    </li>
-                    <li class="{{ Request::routeIs('payroll.generate') ? 'active' : '' }}">
-                        <a href="{{ route('payroll.generate') }}"> Generate Payroll </a>
-                    </li>
-                    <li class="{{ Request::routeIs('payroll.index') ? 'active' : '' }}">
-                        <a href="{{ route('payroll.index') }}"> Payroll History </a>
-                    </li>
-                </ul>
-            </li>
+            @if (auth()->user()->can('payroll.view') || auth()->user()->can('payroll.view_own'))
+                <li
+                    class="menu {{ Request::is('dashboard/payroll*') || Request::is('payroll*') || Request::is('dashboard/my-salary*') ? 'active' : '' }}">
+                    <a href="#payroll" data-bs-toggle="collapse"
+                        aria-expanded="{{ Request::is('dashboard/payroll*') || Request::is('payroll*') || Request::is('dashboard/my-salary*') ? 'true' : 'false' }}"
+                        class="dropdown-toggle">
+                        <div class="">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign">
+                                <line x1="12" y1="1" x2="12" y2="23"></line>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                            <span>Payroll</span>
+                        </div>
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </div>
+                    </a>
+                    <ul class="collapse submenu list-unstyled {{ Request::is('dashboard/payroll*') || Request::is('payroll*') || Request::is('dashboard/my-salary*') ? 'show' : '' }}"
+                        id="payroll" data-bs-parent="#accordionExample">
+                        @can('payroll.view_own')
+                            <li class="{{ Request::routeIs('my-salary') ? 'active' : '' }}">
+                                <a href="{{ route('my-salary') }}"> My Salary </a>
+                            </li>
+                        @endcan
+                        @can('payroll.view')
+                            <li class="{{ Request::routeIs('salary-components.index') ? 'active' : '' }}">
+                                <a href="{{ route('salary-components.index') }}"> Salary Components </a>
+                            </li>
+                            <li class="{{ Request::routeIs('salary-templates.index') ? 'active' : '' }}">
+                                <a href="{{ route('salary-templates.index') }}"> Salary Templates </a>
+                            </li>
+                            <li class="{{ Request::routeIs('payroll.setup') ? 'active' : '' }}">
+                                <a href="{{ route('payroll.setup') }}"> Salary Assignment </a>
+                            </li>
+                            <li class="{{ Request::routeIs('loans.index') ? 'active' : '' }}">
+                                <a href="{{ route('loans.index') }}"> Employee Loans </a>
+                            </li>
+                            <li class="{{ Request::routeIs('payroll.generate') ? 'active' : '' }}">
+                                <a href="{{ route('payroll.generate') }}"> Generate Payroll </a>
+                            </li>
+                            <li class="{{ Request::routeIs('payroll.index') ? 'active' : '' }}">
+                                <a href="{{ route('payroll.index') }}"> Payroll History </a>
+                            </li>
+                            <li class="{{ Request::routeIs('payroll.statement') ? 'active' : '' }}">
+                                <a href="{{ route('payroll.statement') }}"> Quick Statement </a>
+                            </li>
+                            <li class="{{ Request::routeIs('payroll.bank-transfer') ? 'active' : '' }}">
+                                <a href="{{ route('payroll.bank-transfer') }}"> Bank Transfer </a>
+                            </li>
+                            <li class="{{ Request::routeIs('payroll.reports') ? 'active' : '' }}">
+                                <a href="{{ route('payroll.reports') }}"> Reports Gallery </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endif
 
-            <li class="menu {{ $catName == 'performance' ? 'active' : '' }}">
-                <a href="#performance" data-bs-toggle="collapse"
-                    aria-expanded="{{ $catName == 'performance' ? 'true' : 'false' }}" class="dropdown-toggle">
-                    <div class="">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="feather feather-activity">
-                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                        </svg>
-                        <span>Performance</span>
-                    </div>
-                    <div>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="feather feather-chevron-right">
-                            <polyline points="9 18 15 12 9 6"></polyline>
-                        </svg>
-                    </div>
-                </a>
-                <ul class="collapse submenu list-unstyled {{ $catName == 'performance' ? 'show' : '' }}"
-                    id="performance" data-bs-parent="#accordionExample">
-                    <li class="{{ Request::routeIs('performance.index') ? 'active' : '' }}">
-                        <a href="{{ route('performance.index') }}"> Reviews </a>
-                    </li>
-                    <li class="{{ Request::routeIs('performance.goals') ? 'active' : '' }}">
-                        <a href="{{ route('performance.goals') }}"> Goals & KPIs </a>
-                    </li>
-                    <li class="{{ Request::routeIs('performance.appraisals') ? 'active' : '' }}">
-                        <a href="{{ route('performance.appraisals') }}"> Appraisals </a>
-                    </li>
-                </ul>
-            </li>
+            @can('performance.view')
+                <li class="menu {{ $catName == 'performance' ? 'active' : '' }}">
+                    <a href="#performance" data-bs-toggle="collapse"
+                        aria-expanded="{{ $catName == 'performance' ? 'true' : 'false' }}" class="dropdown-toggle">
+                        <div class="">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-activity">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                            </svg>
+                            <span>Performance</span>
+                        </div>
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-chevron-right">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </div>
+                    </a>
+                    <ul class="collapse submenu list-unstyled {{ $catName == 'performance' ? 'show' : '' }}"
+                        id="performance" data-bs-parent="#accordionExample">
+                        <li class="{{ Request::routeIs('performance.index') ? 'active' : '' }}">
+                            <a href="{{ route('performance.index') }}"> Reviews </a>
+                        </li>
+                        <li class="{{ Request::routeIs('performance.goals') ? 'active' : '' }}">
+                            <a href="{{ route('performance.goals') }}"> Goals & KPIs </a>
+                        </li>
+                        <li class="{{ Request::routeIs('performance.appraisals') ? 'active' : '' }}">
+                            <a href="{{ route('performance.appraisals') }}"> Appraisals </a>
+                        </li>
+                    </ul>
+                </li>
+            @endcan
 
             @can('view recruitment')
                 <li class="menu {{ Request::is('dashboard/recruitment*') ? 'active' : '' }}">
@@ -299,21 +338,23 @@
                     </ul>
                 </li>
             @endcan
-            <li class="menu {{ Request::routeIs('calendar.index') ? 'active' : '' }}">
-                <a href="{{ route('calendar.index') }}" aria-expanded="false" class="dropdown-toggle">
-                    <div class="">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="feather feather-calendar">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                            <line x1="16" y1="2" x2="16" y2="6"></line>
-                            <line x1="8" y1="2" x2="8" y2="6"></line>
-                            <line x1="3" y1="10" x2="21" y2="10"></line>
-                        </svg>
-                        <span>Calendar</span>
-                    </div>
-                </a>
-            </li>
+            @can('calendar.view')
+                <li class="menu {{ Request::routeIs('calendar.index') ? 'active' : '' }}">
+                    <a href="{{ route('calendar.index') }}" aria-expanded="false" class="dropdown-toggle">
+                        <div class="">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-calendar">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                            <span>Calendar</span>
+                        </div>
+                    </a>
+                </li>
+            @endcan
 
             <li class="menu {{ Request::routeIs('profile.index') ? 'active' : '' }}">
                 <a href="{{ route('profile.index') }}" aria-expanded="false" class="dropdown-toggle">
@@ -328,63 +369,67 @@
                     </div>
                 </a>
             </li>
-            <li class="menu {{ $catName == 'documents' ? 'active' : '' }}">
-                <a href="{{ route('documents.index') }}" aria-expanded="false" class="dropdown-toggle">
-                    <div class="">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="feather feather-file-text">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                            <polyline points="10 9 9 9 8 9"></polyline>
-                        </svg>
-                        <span>Documents</span>
-                    </div>
-                </a>
-            </li>
+            @can('document.view')
+                <li class="menu {{ $catName == 'documents' ? 'active' : '' }}">
+                    <a href="{{ route('documents.index') }}" aria-expanded="false" class="dropdown-toggle">
+                        <div class="">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-file-text">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                            <span>Documents</span>
+                        </div>
+                    </a>
+                </li>
+            @endcan
 
-            <li class="menu {{ $catName == 'mail' ? 'active' : '' }}">
-                <a href="#mail" data-bs-toggle="collapse"
-                    aria-expanded="{{ $catName == 'mail' ? 'true' : 'false' }}" class="dropdown-toggle">
-                    <div class="">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="feather feather-mail">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
-                            </path>
-                            <polyline points="22,6 12,13 2,6"></polyline>
-                        </svg>
-                        <span>Mail</span>
-                    </div>
-                    <div>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="feather feather-chevron-right">
-                            <polyline points="9 18 15 12 9 6"></polyline>
-                        </svg>
-                    </div>
-                </a>
-                <ul class="collapse submenu list-unstyled {{ $catName == 'mail' ? 'show' : '' }}" id="mail"
-                    data-bs-parent="#accordionExample">
-                    <li class="{{ Request::routeIs('mail.index') ? 'active' : '' }}">
-                        <a href="{{ route('mail.index') }}"> Inbox </a>
-                    </li>
-                    <li class="{{ Request::routeIs('mail.compose') ? 'active' : '' }}">
-                        <a href="{{ route('mail.compose') }}"> Compose </a>
-                    </li>
-                    <li class="{{ Request::routeIs('mail.sent') ? 'active' : '' }}">
-                        <a href="{{ route('mail.sent') }}"> Sent </a>
-                    </li>
-                    <li class="{{ Request::routeIs('mail.drafts') ? 'active' : '' }}">
-                        <a href="{{ route('mail.drafts') }}"> Drafts </a>
-                    </li>
-                    <li class="{{ Request::routeIs('mail.trash') ? 'active' : '' }}">
-                        <a href="{{ route('mail.trash') }}"> Trash </a>
-                    </li>
-                </ul>
-            </li>
+            @can('mail.view')
+                <li class="menu {{ $catName == 'mail' ? 'active' : '' }}">
+                    <a href="#mail" data-bs-toggle="collapse"
+                        aria-expanded="{{ $catName == 'mail' ? 'true' : 'false' }}" class="dropdown-toggle">
+                        <div class="">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-mail">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                </path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            <span>Mail</span>
+                        </div>
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-chevron-right">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </div>
+                    </a>
+                    <ul class="collapse submenu list-unstyled {{ $catName == 'mail' ? 'show' : '' }}" id="mail"
+                        data-bs-parent="#accordionExample">
+                        <li class="{{ Request::routeIs('mail.index') ? 'active' : '' }}">
+                            <a href="{{ route('mail.index') }}"> Inbox </a>
+                        </li>
+                        <li class="{{ Request::routeIs('mail.compose') ? 'active' : '' }}">
+                            <a href="{{ route('mail.compose') }}"> Compose </a>
+                        </li>
+                        <li class="{{ Request::routeIs('mail.sent') ? 'active' : '' }}">
+                            <a href="{{ route('mail.sent') }}"> Sent </a>
+                        </li>
+                        <li class="{{ Request::routeIs('mail.drafts') ? 'active' : '' }}">
+                            <a href="{{ route('mail.drafts') }}"> Drafts </a>
+                        </li>
+                        <li class="{{ Request::routeIs('mail.trash') ? 'active' : '' }}">
+                            <a href="{{ route('mail.trash') }}"> Trash </a>
+                        </li>
+                    </ul>
+                </li>
+            @endcan
 
             {{-- <li class="menu {{ $catName == 'organization' ? 'active' : '' }}">
                 <a href="javascript:void(0);" aria-expanded="false" class="dropdown-toggle">
@@ -416,38 +461,45 @@
                 </a>
             </li> --}}
 
-            <li class="menu {{ $catName == 'settings' ? 'active' : '' }}">
-                <a href="#settings" data-bs-toggle="collapse"
-                    aria-expanded="{{ $catName == 'settings' ? 'true' : 'false' }}" class="dropdown-toggle">
-                    <div class="">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="feather feather-settings">
-                            <circle cx="12" cy="12" r="3"></circle>
-                            <path
-                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
-                            </path>
-                        </svg>
-                        <span>Settings</span>
-                    </div>
-                    <div>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="feather feather-chevron-right">
-                            <polyline points="9 18 15 12 9 6"></polyline>
-                        </svg>
-                    </div>
-                </a>
-                <ul class="collapse submenu list-unstyled {{ $catName == 'settings' ? 'show' : '' }}" id="settings"
-                    data-bs-parent="#accordionExample">
-                    <li class="{{ Request::routeIs('settings') ? 'active' : '' }}">
-                        <a href="{{ route('settings') }}"> General Settings </a>
-                    </li>
-                    <li class="{{ Request::routeIs('roles.*') ? 'active' : '' }}">
-                        <a href="{{ route('roles.index') }}"> Roles </a>
-                    </li>
-                </ul>
-            </li>
+            @can('settings.view')
+                <li class="menu {{ $catName == 'settings' ? 'active' : '' }}">
+                    <a href="#settings" data-bs-toggle="collapse"
+                        aria-expanded="{{ $catName == 'settings' ? 'true' : 'false' }}" class="dropdown-toggle">
+                        <div class="">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-settings">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path
+                                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                                </path>
+                            </svg>
+                            <span>Settings</span>
+                        </div>
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-chevron-right">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </div>
+                    </a>
+                    <ul class="collapse submenu list-unstyled {{ $catName == 'settings' ? 'show' : '' }}" id="settings"
+                        data-bs-parent="#accordionExample">
+                        <li class="{{ Request::routeIs('settings') ? 'active' : '' }}">
+                            <a href="{{ route('settings') }}"> General Settings </a>
+                        </li>
+                        <li class="{{ Request::routeIs('settings.pricing') ? 'active' : '' }}">
+                            <a href="{{ route('settings.pricing') }}"> Pricing Settings </a>
+                        </li>
+                        @if (auth()->user()->hasRole('super_admin'))
+                            <li class="{{ Request::routeIs('roles.*') ? 'active' : '' }}">
+                                <a href="{{ route('roles.index') }}"> Roles </a>
+                            </li>
+                        @endif
+                    </ul>
+                </li>
+            @endcan
         </ul>
 
     </nav>

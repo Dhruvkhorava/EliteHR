@@ -132,31 +132,60 @@
             </div>
         </div>
     </div>
-
-    <div class="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
-        <div class="widget widget-chart-three">
+    <!-- Attendance Bar Chart -->
+    <div class="col-xl-5 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+        <div class="widget widget-chart-two">
             <div class="widget-heading">
-                <div class="">
-                    <h5 class="">Attendance Trend (Last 7 Days)</h5>
-                </div>
+                <h5 class="">Attendance Trend (Last 7 Days)</h5>
+            </div>
+            <div class="widget-content">
+                <div id="attendanceBarChart" class=""></div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Inbox / Recent Messages Widget -->
+    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12 layout-spacing">
+        <div class="widget widget-five">
+            <div class="widget-heading">
+                <h5 class="">Recent Inbox</h5>
                 <div class="task-action">
-                    <div class="dropdown ">
-                        <a class="dropdown-toggle" href="#" role="button" id="uniqueVisitors" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="dropdown">
+                        <a class="dropdown-toggle" href="#" role="button" id="inbox" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
                         </a>
-
-                        <div class="dropdown-menu left" aria-labelledby="uniqueVisitors">
-                            <a class="dropdown-item" href="javascript:void(0);">View</a>
-                            <a class="dropdown-item" href="javascript:void(0);">Update</a>
-                            <a class="dropdown-item" href="javascript:void(0);">Download</a>
+                        <div class="dropdown-menu left" aria-labelledby="inbox" style="will-change: transform;">
+                            <a class="dropdown-item" href="{{ route('mail.index') }}">Go to Inbox</a>
                         </div>
                     </div>
                 </div>
             </div>
-
             <div class="widget-content">
-                <div id="uniqueVisits"></div>
+                <div class="w-shadow-top"></div>
+                <div class="mt-container mx-auto">
+                    <!-- Placeholder messages, ideally would use $recentMessages if populated -->
+                    <div class="d-flex p-3 border-bottom">
+                        <div class="usr-avatar me-3">
+                            <span class="badge badge-primary rounded-circle p-2">HR</span>
+                        </div>
+                        <div class="w-title">
+                            <h6 class="mb-1 fw-bold">HR Team <span class="badge bg-danger ms-1">New</span></h6>
+                            <p class="mb-0 text-muted fs-6">Reminder: Finalize monthly payroll reports before EOFY.</p>
+                            <small class="text-success">2 hours ago</small>
+                        </div>
+                    </div>
+                    <div class="d-flex p-3 border-bottom">
+                        <div class="usr-avatar me-3">
+                            <span class="badge badge-secondary rounded-circle p-2">JD</span>
+                        </div>
+                        <div class="w-title">
+                            <h6 class="mb-1">John Doe</h6>
+                            <p class="mb-0 text-muted fs-6">Requesting an update on the Q3 performance appraisals...</p>
+                            <small class="text-secondary">Yesterday</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-shadow-bottom"></div>
             </div>
         </div>
     </div>
@@ -223,37 +252,27 @@
     </div>
 
     <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12 layout-spacing">
-        <div class="widget-four">
+        <div class="widget widget-chart-two">
             <div class="widget-heading">
                 <h5 class="">Leave Type Breakdown</h5>
+                <div class="task-action">
+                    <div class="dropdown">
+                        <a class="dropdown-toggle" href="#" role="button" id="leaveTypes" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+                        </a>
+                        <div class="dropdown-menu left" aria-labelledby="leaveTypes" style="will-change: transform;">
+                            <a class="dropdown-item" href="javascript:void(0);">View Report</a>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="widget-content">
-                <div class="vistorsBrowser">
-                    @foreach($leaveTypes as $type)
-                    <div class="browser-list">
-                        <div class="w-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-                        </div>
-                        <div class="w-browser-details">
-                            <div class="w-browser-info">
-                                <h6>{{ $type->name }}</h6>
-                                <p class="browser-count">{{ round(($type->leaves_count / $totalLeaveRequests) * 100) }}%</p>
-                            </div>
-                            <div class="w-browser-stats">
-                                <div class="progress">
-                                    <div class="progress-bar bg-gradient-{{ ['primary', 'danger', 'success', 'warning'][ $loop->index % 4 ] }}" role="progressbar" style="width: {{ ($type->leaves_count / $totalLeaveRequests) * 100 }}%" aria-valuenow="{{ $type->leaves_count }}" aria-valuemin="0" aria-valuemax="{{ $totalLeaveRequests }}"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    @endforeach
-                    
-                    @if($leaveTypes->isEmpty())
-                    <div class="text-center py-4">
-                        <p>No leave data available for this year.</p>
-                    </div>
-                    @endif
+                <div id="leaveTypeChart" class=""></div>
+                @if($leaveTypes->isEmpty())
+                <div class="text-center py-4">
+                    <p>No leave data available for this year.</p>
                 </div>
+                @endif
             </div>
         </div>
     </div>
@@ -431,8 +450,12 @@
         attendanceToday  : {{ $attendanceToday }},
         pendingLeaves    : {{ $pendingLeaves }},
         activeGoals      : {{ $activeGoals }},
+        // Extract pie chart data from $leaveTypes collection
+        leaveTypeLabels  : {!! json_encode($leaveTypes->pluck('name')) !!},
+        leaveTypeData    : {!! json_encode($leaveTypes->pluck('leaves_count')) !!}
     };
 </script>
+<script src="{{ asset('asset/js/admin_dashboard_analytics.js') }}"></script>
 
 @vite(['resources/js/dashboard/dash_1.js'])
 

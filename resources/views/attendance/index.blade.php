@@ -5,117 +5,7 @@
     @vite(['resources/scss/dark/plugins/table/datatable/dt-global_style.scss'])
     @vite(['resources/scss/light/plugins/table/datatable/custom_dt_custom.scss'])
     @vite(['resources/scss/dark/plugins/table/datatable/custom_dt_custom.scss'])
-    <style>
-        /* Modern Attendance Styles */
-        .attendance-tab-nav .nav-link {
-            border: none;
-            padding: 10px 25px;
-            font-weight: 600;
-            color: #515365;
-            background: #f1f2f3;
-            border-radius: 6px;
-            margin-right: 10px;
-        }
-        .attendance-tab-nav .nav-link.active {
-            background: #fff;
-            color: #4361ee;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-        .filter-section {
-            background: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border: 1px solid #e0e6ed;
-        }
-        .btn-filter {
-            background: #fff;
-            border: 1px solid #e0e6ed;
-            color: #515365;
-            padding: 5px 15px;
-            font-size: 13px;
-        }
-        .btn-filter.active {
-            background: #4361ee;
-            color: #fff;
-            border-color: #4361ee;
-        }
-        
-        /* Attendance Visual Timeline */
-        .attendance-visual {
-            width: 100%;
-            height: 8px;
-            background: #ebedf2;
-            border-radius: 10px;
-            display: flex;
-            position: relative;
-            margin: 5px 0;
-        }
-        .visual-segment {
-            height: 100%;
-            border-radius: 4px;
-        }
-        .segment-work { background: #00abff; opacity: 0.6; }
-        .segment-break { background: #e2a03f; opacity: 0.4; }
-        .timeline-markers {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            padding-top: 5px;
-        }
-        .marker {
-            width: 1px;
-            height: 5px;
-            background: #bfc9d4;
-        }
-
-        /* Progress Circle for Hours */
-        .hours-circle {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 8px;
-            position: relative;
-        }
-        .circle-full { background: #00abff; }
-        .circle-half { 
-            background: linear-gradient(90deg, #00abff 50%, #ebedf2 50%);
-        }
-        
-        .attendance-table th {
-            text-transform: uppercase;
-            font-size: 11px;
-            font-weight: 700;
-            color: #888ea8;
-            border-bottom: 1px solid #e0e6ed;
-            background: #f8f9fa;
-        }
-        .attendance-table td {
-            vertical-align: middle;
-            padding: 15px 12px;
-            font-weight: 500;
-            color: #3b3f5c;
-        }
-        
-        /* Special Row Styling */
-        .row-special {
-            background-color: #f9f9f9 !important;
-            color: #888ea8;
-            text-align: center;
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-        .row-leave { background-color: #f3f0ff !important; }
-        
-        .badge-wfh { background: #e7f7ff; color: #00abff; }
-        .badge-hldy { background: #fff9ed; color: #e2a03f; }
-        .badge-woff { background: #f1f2f3; color: #888ea8; }
-        .badge-pnlty { background: #ffe7e7; color: #e7515a; }
-        .badge-leave { background: #f3f0ff; color: #805dca; }
-    </style>
+    <link rel="stylesheet" href="{{ asset('asset/css/attendance_index.css') }}">
 @endsection
 
 @section('content')
@@ -256,10 +146,10 @@
                         </li>
                     </ul>
                 </div>
-                <div class="form-check form-switch d-flex align-items-center">
+                {{-- <div class="form-check form-switch d-flex align-items-center">
                     <input class="form-check-input me-2" type="checkbox" id="hourFormat">
                     <label class="form-check-label mb-0 text-muted small fw-bold" for="hourFormat">24 hour format</label>
-                </div>
+                </div> --}}
             </div>
 
             <div class="tab-content" id="pills-tabContent">
@@ -284,14 +174,14 @@
                                         <a href="{{ route('attendance.index', ['month' => $num]) }}" class="btn btn-filter {{ request('month') == $num ? 'active' : '' }}">{{ $name }}</a>
                                     @endforeach
                                 </div>
-                                <div class="btn-group" role="group">
+                                {{-- <div class="btn-group" role="group">
                                     <button type="button" class="btn btn-filter active">12 hr format</button>
                                     <button type="button" class="btn btn-filter">24 hr format</button>
-                                </div>
-                                <div class="btn-group" role="group">
+                                </div> --}}
+                                {{-- <div class="btn-group" role="group">
                                     <button type="button" class="btn btn-filter active px-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button>
                                     <button type="button" class="btn btn-filter px-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></button>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
@@ -495,35 +385,6 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('plugins/src/table/datatable/datatables.js') }}"></script>
     <script src="{{ asset('asset/js/attendance/index.js') }}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Handle Filter Button States
-            const filterButtons = document.querySelectorAll('.btn-filter');
-            filterButtons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    // Find brother buttons and remove active
-                    this.parentElement.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
-
-            // Tab Switching Logic (Bootstrap already handles this, but ensuring UI consistency)
-            const triggerTabList = [].slice.call(document.querySelectorAll('#pills-tab button'));
-            triggerTabList.forEach(function (triggerEl) {
-                const tabTrigger = new bootstrap.Tab(triggerEl);
-                triggerEl.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    tabTrigger.show();
-                });
-            });
-
-            // Initialize Bootstrap Tooltips
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl)
-            });
-        });
-    </script>
+    <script src="{{ asset('asset/js/attendance_index_ui.js') }}"></script>
 @endsection

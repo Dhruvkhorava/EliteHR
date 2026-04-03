@@ -17,21 +17,27 @@
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label>Month</label>
-                                        <select name="month" class="form-control" required>
+                                        <select name="month" class="form-control @error('month') is-invalid @enderror">
                                             @for($i = 1; $i <= 12; $i++)
-                                                <option value="{{ $i }}" {{ date('n') == $i ? 'selected' : '' }}>
+                                                <option value="{{ $i }}" {{ (old('month') ?? date('n')) == $i ? 'selected' : '' }}>
                                                     {{ date('F', mktime(0, 0, 0, $i, 10)) }}
                                                 </option>
                                             @endfor
                                         </select>
+                                        @error('month')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label>Year</label>
-                                        <select name="year" class="form-control" required>
+                                        <select name="year" class="form-control @error('year') is-invalid @enderror">
                                             @for($i = date('Y'); $i >= date('Y') - 5; $i--)
-                                                <option value="{{ $i }}">{{ $i }}</option>
+                                                <option value="{{ $i }}" {{ (old('year') ?? date('Y')) == $i ? 'selected' : '' }}>{{ $i }}</option>
                                             @endfor
                                         </select>
+                                        @error('year')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="alert alert-info py-2">

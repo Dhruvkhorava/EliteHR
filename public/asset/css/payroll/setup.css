@@ -1,0 +1,129 @@
+/* Premium Dashboard Header */
+.leaves-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 0 5px;
+}
+.leaves-title h4 {
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 0.25rem;
+    letter-spacing: -0.025em;
+}
+.leaves-title p {
+    color: #64748b;
+    font-size: 0.95rem;
+}
+
+/* Glassmorphism Card Styling (Form) */
+.setup-card {
+    background: #ffffff;
+    border-radius: 20px;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+.card-accent-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #6366f1 0%, #a855f7 100%);
+}
+
+/* Modern Table Styling */
+.table-container {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+}
+.custom-table thead th {
+    background-color: #f8fafc;
+    color: #475569;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    padding: 1rem 1.5rem;
+    border-bottom: 2px solid #f1f5f9;
+    white-space: nowrap;
+}
+.custom-table tbody td {
+    padding: 1.25rem 1.5rem;
+    vertical-align: middle;
+    color: #334155;
+    font-weight: 500;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+/* Form Controls */
+.form-label-premium {
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #64748b;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.35rem;
+}
+.form-control-premium {
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    font-weight: 600;
+    color: #1e293b;
+    transition: all 0.2s;
+}
+.form-control-premium:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+.form-select-premium {
+    background-repeat: no-repeat;
+    border-radius: 12px;
+    height: auto;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+}
+
+/* Action Button (Gradient) */
+.btn-assign {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    border: none;
+    padding: 0.85rem;
+    border-radius: 12px;
+    font-weight: 800;
+    color: white;
+    transition: all 0.3s;
+    box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+    letter-spacing: 0.025em;
+}
+.btn-assign:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.4);
+    color: white;
+}
+
+/* Avatar & Badge */
+.avatar-wrapper {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+.bg-soft-primary { background-color: rgba(99, 102, 241, 0.1); color: #6366f1; }
+.badge-premium {
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.7rem;
+}

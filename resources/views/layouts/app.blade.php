@@ -17,7 +17,8 @@
             {{ get_setting('site_name', 'EliteHR') }} | Intelligent HR Management System
         @endisset
     </title>
-    <link rel="icon" type="image/x-icon" href="{{ get_setting('site_favicon') ? asset('storage/' . get_setting('site_favicon')) : asset('asset/images/logo2.png') }}" />
+    <link rel="icon" type="image/x-icon"
+        href="{{ get_setting('site_favicon') ? asset('storage/' . get_setting('site_favicon')) : asset('asset/images/logo2.png') }}" />
     @vite(['resources/scss/layouts/vertical-light-menu/light/loader.scss'])
     @vite(['resources/scss/layouts/vertical-light-menu/dark/loader.scss'])
     @vite(['resources/layouts/vertical-light-menu/loader.js'])
@@ -38,7 +39,8 @@
     <link rel="stylesheet" href="{{ asset('plugins/src/sweetalerts2/sweetalerts2.css') }}">
     @vite(['resources/scss/light/plugins/sweetalerts2/custom-sweetalert.scss'])
     @vite(['resources/scss/dark/plugins/sweetalerts2/custom-sweetalert.scss'])
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     @isset($scrollspy)
         @if ($scrollspy)
@@ -50,6 +52,7 @@
 
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
     @yield('styles')
+    @stack('styles')
     <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
 
 </head>
@@ -181,84 +184,19 @@
 
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
     @yield('scripts')
-    
+    @stack('scripts')
+
     <script>
-        $(document).ready(function() {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            });
-
-            @if(session('success'))
-                Toast.fire({
-                    icon: 'success',
-                    title: "{{ session('success') }}"
-                });
-            @endif
-
-            @if(session('error'))
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: "{{ session('error') }}",
-                    padding: '2em',
-                    customClass: 'sweet-alerts',
-                });
-            @endif
-
-            @if(session('warning'))
-                Toast.fire({
-                    icon: 'warning',
-                    title: "{{ session('warning') }}"
-                });
-            @endif
-
-            @if(session('info'))
-                Toast.fire({
-                    icon: 'info',
-                    title: "{{ session('info') }}"
-                });
-            @endif
-
-            @if($errors->any())
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Validation Error',
-                    html: '<ul class="text-start">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>',
-                    padding: '2em',
-                    customClass: 'sweet-alerts',
-                });
-            @endif
-
-            // Global Confirmation for Delete Actions
-            $(document).on('click', '.confirm-delete', function(e) {
-                e.preventDefault();
-                let form = $(this).closest('form');
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "This action cannot be undone!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!',
-                    padding: '2em',
-                    customClass: 'sweet-alerts',
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
-                    }
-                });
-            });
-        });
+        window.appData = {
+            csrfToken: "{{ csrf_token() }}",
+            success: "{{ session('success') }}",
+            error: "{{ session('error') }}",
+            warning: "{{ session('warning') }}",
+            info: "{{ session('info') }}",
+            errors: {!! json_encode($errors->all()) !!}
+        };
     </script>
+    <script src="{{ asset('asset/js/app_global.js') }}"></script>
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
 
 </body>

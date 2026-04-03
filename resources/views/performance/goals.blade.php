@@ -115,27 +115,43 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Employee</label>
-                                <select name="user_id" class="form-select" required>
+                                <select name="user_id" class="form-select @error('user_id') is-invalid @enderror">
+                                    <option value="">Select Employee</option>
                                     @foreach($employees as $emp)
-                                        <option value="{{ $emp->id }}">{{ $emp->name }}</option>
+                                        <option value="{{ $emp->id }}" {{ old('user_id') == $emp->id ? 'selected' : '' }}>{{ $emp->name }}</option>
                                     @endforeach
                                 </select>
+                                @error('user_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Goal Title</label>
-                                <input type="text" name="title" class="form-control" placeholder="e.g. Sales Target, Project Deadline" required>
+                                <input type="text" name="title" class="form-control @error('title') is-invalid @enderror" placeholder="e.g. Sales Target, Project Deadline" value="{{ old('title') }}">
+                                @error('title')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Target Metric (Optional)</label>
-                                <input type="text" name="target" class="form-control" placeholder="e.g. 20 leads, 100% attendance">
+                                <input type="text" name="target" class="form-control @error('target') is-invalid @enderror" placeholder="e.g. 20 leads, 100% attendance" value="{{ old('target') }}">
+                                @error('target')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Deadline</label>
-                                <input type="date" name="deadline" class="form-control">
+                                <input type="date" name="deadline" class="form-control @error('deadline') is-invalid @enderror" value="{{ old('deadline') }}">
+                                @error('deadline')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-12 mb-3">
                                 <label class="form-label">Description</label>
-                                <textarea name="description" class="form-control" rows="3"></textarea>
+                                <textarea name="description" class="form-control @error('description') is-invalid @enderror" rows="3">{{ old('description') }}</textarea>
+                                @error('description')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                     </div>

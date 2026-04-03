@@ -1,5 +1,9 @@
 @extends('frontend.layouts.page')
 
+@section('meta_title', 'Contact Us | EliteHR Support')
+@section('meta_description', 'Get in touch with EliteHR. Reach out to our specialists today to learn how our HRMS can simplify your workforce management.')
+@section('meta_keywords', 'Contact EliteHR, HR Support, EliteHR Contact')
+
 @section('page_title', 'Contact EliteHR')
 
 @section('page_content')

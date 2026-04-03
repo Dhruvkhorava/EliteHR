@@ -19,39 +19,39 @@
                         <div class="row">
                             <div class="col-md-6 mb-4">
                                 <label for="name" class="form-label font-weight-bold">Full Name *</label>
-                                <input type="text" name="name" id="name" class="form-control" placeholder="e.g. John Doe" required>
-                                @error('name') <span class="text-danger small">{{ $message }}</span> @enderror
+                                <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" placeholder="e.g. John Doe" value="{{ old('name') }}">
+                                @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label for="email" class="form-label font-weight-bold">Email Address *</label>
-                                <input type="email" name="email" id="email" class="form-control" placeholder="e.g. john@example.com" required>
-                                @error('email') <span class="text-danger small">{{ $message }}</span> @enderror
+                                <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror" placeholder="e.g. john@example.com" value="{{ old('email') }}">
+                                @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-4">
                                 <label for="phone" class="form-label font-weight-bold">Phone Number</label>
-                                <input type="text" name="phone" id="phone" class="form-control" placeholder="e.g. +1 234 567 890">
-                                @error('phone') <span class="text-danger small">{{ $message }}</span> @enderror
+                                <input type="text" name="phone" id="phone" class="form-control @error('phone') is-invalid @enderror" placeholder="e.g. +1 234 567 890" value="{{ old('phone') }}">
+                                @error('phone') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label for="experience" class="form-label font-weight-bold">Experience</label>
-                                <input type="text" name="experience" id="experience" class="form-control" placeholder="e.g. 3+ Years">
-                                @error('experience') <span class="text-danger small">{{ $message }}</span> @enderror
+                                <input type="text" name="experience" id="experience" class="form-control @error('experience') is-invalid @enderror" placeholder="e.g. 3+ Years" value="{{ old('experience') }}">
+                                @error('experience') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
                         </div>
 
                         <div class="mb-4">
                             <label for="skills" class="form-label font-weight-bold">Skills</label>
-                            <input type="text" name="skills" id="skills" class="form-control" placeholder="e.g. PHP, Laravel, Vue.js">
-                            @error('skills') <span class="text-danger small">{{ $message }}</span> @enderror
+                             <input type="text" name="skills" id="skills" class="form-control @error('skills') is-invalid @enderror" placeholder="e.g. PHP, Laravel, Vue.js" value="{{ old('skills') }}">
+                            @error('skills') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
 
                         <div class="mb-4">
                             <label for="resume" class="form-label font-weight-bold">Resume (PDF, DOC, DOCX) *</label>
-                            <input type="file" name="resume" id="resume" class="form-control" accept=".pdf,.doc,.docx">
-                            @error('resume') <span class="text-danger small">{{ $message }}</span> @enderror
+                             <input type="file" name="resume" id="resume" class="form-control @error('resume') is-invalid @enderror" accept=".pdf,.doc,.docx">
+                            @error('resume') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
 
                         <div class="d-flex justify-content-end">

@@ -109,21 +109,31 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Employee</label>
-                                <select name="user_id" class="form-select" required>
+                                <select name="user_id" class="form-select @error('user_id') is-invalid @enderror">
+                                    <option value="">Select Employee</option>
                                     @foreach($employees as $emp)
                                         @if($emp->salary)
-                                            <option value="{{ $emp->id }}">{{ $emp->name }} (Basic: {{ $emp->salary->basic }})</option>
+                                            <option value="{{ $emp->id }}" {{ old('user_id') == $emp->id ? 'selected' : '' }}>{{ $emp->name }} (Basic: {{ $emp->salary->basic }})</option>
                                         @endif
                                     @endforeach
                                 </select>
+                                @error('user_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Increment Percentage (%)</label>
-                                <input type="number" step="0.01" name="increment_percentage" class="form-control" placeholder="e.g. 10" required>
+                                <input type="number" step="0.01" name="increment_percentage" class="form-control @error('increment_percentage') is-invalid @enderror" placeholder="e.g. 10" value="{{ old('increment_percentage') }}">
+                                @error('increment_percentage')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Effective Date</label>
-                                <input type="date" name="effective_date" class="form-control" value="{{ date('Y-m-d') }}" required>
+                                <input type="date" name="effective_date" class="form-control @error('effective_date') is-invalid @enderror" value="{{ old('effective_date', date('Y-m-d')) }}">
+                                @error('effective_date')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                     </div>

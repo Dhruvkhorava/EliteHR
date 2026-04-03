@@ -1,0 +1,38 @@
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 12px 0 rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    border: none;
+}
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+.stat-card .icon-box {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.bg-yearly { background-color: rgba(67, 97, 238, 0.1); color: #4361ee; }
+.bg-monthly { background-color: rgba(0, 171, 85, 0.1); color: #00ab55; }
+.bg-daily { background-color: rgba(255, 184, 0, 0.1); color: #ffb800; }
+
+.salary-value {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #1b2e4b;
+    margin-bottom: 5px;
+}
+.salary-label {
+    color: #888ea8;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+}

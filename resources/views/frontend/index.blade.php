@@ -1,5 +1,9 @@
 @extends('frontend.layouts.app')
 
+@section('meta_title', 'Home | EliteHR - Next Gen HR Platform')
+@section('meta_description', 'Empower your people and elevate your business with EliteHR. The unified platform for global recruitment and payroll.')
+@section('meta_keywords', 'HRMS, EliteHR, Home, Payroll, Recruitment')
+
 @section('header')
     <div class="container-fluid position-relative p-0 hero-header-modern" style="background: linear-gradient(rgb(38 92 175 / 55%), rgba(9, 30, 62, 0.85)), url('{{ asset('frontend/img/carousel-1.jpg') }}') center center no-repeat; background-size: cover; padding: 160px 0 120px 0; margin-bottom: 90px;">
         <div class="container py-5">

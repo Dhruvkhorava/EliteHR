@@ -11,9 +11,17 @@
         </ul>
 
         <ul class="navbar-item flex-row ms-lg-auto ms-0 action-area">
-            <li class="nav-item search-animated">
+            <li class="nav-item theme-toggle-item">
                 <a href="javascript:void(0);" class="nav-link search-trigger" id="globalSearchTrigger">
-                    <span class="badge badge-secondary ms-2 d-none d-sm-inline-block" style="font-size: 0.65rem; padding: 2px 5px;">Ctrl + K</span>
+
+                    <span class=" ms-2 d-none d-sm-inline-block" style="font-size: 0.65rem; padding: 2px 5px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="feather feather-search">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </span>
                 </a>
             </li>
             <li class="nav-item theme-toggle-item">
@@ -47,191 +55,70 @@
                         stroke-linejoin="round" class="feather feather-bell">
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                    </svg><span class="badge badge-success"></span>
+                    </svg>
+                    @if(($unreadMailsCount ?? 0) + ($unreadNotificationsCount ?? 0) > 0)
+                        <span class="badge badge-success">{{ ($unreadMailsCount ?? 0) + ($unreadNotificationsCount ?? 0) }}</span>
+                    @endif
                 </a>
 
                 <div class="dropdown-menu position-absolute" aria-labelledby="notificationDropdown">
                     <div class="drodpown-title message">
-                        <h6 class="d-flex justify-content-between"><span class="align-self-center">Messages</span> <span
-                                class="badge badge-primary">9 Unread</span></h6>
+                        <h6 class="d-flex justify-content-between">
+                            <a href="{{ route('mail.index') }}" class="text-decoration-none d-flex justify-content-between w-100">
+                                <span class="align-self-center text-dark">Messages</span>
+                                <span class="badge badge-primary">{{ $unreadMailsCount ?? 0 }} Unread</span>
+                            </a>
+                        </h6>
                     </div>
                     <div class="notification-scroll">
-                        <div class="dropdown-item">
-                            <div class="media server-log">
-                                <img src="{{ Vite::asset('resources/images/profile-16.jpeg') }}" class="img-fluid me-2"
-                                    alt="avatar">
-                                <div class="media-body">
-                                    <div class="data-info">
-                                        <h6 class="">Kara Young</h6>
-                                        <p class="">1 hr ago</p>
+                        @forelse($unreadMails ?? [] as $mail)
+                            <div class="dropdown-item">
+                                <a href="{{ route('mail.show', $mail->id) }}" class="text-decoration-none">
+                                    <div class="media">
+                                        <img src="{{ ($mail->sender && $mail->sender->image) ? asset('storage/' . $mail->sender->image) : asset('asset/images/placeholder.png') }}"
+                                            class="img-fluid me-2" alt="avatar">
+                                        <div class="media-body">
+                                            <div class="data-info">
+                                                <h6 class="mb-0 text-dark">{{ $mail->sender->name ?? 'Unknown' }}</h6>
+                                                <p class="mb-0 text-muted small">{{ $mail->subject }}</p>
+                                                <p class="mb-0 text-primary small">{{ $mail->created_at->diffForHumans() }}</p>
+                                            </div>
+                                        </div>
                                     </div>
-
-                                    <div class="icon-status">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                            class="feather feather-x">
-                                            <line x1="18" y1="6" x2="6" y2="18">
-                                            </line>
-                                            <line x1="6" y1="6" x2="18" y2="18">
-                                            </line>
-                                        </svg>
-                                    </div>
-                                </div>
+                                </a>
                             </div>
-                        </div>
-
-                        <div class="dropdown-item">
-                            <div class="media ">
-                                <img src="{{ Vite::asset('resources/images/profile-15.jpeg') }}"
-                                    class="img-fluid me-2" alt="avatar">
-                                <div class="media-body">
-                                    <div class="data-info">
-                                        <h6 class="">Daisy Anderson</h6>
-                                        <p class="">8 hrs ago</p>
-                                    </div>
-
-                                    <div class="icon-status">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                            class="feather feather-x">
-                                            <line x1="18" y1="6" x2="6" y2="18">
-                                            </line>
-                                            <line x1="6" y1="6" x2="18" y2="18">
-                                            </line>
-                                        </svg>
-                                    </div>
-                                </div>
+                        @empty
+                            <div class="dropdown-item text-center py-3">
+                                <p class="mb-0 text-muted">No unread messages</p>
                             </div>
-                        </div>
-
-                        <div class="dropdown-item">
-                            <div class="media file-upload">
-                                <img src="{{ Vite::asset('resources/images/profile-21.jpeg') }}"
-                                    class="img-fluid me-2" alt="avatar">
-                                <div class="media-body">
-                                    <div class="data-info">
-                                        <h6 class="">Oscar Garner</h6>
-                                        <p class="">14 hrs ago</p>
-                                    </div>
-
-                                    <div class="icon-status">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                            class="feather feather-x">
-                                            <line x1="18" y1="6" x2="6" y2="18">
-                                            </line>
-                                            <line x1="6" y1="6" x2="18" y2="18">
-                                            </line>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        @endforelse
 
                         <div class="drodpown-title notification mt-2">
                             <h6 class="d-flex justify-content-between"><span
                                     class="align-self-center">Notifications</span> <span
-                                    class="badge badge-secondary">16 New</span></h6>
+                                    class="badge badge-secondary">{{ $unreadNotificationsCount ?? 0 }} New</span></h6>
                         </div>
 
-                        <div class="dropdown-item">
-                            <div class="media server-log">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" class="feather feather-server">
-                                    <rect x="2" y="2" width="20" height="8" rx="2" ry="2">
-                                    </rect>
-                                    <rect x="2" y="14" width="20" height="8" rx="2" ry="2">
-                                    </rect>
-                                    <line x1="6" y1="6" x2="6" y2="6"></line>
-                                    <line x1="6" y1="18" x2="6" y2="18"></line>
-                                </svg>
-                                <div class="media-body">
-                                    <div class="data-info">
-                                        <h6 class="">Server Rebooted</h6>
-                                        <p class="">45 min ago</p>
-                                    </div>
-
-                                    <div class="icon-status">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                            class="feather feather-x">
-                                            <line x1="18" y1="6" x2="6" y2="18">
-                                            </line>
-                                            <line x1="6" y1="6" x2="18" y2="18">
-                                            </line>
-                                        </svg>
+                        @forelse($unreadNotifications ?? [] as $notification)
+                            <div class="dropdown-item">
+                                <div class="media">
+                                    <div class="media-body">
+                                        <div class="data-info">
+                                            <h6 class="mb-0 text-dark">{{ is_array($notification->data) ? ($notification->data['message'] ?? 'New event') : 'New event' }}</h6>
+                                            <p class="mb-0 text-primary small">{{ $notification->created_at->diffForHumans() }}</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="dropdown-item">
-                            <div class="media file-upload">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                    <polyline points="14 2 14 8 20 8"></polyline>
-                                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                                    <polyline points="10 9 9 9 8 9"></polyline>
-                                </svg>
-                                <div class="media-body">
-                                    <div class="data-info">
-                                        <h6 class="">Kelly Portfolio.pdf</h6>
-                                        <p class="">670 kb</p>
-                                    </div>
-
-                                    <div class="icon-status">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                            class="feather feather-x">
-                                            <line x1="18" y1="6" x2="6" y2="18">
-                                            </line>
-                                            <line x1="6" y1="6" x2="18" y2="18">
-                                            </line>
-                                        </svg>
-                                    </div>
-                                </div>
+                        @empty
+                            <div class="dropdown-item text-center py-3">
+                                <p class="mb-0 text-muted">No new notifications</p>
                             </div>
+                        @endforelse
+
+                        <div class="dropdown-item text-center py-3 border-top">
+                            <a href="{{ route('mail.index') }}" class="text-primary font-weight-bold">View All Messages</a>
                         </div>
-
-                        <div class="dropdown-item">
-                            <div class="media ">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart">
-                                    <path
-                                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                                    </path>
-                                </svg>
-                                <div class="media-body">
-                                    <div class="data-info">
-                                        <h6 class="">Licence Expiring Soon</h6>
-                                        <p class="">8 hrs ago</p>
-                                    </div>
-
-                                    <div class="icon-status">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                            class="feather feather-x">
-                                            <line x1="18" y1="6" x2="6" y2="18">
-                                            </line>
-                                            <line x1="6" y1="6" x2="18" y2="18">
-                                            </line>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
 
@@ -272,7 +159,7 @@
                         </a>
                     </div>
                     <div class="dropdown-item">
-                        <a href="{{ getRouterValue() }}app/mailbox">
+                        <a href="{{ route('mail.index') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" class="feather feather-inbox">
@@ -281,17 +168,6 @@
                                     d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z">
                                 </path>
                             </svg> <span>Inbox</span>
-                        </a>
-                    </div>
-                    <div class="dropdown-item">
-                        <a href="{{ getRouterValue() }}authentication/boxed/lockscreen">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock">
-                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2">
-                                </rect>
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                            </svg> <span>Lock Screen</span>
                         </a>
                     </div>
                     <div class="dropdown-item">

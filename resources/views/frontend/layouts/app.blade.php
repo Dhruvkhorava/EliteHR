@@ -3,10 +3,10 @@
 
 <head>
     <meta charset="utf-8">
-    <title>{{ $title ?? 'EliteHR - HR Management System'}}</title>
+    <title>@yield('meta_title', $title ?? 'EliteHR - HR Management System')</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="HRMS, EliteHR, Management" name="keywords">
-    <meta content="EliteHR - Comprehensive HR Management System" name="description">
+    <meta content="@yield('meta_keywords', 'HRMS, EliteHR, Management')" name="keywords">
+    <meta content="@yield('meta_description', 'EliteHR - Comprehensive HR Management System')" name="description">
 
     <!-- Favicon -->
     <link href="{{ asset('frontend/img/favicon.ico') }}" rel="icon">

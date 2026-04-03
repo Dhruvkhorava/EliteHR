@@ -14,7 +14,7 @@
                 <div class="row mb-4">
                     <div class="col-md-12 mb-3">
                         <label for="leave_type_id" class="fw-bold text-dark mb-2">Leave Type <span class="text-danger">*</span></label>
-                        <select name="leave_type_id" id="leave_type_id" class="form-control form-control-lg shadow-none" required>
+                        <select name="leave_type_id" id="leave_type_id" class="form-control form-control-lg shadow-none @error('leave_type_id') is-invalid @enderror">
                             <option value="">Select Leave Type</option>
                             @foreach($leaveTypes as $type)
                                 <option value="{{ $type->id }}" {{ old('leave_type_id') == $type->id ? 'selected' : '' }}>
@@ -22,20 +22,20 @@
                                 </option>
                             @endforeach
                         </select>
-                        @error('leave_type_id') <span class="text-danger small">{{ $message }}</span> @enderror
+                        @error('leave_type_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
                 </div>
 
                 <div class="row mb-4">
                     <div class="col-md-6 mb-3">
                         <label for="from_date" class="fw-bold text-dark mb-2">From Date <span class="text-danger">*</span></label>
-                        <input type="date" name="from_date" id="from_date" class="form-control form-control-lg shadow-none" value="{{ old('from_date', date('Y-m-d')) }}" required>
-                        @error('from_date') <span class="text-danger small">{{ $message }}</span> @enderror
+                        <input type="date" name="from_date" id="from_date" class="form-control form-control-lg shadow-none @error('from_date') is-invalid @enderror" value="{{ old('from_date', date('Y-m-d')) }}">
+                        @error('from_date') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="to_date" class="fw-bold text-dark mb-2">To Date <span class="text-danger">*</span></label>
-                        <input type="date" name="to_date" id="to_date" class="form-control form-control-lg shadow-none" value="{{ old('to_date', date('Y-m-d')) }}" required>
-                        @error('to_date') <span class="text-danger small">{{ $message }}</span> @enderror
+                        <input type="date" name="to_date" id="to_date" class="form-control form-control-lg shadow-none @error('to_date') is-invalid @enderror" value="{{ old('to_date', date('Y-m-d')) }}">
+                        @error('to_date') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
                 </div>
 
@@ -51,8 +51,8 @@
                 <div class="row mb-4">
                     <div class="col-md-12">
                         <label for="reason" class="fw-bold text-dark mb-2">Reason for Leave <span class="text-danger">*</span></label>
-                        <textarea name="reason" id="reason" rows="4" class="form-control shadow-none" placeholder="Explain the reason for your leave..." required>{{ old('reason') }}</textarea>
-                        @error('reason') <span class="text-danger small">{{ $message }}</span> @enderror
+                        <textarea name="reason" id="reason" rows="4" class="form-control shadow-none @error('reason') is-invalid @enderror" placeholder="Explain the reason for your leave...">{{ old('reason') }}</textarea>
+                        @error('reason') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
                 </div>
 

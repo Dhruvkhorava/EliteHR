@@ -1,0 +1,29 @@
+.recruitment-card-primary {
+    background: linear-gradient(135deg, #4361ee 0%, #1e3a8a 100%);
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(67, 97, 238, 0.3);
+}
+
+.recruitment-card-success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+}
+
+.recruitment-card-warning {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);
+}
+
+.recruitment-widget-table {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.recruitment-modal-rounded {
+    border-radius: 15px;
+}

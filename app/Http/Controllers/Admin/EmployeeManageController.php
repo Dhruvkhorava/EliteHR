@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Designation;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Storage;
+use App\Notifications\NewEmployeeNotification;
+use Illuminate\Support\Facades\Notification;
 
 class EmployeeManageController extends Controller
 {
@@ -29,7 +32,12 @@ class EmployeeManageController extends Controller
                 $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
                         ->orWhere('email', 'like', "%{$search}%")
-                        ->orWhere('designation', 'like', "%{$search}%");
+                        ->orWhereHas('designation', function($dq) use ($search) {
+                            $dq->where('name', 'like', "%{$search}%");
+                        })
+                        ->orWhereHas('manager', function($mq) use ($search) {
+                            $mq->where('name', 'like', "%{$search}%");
+                        });
                 });
             }
 
@@ -45,7 +53,7 @@ class EmployeeManageController extends Controller
             }
 
             // Paginate
-            $users = $query->skip($request->input('start'))
+            $users = $query->with(['designation', 'manager'])->skip($request->input('start'))
                 ->take($request->input('length'))
                 ->get();
 
@@ -60,7 +68,7 @@ class EmployeeManageController extends Controller
 
                 $data[] = [
                     'name' => $media,
-                    'designation' => $user->designation ?? '-',
+                    'designation' => ($user->designation ? $user->designation->name : '-') . '<br><small class="text-muted">Manager: ' . ($user->manager ? $user->manager->name : 'N/A') . '</small>',
                     'role' => '<p class="mb-0">' . ucfirst($this->role) . '</p><span class="text-success">Management</span>',
                     'status' => '<div class="text-center">' . $statusBadge . '</div>',
                     'action' => '<div class="text-center">' . $actions . '</div>',
@@ -87,11 +95,15 @@ class EmployeeManageController extends Controller
 
     public function create()
     {
+        $designations = Designation::all();
+        $managers = User::role('manager')->get();
         return view($this->viewPath . '.create', [
             'catName' => 'users',
             'role' => $this->role,
             'title' => 'Create ' . ucfirst($this->role),
             "breadcrumbs" => ["Dashboard", "Users", "Create"],
+            'designations' => $designations,
+            'managers' => $managers,
             'simplePage' => 0,
             'scrollspy' => 0,
         ]);
@@ -100,29 +112,53 @@ class EmployeeManageController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Password::defaults()],
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'date_of_birth' => 'required|date',
+            'gender' => 'required|string|in:male,female,other',
+            'address' => 'required|string',
+            'city' => 'required|string|max:255',
+            'state' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'pincode' => 'required|string|max:20',
             'status' => 'required|in:0,1',
-            'designation' => 'nullable|string|max:255',
+            'designation_id' => 'nullable|exists:designations,id',
+            'manager_id' => 'nullable|exists:users,id',
         ]);
 
         $userData = [
-            'name' => $request->name,
+            'name' => $request->first_name . ' ' . $request->last_name,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'date_of_birth' => $request->date_of_birth,
+            'gender' => $request->gender,
+            'address' => $request->address,
+            'city' => $request->city,
+            'state' => $request->state,
+            'country' => $request->country,
+            'pincode' => $request->pincode,
             'status' => $request->status,
-            'designation' => $request->designation,
+            'designation_id' => $request->designation_id,
+            'manager_id' => $request->manager_id,
         ];
 
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('users', 'public');
-            $userData['image'] = $path;
+        if ($request->hasFile('profile_image')) {
+            $path = $request->file('profile_image')->store('users', 'public');
+            $userData['profile_image'] = $path;
+            $userData['image'] = $path; // Mirroring to existing image field for compatibility
         }
 
         $user = User::create($userData);
         $user->assignRole($this->role);
+
+        // Notify Admins and HRs
+        $recipients = User::role(['admin', 'hr'])->get();
+        Notification::send($recipients, new NewEmployeeNotification($user));
 
         return redirect()->route('employees.index')->with('success', ucfirst($this->role) . ' created successfully.');
     }
@@ -130,12 +166,16 @@ class EmployeeManageController extends Controller
     public function edit(string $id)
     {
         $user = User::findOrFail($id);
+        $designations = Designation::all();
+        $managers = User::role('manager')->get();
         return view($this->viewPath . '.edit', [
             'user' => $user,
             'catName' => 'users',
             'role' => $this->role,
             'title' => 'Edit ' . ucfirst($this->role),
             "breadcrumbs" => ["Dashboard", "Users", "Edit"],
+            'designations' => $designations,
+            'managers' => $managers,
             'simplePage' => 0,
             'scrollspy' => 0,
         ]);
@@ -146,30 +186,50 @@ class EmployeeManageController extends Controller
         $user = User::findOrFail($id);
 
         $request->validate([
-            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => ['nullable', 'confirmed', Password::defaults()],
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'date_of_birth' => 'required|date',
+            'gender' => 'required|string|in:male,female,other',
+            'address' => 'required|string',
+            'city' => 'required|string|max:255',
+            'state' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'pincode' => 'required|string|max:20',
             'status' => 'required|in:0,1',
-            'designation' => 'nullable|string|max:255',
+            'designation_id' => 'nullable|exists:designations,id',
+            'manager_id' => 'nullable|exists:users,id',
         ]);
 
         $userData = [
-            'name' => $request->name,
+            'name' => $request->first_name . ' ' . $request->last_name,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
             'email' => $request->email,
+            'date_of_birth' => $request->date_of_birth,
+            'gender' => $request->gender,
+            'address' => $request->address,
+            'city' => $request->city,
+            'state' => $request->state,
+            'country' => $request->country,
+            'pincode' => $request->pincode,
             'status' => $request->status,
-            'designation' => $request->designation,
+            'designation_id' => $request->designation_id,
+            'manager_id' => $request->manager_id,
         ];
 
         if ($request->filled('password')) {
             $userData['password'] = Hash::make($request->password);
         }
 
-        if ($request->hasFile('image')) {
-            if ($user->image) {
-                Storage::disk('public')->delete($user->image);
+        if ($request->hasFile('profile_image')) {
+            if ($user->profile_image) {
+                Storage::disk('public')->delete($user->profile_image);
             }
-            $path = $request->file('image')->store('users', 'public');
+            $path = $request->file('profile_image')->store('users', 'public');
+            $userData['profile_image'] = $path;
             $userData['image'] = $path;
         }
 

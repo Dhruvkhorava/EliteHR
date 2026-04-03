@@ -26,9 +26,12 @@ class ProfileController extends Controller
             ->whereNotNull('check_in')
             ->count();
 
+        $loginHistories = $user->loginHistories()->latest()->take(10)->get();
+
         return view('admin.profile.index', [
             'user' => $user,
             'attendanceCount' => $attendanceCount,
+            'loginHistories' => $loginHistories,
             'catName' => 'users',
             'title' => 'User Profile',
             "breadcrumbs" => ["User", "Profile"],
@@ -45,21 +48,39 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'date_of_birth' => ['required', 'date'],
+            'gender' => ['required', 'in:male,female,other'],
+            'address' => ['required', 'string'],
+            'city' => ['required', 'string', 'max:255'],
+            'state' => ['required', 'string', 'max:255'],
+            'country' => ['required', 'string', 'max:255'],
+            'pincode' => ['required', 'string', 'max:20'],
+            'profile_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
         ]);
 
-        $user->name = $request->name;
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->name = $request->first_name . ' ' . $request->last_name;
         $user->email = $request->email;
+        $user->date_of_birth = $request->date_of_birth;
+        $user->gender = $request->gender;
+        $user->address = $request->address;
+        $user->city = $request->city;
+        $user->state = $request->state;
+        $user->country = $request->country;
+        $user->pincode = $request->pincode;
 
-        if ($request->hasFile('image')) {
+        if ($request->hasFile('profile_image')) {
             // Delete old image if exists
-            if ($user->image) {
-                Storage::disk('public')->delete($user->image);
+            if ($user->profile_image) {
+                Storage::disk('public')->delete($user->profile_image);
             }
-            $path = $request->file('image')->store('users', 'public');
-            $user->image = $path;
+            $path = $request->file('profile_image')->store('users', 'public');
+            $user->profile_image = $path;
+            $user->image = $path; // Complementary field
         }
 
         $user->save();

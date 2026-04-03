@@ -58,12 +58,12 @@
                             <h3 class="text-light mb-0">Popular Modules</h3>
                         </div>
                         <div class="link-animated d-flex flex-column justify-content-start">
-                            <a class="text-light mb-2 text-decoration-none" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Payroll Automation</a>
-                            <a class="text-light mb-2 text-decoration-none" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Recruitment Pipeline</a>
-                            <a class="text-light mb-2 text-decoration-none" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Attendance Tracking</a>
-                            <a class="text-light mb-2 text-decoration-none" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Leave Management</a>
-                            <a class="text-light mb-2 text-decoration-none" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Performance Appraisal</a>
-                            <a class="text-light text-decoration-none" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Employee Self-Service</a>
+                            <a class="text-light mb-2 text-decoration-none" href="{{ route('front.product', 'payroll-software') }}"><i class="bi bi-arrow-right text-primary me-2"></i>Payroll Automation</a>
+                            <a class="text-light mb-2 text-decoration-none" href="{{ route('front.product', 'recruitment-software') }}"><i class="bi bi-arrow-right text-primary me-2"></i>Recruitment Pipeline</a>
+                            <a class="text-light mb-2 text-decoration-none" href="{{ route('front.product', 'attendance-management') }}"><i class="bi bi-arrow-right text-primary me-2"></i>Attendance Tracking</a>
+                            <a class="text-light mb-2 text-decoration-none" href="{{ route('front.product', 'leave-management') }}"><i class="bi bi-arrow-right text-primary me-2"></i>Leave Management</a>
+                            <a class="text-light mb-2 text-decoration-none" href="{{ route('front.product', 'performance-management') }}"><i class="bi bi-arrow-right text-primary me-2"></i>Performance Appraisal</a>
+                            <a class="text-light text-decoration-none" href="{{ route('front.product', 'employee-self-service') }}"><i class="bi bi-arrow-right text-primary me-2"></i>Employee Self-Service</a>
                         </div>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
         <div class="row justify-content-end">
             <div class="col-lg-8 col-md-6">
                 <div class="d-flex align-items-center justify-content-center" style="height: 75px;">
-                    <p class="mb-0">&copy; <a class="text-white border-bottom text-decoration-none" href="#">EliteHR</a>. All Rights Reserved. 
+                    <p class="mb-0">&copy; <a class="text-white border-bottom text-decoration-none" href="{{ route('front.index') }}">EliteHR</a>. All Rights Reserved. 
                     <span class="text-white-50 ms-2">Empowering Workforces Everywhere.</span></p>
                 </div>
             </div>

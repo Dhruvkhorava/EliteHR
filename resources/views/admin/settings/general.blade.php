@@ -105,13 +105,5 @@
 @endsection
 
 @push('styles')
-<style>
-    .form-control:focus {
-        border-color: #4361ee;
-        box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
-    }
-    .widget-content-area {
-        box-shadow: 0 10px 30px 0 rgba(31, 45, 61, 0.06);
-    }
-</style>
+    <link rel="stylesheet" href="{{ asset('asset/css/admin_settings_general.css') }}">
 @endpush

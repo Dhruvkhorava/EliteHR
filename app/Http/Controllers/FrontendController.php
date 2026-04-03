@@ -60,4 +60,16 @@ class FrontendController extends Controller
     {
         return view('frontend.detail', ['title' => 'Blog Detail']);
     }
+
+    public function product($slug = 'hr-software')
+    {
+        $viewPath = 'frontend.product.' . $slug;
+        
+        if (view()->exists($viewPath)) {
+            return view($viewPath, ['title' => ucwords(str_replace('-', ' ', $slug))]);
+        }
+        
+        // Fallback if view doesn't exist
+        abort(404);
+    }
 }

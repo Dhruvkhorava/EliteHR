@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Interview;
 use App\Models\Leave;
 use App\Models\CalendarEvent;
+use App\Models\User;
+use App\Notifications\NewEventNotification;
+use Illuminate\Support\Facades\Notification;
 use Carbon\Carbon;
 
 class CalendarController extends Controller
@@ -157,6 +160,10 @@ class CalendarController extends Controller
             'category' => $request->category ?? 'Work',
             'description' => $request->description,
         ]);
+
+        // Notify Admins and HRs
+        $recipients = User::role(['admin', 'hr'])->get();
+        Notification::send($recipients, new NewEventNotification($event));
 
         return response()->json(['success' => true, 'event' => $event]);
     }
