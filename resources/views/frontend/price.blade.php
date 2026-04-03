@@ -30,7 +30,7 @@
                             <div class="pe-3">
                                 <h5 class="fw-bold mb-1" style="color: #8e24aa;">Expense Management</h5>
                                 <p class="mb-2 fw-bold text-dark fs-6" style="font-family: inherit;">₹15/employee/month</p>
-                                <p class="small text-muted mb-0">Snap receipts with OCR, approve on mobile, and automate finance payouts</p>
+                                <p class="small text-muted mb-0">Snap receipts with AI OCR, automate expense workflows, and sync with finance payouts.</p>
                             </div>
                             <div class="flex-shrink-0 text-center">
                                 <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
@@ -44,9 +44,9 @@
                     <div class="card border-0 rounded-4 p-4 mb-4 shadow-sm" style="background-color: #e8f5e9;">
                         <div class="d-flex justify-content-between align-items-center h-100">
                             <div class="pe-3">
-                                <h5 class="fw-bold mb-1" style="color: #5e35b1;">Performance Management Software</h5>
+                                <h5 class="fw-bold mb-1" style="color: #5e35b1;">Performance Pro</h5>
                                 <p class="mb-2 fw-bold text-dark fs-6" style="font-family: inherit;">Starts at ₹35/user/month</p>
-                                <p class="small text-muted mb-0">Goals, Reviews, Calibration & 360 Feedback</p>
+                                <p class="small text-muted mb-0">Enable growth with Goals, 360-degree Reviews, Calibration cycles, and real-time Feedback.</p>
                             </div>
                             <div class="flex-shrink-0 text-center">
                                 <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
@@ -60,9 +60,9 @@
                     <div class="card border-0 rounded-4 p-4 shadow-sm" style="background-color: #fff8e1;">
                         <div class="d-flex justify-content-between align-items-center h-100">
                             <div class="pe-3">
-                                <h5 class="fw-bold mb-1" style="color: #d81b60;">Visage</h5>
+                                <h5 class="fw-bold mb-1" style="color: #d81b60;">Visage AI</h5>
                                 <p class="mb-2 fw-bold text-dark fs-6" style="font-family: inherit;">₹20/user/month</p>
-                                <p class="small text-muted mb-0">AI-powered Facial Recognition-Based attendance Marking</p>
+                                <p class="small text-muted mb-0">Touchless, AI-powered Facial Recognition-Based attendance marking for modern hybrid workforces.</p>
                             </div>
                             <div class="flex-shrink-0 text-center">
                                 <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
@@ -81,7 +81,7 @@
                             <div class="pe-3">
                                 <h5 class="fw-bold mb-1" style="color: #5e35b1;">Alumni Portal</h5>
                                 <p class="mb-2 fw-bold text-dark fs-6" style="font-family: inherit;">Starts at ₹15/user/month</p>
-                                <p class="small text-muted mb-0">(Post-Exit) Employee access to Payslips, Form 16, IT Statements, Letters, and more</p>
+                                <p class="small text-muted mb-0">Self-service portal for former employees to access Payslips, Form 16, and Letters anytime.</p>
                             </div>
                             <div class="flex-shrink-0 text-center">
                                 <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
@@ -97,7 +97,7 @@
                             <div class="pe-3">
                                 <h5 class="fw-bold mb-1" style="color: #8e24aa;">GeoMark+</h5>
                                 <p class="mb-2 fw-bold text-dark fs-6" style="font-family: inherit;">₹50/user/month</p>
-                                <p class="small text-muted mb-0">Map-Based Attendance Marking with location Tagging</p>
+                                <p class="small text-muted mb-0">Precision Map-Based Attendance marking with real-time location tagging and route verification.</p>
                             </div>
                             <div class="flex-shrink-0 text-center">
                                 <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
@@ -111,9 +111,9 @@
                     <div class="card border-0 rounded-4 p-4 shadow-sm" style="background-color: #e8f5e9;">
                         <div class="d-flex justify-content-between align-items-center h-100">
                             <div class="pe-3">
-                                <h5 class="fw-bold mb-1" style="color: #5e35b1;">Recruit</h5>
+                                <h5 class="fw-bold mb-1" style="color: #5e35b1;">Recruit Elite</h5>
                                 <p class="mb-2 fw-bold text-dark fs-6" style="font-family: inherit;">₹2500/recruiter/month</p>
-                                <p class="small text-muted mb-0">Accelerate Hiring with our all-in-one Recruitment Solution</p>
+                                <p class="small text-muted mb-0">Accelerate high-volume hiring with AI resume parsing, candidate stages, and seamless onboarding.</p>
                             </div>
                             <div class="flex-shrink-0 text-center">
                                 <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">

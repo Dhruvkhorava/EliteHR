@@ -3,38 +3,29 @@
 return [
     'plans' => [
         [
-            'title' => 'Free Trial',
+            'title' => 'Starter',
             'price' => '₹0',
-            'price_suffix' => '',
-            'subtitle' => '(Includes 50 Employees)',
-            'button_text' => 'Start Free Trial',
+            'price_suffix' => '/month',
+            'subtitle' => '(Up to 10 Employees)',
+            'button_text' => 'Get Started',
             'button_link' => '#',
             'highlight' => false,
         ],
         [
-            'title' => 'Essential',
-            'price' => '₹3,495',
+            'title' => 'Professional',
+            'price' => '₹4,999',
             'price_suffix' => '/month',
-            'subtitle' => '(Includes 50 Employees)',
-            'button_text' => 'Start Free Trial',
-            'button_link' => '#',
-            'highlight' => false,
-        ],
-        [
-            'title' => 'Growth',
-            'price' => '₹5,495',
-            'price_suffix' => '/month',
-            'subtitle' => '(Includes 50 Employees)',
-            'button_text' => 'Start Free Trial',
+            'subtitle' => '(Up to 50 Employees)',
+            'button_text' => 'Go Pro',
             'button_link' => '#',
             'highlight' => true,
         ],
         [
             'title' => 'Enterprise',
-            'price' => '₹7,495',
+            'price' => '₹12,499',
             'price_suffix' => '/month',
-            'subtitle' => '(Includes 50 Employees)',
-            'button_text' => 'Start Free Trial',
+            'subtitle' => '(Unlimited Employees)',
+            'button_text' => 'Contact Sales',
             'button_link' => '#',
             'highlight' => false,
         ],
@@ -42,256 +33,138 @@ return [
     
     'categories' => [
         [
-            'name' => null, // No category header
+            'name' => 'Capacity',
             'features' => [
                 [
-                    'name' => 'Number of Employees',
+                    'name' => 'Employee Limit',
                     'values' => [
-                        ['type' => 'text', 'text' => 'Limited', 'class' => 'limited-text'],
+                        ['type' => 'text', 'text' => '10 Employees', 'class' => 'limited-text'],
+                        ['type' => 'text', 'text' => '50 Employees', 'class' => 'fw-bold'],
                         ['type' => 'text', 'text' => 'Unlimited', 'class' => 'unlimited-text'],
-                        ['type' => 'text', 'text' => 'Unlimited', 'class' => 'unlimited-text'],
-                        ['type' => 'text', 'text' => 'Unlimited', 'class' => 'unlimited-text'],
                     ]
                 ],
                 [
-                    'name' => 'Cost Per Additional Employee',
+                    'name' => 'Additional Employee Cost',
                     'values' => [
-                        ['type' => 'text', 'text' => 'Not Applicable', 'class' => ''],
-                        ['type' => 'text', 'text' => '₹35/ month', 'class' => 'fw-bold'],
-                        ['type' => 'text', 'text' => '₹65/ month', 'class' => 'fw-bold'],
-                        ['type' => 'text', 'text' => '₹105/ month', 'class' => 'fw-bold'],
+                        ['type' => 'text', 'text' => 'N/A', 'class' => ''],
+                        ['type' => 'text', 'text' => '₹99 / employee', 'class' => 'fw-bold'],
+                        ['type' => 'text', 'text' => 'Included', 'class' => 'unlimited-text'],
                     ]
                 ],
             ]
         ],
         [
-            'name' => 'Core Modules',
+            'name' => 'Core HR & Attendance',
             'features' => [
                 [
-                    'name' => 'Core HR',
+                    'name' => 'Employee Profiles & Directories',
                     'values' => [
-                        ['type' => 'text', 'text' => 'Limited', 'class' => 'limited-text'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
+                        ['type' => 'status', 'status' => 1],
+                        ['type' => 'status', 'status' => 1],
+                        ['type' => 'status', 'status' => 1],
                     ]
                 ],
                 [
-                    'name' => 'Payroll',
+                    'name' => 'Attendance (Web & Mobile)',
                     'values' => [
-                        ['type' => 'text', 'text' => 'Limited', 'class' => 'limited-text'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
+                        ['type' => 'status', 'status' => 1],
+                        ['type' => 'status', 'status' => 1],
+                        ['type' => 'status', 'status' => 1],
                     ]
                 ],
                 [
-                    'name' => 'Leave Management',
+                    'name' => 'Shift & Rotation Management',
                     'values' => [
-                        ['type' => 'text', 'text' => 'Limited', 'class' => 'limited-text'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
+                        ['type' => 'status', 'status' => 2],
+                        ['type' => 'status', 'status' => 1],
+                        ['type' => 'status', 'status' => 1],
                     ]
                 ],
                 [
-                    'name' => 'Attendance Management',
+                    'name' => 'Geofencing & Location Tagging',
                     'values' => [
-                        ['type' => 'text', 'text' => 'Limited', 'class' => 'limited-text'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
+                        ['type' => 'status', 'status' => 2],
+                        ['type' => 'status', 'status' => 3],
+                        ['type' => 'status', 'status' => 1],
                     ]
                 ],
             ]
         ],
         [
-            'name' => 'Employee Experience',
+            'name' => 'Payroll & Compliance',
             'features' => [
                 [
-                    'name' => 'Employee Portal (Web and Mobile app)',
+                    'name' => 'Automated Payroll Processing',
                     'values' => [
-                        ['type' => 'text', 'text' => 'Limited', 'class' => 'limited-text'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
+                        ['type' => 'status', 'status' => 2],
+                        ['type' => 'status', 'status' => 1],
+                        ['type' => 'status', 'status' => 1],
                     ]
                 ],
                 [
-                    'name' => 'Employee Self Onboarding',
+                    'name' => 'Statutory Compliance (PF/ESI/PT)',
                     'values' => [
-                        ['type' => 'text', 'text' => 'Limited', 'class' => 'limited-text'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
+                        ['type' => 'status', 'status' => 2],
+                        ['type' => 'status', 'status' => 1],
+                        ['type' => 'status', 'status' => 1],
                     ]
                 ],
                 [
-                    'name' => 'Comprehensive Employee Exit Management',
+                    'name' => 'Loan & Advance Management',
                     'values' => [
-                        ['type' => 'icon', 'icon' => 'fas fa-times cross-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
+                        ['type' => 'status', 'status' => 2],
+                        ['type' => 'status', 'status' => 1],
+                        ['type' => 'status', 'status' => 1],
                     ]
                 ],
             ]
         ],
         [
-            'name' => 'Automation & Intelligence',
+            'name' => 'Talent & Performance',
             'features' => [
                 [
-                    'name' => 'Employee Workflows for Process Automation',
+                    'name' => 'Recruitment Pipeline (ATS)',
                     'values' => [
-                        ['type' => 'text', 'text' => 'Limited', 'class' => 'limited-text'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
+                        ['type' => 'status', 'status' => 2],
+                        ['type' => 'text', 'text' => 'Basic', 'class' => 'limited-text'],
+                        ['type' => 'text', 'text' => 'Advanced', 'class' => 'unlimited-text'],
                     ]
                 ],
                 [
-                    'name' => 'Automated Checklists for Task Management',
+                    'name' => 'Performance Goals & Appraisals',
                     'values' => [
-                        ['type' => 'text', 'text' => 'Limited', 'class' => 'limited-text'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
+                        ['type' => 'status', 'status' => 2],
+                        ['type' => 'status', 'status' => 1],
+                        ['type' => 'status', 'status' => 1],
                     ]
                 ],
                 [
-                    'name' => 'AI-Powered Chatbot',
+                    'name' => 'Doc Management (Cloud Storage)',
                     'values' => [
-                        ['type' => 'icon', 'icon' => 'fas fa-times cross-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-times cross-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
+                        ['type' => 'text', 'text' => '2GB', 'class' => 'limited-text'],
+                        ['type' => 'text', 'text' => '10GB', 'class' => 'fw-bold'],
+                        ['type' => 'text', 'text' => '50GB', 'class' => 'unlimited-text'],
                     ]
                 ],
             ]
         ],
         [
-            'name' => 'Reports & Management',
+            'name' => 'Support & Security',
             'features' => [
                 [
-                    'name' => 'Advanced Analytics & Reporting',
+                    'name' => '2FA & Advanced Security',
                     'values' => [
-                        ['type' => 'text', 'text' => 'Limited', 'class' => 'limited-text'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
+                        ['type' => 'status', 'status' => 1],
+                        ['type' => 'status', 'status' => 1],
+                        ['type' => 'status', 'status' => 1],
                     ]
                 ],
                 [
-                    'name' => 'Access & User Management',
+                    'name' => 'Support Level',
                     'values' => [
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                    ]
-                ],
-                [
-                    'name' => 'Extensive Excel import & Export Facility',
-                    'values' => [
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                    ]
-                ],
-            ]
-        ],
-        [
-            'name' => 'Support & Add-ons',
-            'features' => [
-                [
-                    'name' => 'Onboarding Support & Support plans',
-                    'values' => [
-                        ['type' => 'text', 'text' => 'Limited', 'class' => 'limited-text'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                    ]
-                ],
-                [
-                    'name' => 'Group Company Support',
-                    'values' => [
-                        ['type' => 'icon', 'icon' => 'fas fa-times cross-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-times cross-icon'],
-                        ['type' => 'text', 'text' => 'Add-on', 'class' => 'addon-text'],
-                        ['type' => 'text', 'text' => 'Add-on', 'class' => 'addon-text'],
-                    ]
-                ],
-                [
-                    'name' => 'Enterprise Features',
-                    'values' => [
-                        ['type' => 'icon', 'icon' => 'fas fa-times cross-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-times cross-icon'],
-                        ['type' => 'text', 'text' => 'Add-on', 'class' => 'addon-text'],
-                        ['type' => 'text', 'text' => 'Add-on', 'class' => 'addon-text'],
-                    ]
-                ],
-                [
-                    'name' => 'GeoMark+',
-                    'values' => [
-                        ['type' => 'icon', 'icon' => 'fas fa-times cross-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-times cross-icon'],
-                        ['type' => 'text', 'text' => 'Add-on', 'class' => 'addon-text'],
-                        ['type' => 'text', 'text' => 'Add-on', 'class' => 'addon-text'],
-                    ]
-                ],
-                [
-                    'name' => 'Visage',
-                    'values' => [
-                        ['type' => 'icon', 'icon' => 'fas fa-times cross-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-times cross-icon'],
-                        ['type' => 'text', 'text' => 'Add-on', 'class' => 'addon-text'],
-                        ['type' => 'text', 'text' => 'Add-on', 'class' => 'addon-text'],
-                    ]
-                ],
-                [
-                    'name' => 'Recruit',
-                    'values' => [
-                        ['type' => 'icon', 'icon' => 'fas fa-times cross-icon'],
-                        ['type' => 'text', 'text' => 'Add-on', 'class' => 'addon-text'],
-                        ['type' => 'text', 'text' => 'Add-on', 'class' => 'addon-text'],
-                        ['type' => 'text', 'text' => 'Add-on', 'class' => 'addon-text'],
-                    ]
-                ],
-                [
-                    'name' => 'Expense Management',
-                    'values' => [
-                        ['type' => 'icon', 'icon' => 'fas fa-times cross-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-times cross-icon'],
-                        ['type' => 'text', 'text' => 'Add-on', 'class' => 'addon-text'],
-                        ['type' => 'text', 'text' => 'Add-on', 'class' => 'addon-text'],
-                    ]
-                ],
-                [
-                    'name' => 'Performance Management Software (PMS)',
-                    'values' => [
-                        ['type' => 'icon', 'icon' => 'fas fa-times cross-icon'],
-                        ['type' => 'text', 'text' => 'Add-on', 'class' => 'addon-text'],
-                        ['type' => 'text', 'text' => 'Add-on', 'class' => 'addon-text'],
-                        ['type' => 'text', 'text' => 'Add-on', 'class' => 'addon-text'],
-                    ]
-                ],
-                [
-                    'name' => 'Alumni Portal',
-                    'values' => [
-                        ['type' => 'icon', 'icon' => 'fas fa-times cross-icon'],
-                        ['type' => 'text', 'text' => 'Add-on', 'class' => 'addon-text'],
-                        ['type' => 'text', 'text' => 'Add-on', 'class' => 'addon-text'],
-                        ['type' => 'text', 'text' => 'Add-on', 'class' => 'addon-text'],
-                    ]
-                ],
-                [
-                    'name' => 'Security & Compliance',
-                    'values' => [
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
-                        ['type' => 'icon', 'icon' => 'fas fa-check check-icon'],
+                        ['type' => 'text', 'text' => 'Commuity', 'class' => ''],
+                        ['type' => 'text', 'text' => 'Priority Email', 'class' => 'fw-bold'],
+                        ['type' => 'text', 'text' => '24/7 Dedicated', 'class' => 'unlimited-text'],
                     ]
                 ],
             ]

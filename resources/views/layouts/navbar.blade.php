@@ -1,6 +1,7 @@
 <div class="header-container">
     <header class="header navbar navbar-expand-sm expand-header">
 
+
         <ul class="navbar-item theme-brand flex-row text-center">
             <li class="nav-item theme-logo">
                 <a href="{{ getRouterValue() }}dashboard/analytics">
@@ -56,15 +57,44 @@
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                     </svg>
-                    @if(($unreadMailsCount ?? 0) + ($unreadNotificationsCount ?? 0) > 0)
-                        <span class="badge badge-success">{{ ($unreadMailsCount ?? 0) + ($unreadNotificationsCount ?? 0) }}</span>
+                    @if (($unreadMailsCount ?? 0) + ($unreadNotificationsCount ?? 0) + ($todayBirthdays->count() ?? 0) > 0)
+                        <span
+                            class="badge badge-success">{{ ($unreadMailsCount ?? 0) + ($unreadNotificationsCount ?? 0) + ($todayBirthdays->count() ?? 0) }}</span>
                     @endif
                 </a>
 
                 <div class="dropdown-menu position-absolute" aria-labelledby="notificationDropdown">
+                    @if (isset($todayBirthdays) && $todayBirthdays->count() > 0)
+                        <div class="drodpown-title birthday-alert"
+                            style="background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);">
+                            <h6 class="mb-0 text-white">🎂 Today's Birthdays!</h6>
+                        </div>
+                        <div class="birthday-scroll">
+                            @foreach ($todayBirthdays as $birthdayUser)
+                                <div class="dropdown-item">
+                                    <div class="media">
+                                        <div class="avatar avatar-sm me-2">
+                                            <img alt="avatar"
+                                                src="{{ $birthdayUser->image ? asset('storage/' . $birthdayUser->image) : asset('asset/images/placeholder.png') }}"
+                                                class="rounded-circle">
+                                        </div>
+                                        <div class="media-body">
+                                            <div class="data-info">
+                                                <h6 class="mb-0 text-dark">Today is {{ $birthdayUser->name }}'s
+                                                    birthday!</h6>
+                                                <p class="mb-0 text-primary small">Wish them a great day! 🎉</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+
                     <div class="drodpown-title message">
                         <h6 class="d-flex justify-content-between">
-                            <a href="{{ route('mail.index') }}" class="text-decoration-none d-flex justify-content-between w-100">
+                            <a href="{{ route('mail.index') }}"
+                                class="text-decoration-none d-flex justify-content-between w-100">
                                 <span class="align-self-center text-dark">Messages</span>
                                 <span class="badge badge-primary">{{ $unreadMailsCount ?? 0 }} Unread</span>
                             </a>
@@ -75,13 +105,14 @@
                             <div class="dropdown-item">
                                 <a href="{{ route('mail.show', $mail->id) }}" class="text-decoration-none">
                                     <div class="media">
-                                        <img src="{{ ($mail->sender && $mail->sender->image) ? asset('storage/' . $mail->sender->image) : asset('asset/images/placeholder.png') }}"
+                                        <img src="{{ $mail->sender && $mail->sender->image ? asset('storage/' . $mail->sender->image) : asset('asset/images/placeholder.png') }}"
                                             class="img-fluid me-2" alt="avatar">
                                         <div class="media-body">
                                             <div class="data-info">
                                                 <h6 class="mb-0 text-dark">{{ $mail->sender->name ?? 'Unknown' }}</h6>
                                                 <p class="mb-0 text-muted small">{{ $mail->subject }}</p>
-                                                <p class="mb-0 text-primary small">{{ $mail->created_at->diffForHumans() }}</p>
+                                                <p class="mb-0 text-primary small">
+                                                    {{ $mail->created_at->diffForHumans() }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -104,8 +135,11 @@
                                 <div class="media">
                                     <div class="media-body">
                                         <div class="data-info">
-                                            <h6 class="mb-0 text-dark">{{ is_array($notification->data) ? ($notification->data['message'] ?? 'New event') : 'New event' }}</h6>
-                                            <p class="mb-0 text-primary small">{{ $notification->created_at->diffForHumans() }}</p>
+                                            <h6 class="mb-0 text-dark">
+                                                {{ is_array($notification->data) ? $notification->data['message'] ?? 'New event' : 'New event' }}
+                                            </h6>
+                                            <p class="mb-0 text-primary small">
+                                                {{ $notification->created_at->diffForHumans() }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -117,7 +151,8 @@
                         @endforelse
 
                         <div class="dropdown-item text-center py-3 border-top">
-                            <a href="{{ route('mail.index') }}" class="text-primary font-weight-bold">View All Messages</a>
+                            <a href="{{ route('mail.index') }}" class="text-primary font-weight-bold">View All
+                                Messages</a>
                         </div>
                     </div>
                 </div>
@@ -136,55 +171,80 @@
                     </div>
                 </a>
 
-                <div class="dropdown-menu position-absolute" aria-labelledby="userProfileDropdown">
-                    <div class="user-profile-section">
-                        <div class="media mx-auto">
-                            <div class="emoji me-2">
-                                &#x1F44B;
-                            </div>
-                            <div class="media-body">
-                                <h5>{{ Auth::check() ? Auth::user()->name : 'Guest' }}</h5>
-                                <p>{{ Auth::check() ? Auth::user()->getRoleNames()->first() : 'Visitor' }}</p>
-                            </div>
+                <div class="dropdown-menu position-absolute aurora-dropdown" aria-labelledby="userProfileDropdown">
+                    <div class="aurora-avatar-container">
+                        <div class="floating-avatar-wrapper">
+                            <img alt="avatar"
+                                src="{{ Auth::check() && Auth::user()->image ? asset('storage/' . Auth::user()->image) : asset('asset/images/placeholder.png') }}"
+                                class="rounded-circle">
+                            <span class="aurora-status"></span>
                         </div>
                     </div>
-                    <div class="dropdown-item">
-                        <a href="{{ route('profile.index') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" class="feather feather-user">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
-                            </svg> <span>Profile</span>
-                        </a>
+                    <div class="aurora-header">
+                        <div class="aurora-mesh-gradient"></div>
+                        <div class="aurora-user-info text-center">
+                            <h5 class="aurora-name">{{ Auth::check() ? Auth::user()->name : 'Guest' }}</h5>
+                            <span class="aurora-badge">{{ Auth::check() ? Auth::user()->getRoleNames()->first() : 'Visitor' }}</span>
+                        </div>
                     </div>
-                    <div class="dropdown-item">
-                        <a href="{{ route('mail.index') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" class="feather feather-inbox">
-                                <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline>
-                                <path
-                                    d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z">
-                                </path>
-                            </svg> <span>Inbox</span>
-                        </a>
-                    </div>
-                    <div class="dropdown-item">
-                        <a href="javascript:void(0);"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out">
-                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                                <polyline points="16 17 21 12 16 7"></polyline>
-                                <line x1="21" y1="12" x2="9" y2="12"></line>
-                            </svg> <span>Log Out</span>
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                            style="display: none;">
-                            @csrf
-                        </form>
+                    
+                    <div class="aurora-items-list">
+                        <div class="aurora-item" style="--delay: 0.1s">
+                            <a href="{{ route('profile.index') }}" class="aurora-link">
+                                <div class="aurora-icon-bg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" class="feather feather-user">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </div>
+                                <span class="aurora-text">Profile</span>
+                                <div class="aurora-arrow"><i class="bi bi-chevron-right"></i></div>
+                            </a>
+                        </div>
+                        <div class="aurora-item" style="--delay: 0.2s">
+                            <a href="{{ route('mail.index') }}" class="aurora-link">
+                                <div class="aurora-icon-bg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" class="feather feather-inbox">
+                                        <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline>
+                                        <path
+                                            d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <span class="aurora-text">Inbox</span>
+                                @if(($unreadMailsCount ?? 0) > 0)
+                                    <span class="aurora-count">{{ $unreadMailsCount }}</span>
+                                @endif
+                                <div class="aurora-arrow"><i class="bi bi-chevron-right"></i></div>
+                            </a>
+                        </div>
+                        
+                        <div class="aurora-divider" style="--delay: 0.3s"></div>
+                        
+                        <div class="aurora-item" style="--delay: 0.4s">
+                            <a href="javascript:void(0);"
+                                class="aurora-link logout-trigger"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <div class="aurora-icon-bg danger">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out">
+                                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                        <polyline points="16 17 21 12 16 7"></polyline>
+                                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                                    </svg>
+                                </div>
+                                <span class="aurora-text">Sign Out</span>
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                style="display: none;">
+                                @csrf
+                            </form>
+                        </div>
                     </div>
                 </div>
 
@@ -192,4 +252,3 @@
         </ul>
     </header>
 </div>
-{{-- @endsection --}}

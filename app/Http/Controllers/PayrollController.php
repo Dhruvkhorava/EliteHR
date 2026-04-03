@@ -29,10 +29,12 @@ class PayrollController extends Controller
 
     public function setup()
     {
-        $users = auth()->user()->hasRole('super_admin') 
-            ? User::all() 
-            : User::whereDoesntHave('roles', function($q) { $q->where('name', 'super_admin'); })->get();
-        
+        $users = auth()->user()->hasRole('super_admin')
+            ? User::all()
+            : User::whereDoesntHave('roles', function ($q) {
+                $q->where('name', 'super_admin');
+            })->get();
+
         $salaries = Salary::with(['user', 'template'])->get();
         $templates = \App\Models\SalaryTemplate::where('status', 'active')->get();
 
@@ -60,7 +62,7 @@ class PayrollController extends Controller
         ]);
 
         $template = \App\Models\SalaryTemplate::with('components')->find($request->salary_template_id);
-        
+
         // Calculate basic from template if percentage based (assuming one component is named 'Basic')
         $basicComp = $template->components->where('name', 'Basic')->first();
         $basic = 0;
@@ -113,14 +115,17 @@ class PayrollController extends Controller
         $month = $request->month;
         $year = $request->year;
 
-        $users = auth()->user()->hasRole('super_admin') 
-            ? User::with(['salary.template.components', 'loans'])->get() 
-            : User::with(['salary.template.components', 'loans'])->whereDoesntHave('roles', function($q) { $q->where('name', 'super_admin'); })->get();
-        
+        $users = auth()->user()->hasRole('super_admin')
+            ? User::with(['salary.template.components', 'loans'])->get()
+            : User::with(['salary.template.components', 'loans'])->whereDoesntHave('roles', function ($q) {
+                $q->where('name', 'super_admin');
+            })->get();
+
         $workingDays = Carbon::create($year, $month)->daysInMonth;
 
         foreach ($users as $user) {
-            if (!$user->salary || !$user->salary->template) continue;
+            if (!$user->salary || !$user->salary->template)
+                continue;
 
             // Delete existing payroll for this month/year if any
             Payroll::where('user_id', $user->id)
@@ -247,6 +252,12 @@ class PayrollController extends Controller
     public function show($id)
     {
         $payroll = Payroll::with(['user', 'details'])->findOrFail($id);
+
+        // Check if user is viewing their own payroll or has admin/hr access
+        if ($payroll->user_id !== auth()->id() && !auth()->user()->can('payroll.view')) {
+            abort(403, 'Unauthorized access.');
+        }
+
         return view('payroll.payslip', [
             'payroll' => $payroll,
             'title' => 'Employee Payslip',
@@ -260,6 +271,12 @@ class PayrollController extends Controller
     public function downloadPdf($id)
     {
         $payroll = Payroll::with(['user', 'details'])->findOrFail($id);
+
+        // Check if user is downloading their own payroll or has admin/hr access
+        if ($payroll->user_id !== auth()->id() && !auth()->user()->can('payroll.view')) {
+            abort(403, 'Unauthorized access.');
+        }
+
         $pdf = PDF::loadView('payroll.pdf_payslip', [
             'payroll' => $payroll,
         ])->setPaper('a4', 'portrait');
@@ -296,7 +313,7 @@ class PayrollController extends Controller
             'batch_no' => 'required|string',
             'bank_name' => 'required|string',
         ]);
-        
+
         $payrolls = Payroll::where('status', 'generated')->get();
         if ($payrolls->isEmpty()) {
             return redirect()->back()->with('error', 'No generated payrolls found to create a batch.');
@@ -326,9 +343,18 @@ class PayrollController extends Controller
             'currentMonth' => date('n'),
             'currentYear' => date('Y'),
             'months' => [
-                1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 
-                5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August',
-                9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December'
+                1 => 'January',
+                2 => 'February',
+                3 => 'March',
+                4 => 'April',
+                5 => 'May',
+                6 => 'June',
+                7 => 'July',
+                8 => 'August',
+                9 => 'September',
+                10 => 'October',
+                11 => 'November',
+                12 => 'December'
             ],
             'years' => range(date('Y'), date('Y') - 5)
         ]);
@@ -418,11 +444,11 @@ class PayrollController extends Controller
         };
 
         return response()->stream($callback, 200, [
-            "Content-type"        => "text/csv",
+            "Content-type" => "text/csv",
             "Content-Disposition" => "attachment; filename=$filename",
-            "Pragma"              => "no-cache",
-            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
-            "Expires"             => "0"
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
         ]);
     }
 
@@ -437,8 +463,8 @@ class PayrollController extends Controller
             ->get();
 
         $filename = "Salary_Statement_" . date('F_Y', mktime(0, 0, 0, $month, 1, $year)) . ".csv";
-        
-        $callback = function() use ($payrolls) {
+
+        $callback = function () use ($payrolls) {
             $file = fopen('php://output', 'w');
             fputcsv($file, ['Employee Name', 'Earnings', 'Deductions', 'Net Salary', 'Status']);
 
@@ -455,11 +481,11 @@ class PayrollController extends Controller
         };
 
         return response()->stream($callback, 200, [
-            "Content-type"        => "text/csv",
+            "Content-type" => "text/csv",
             "Content-Disposition" => "attachment; filename=$filename",
-            "Pragma"              => "no-cache",
-            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
-            "Expires"             => "0"
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
         ]);
     }
 
@@ -471,19 +497,19 @@ class PayrollController extends Controller
             ->orderBy('year', 'desc')
             ->orderBy('month', 'desc')
             ->get();
-        
+        // dd($payrolls->toArray());
         $currentYear = date('Y');
         $yearlyPayrolls = $user->payrolls()
             ->where('year', $currentYear)
             ->get();
-        
+
         // Dynamic Yearly: Sum of gross from current year payrolls, fallback to CTC
-        $yearlyGross = $yearlyPayrolls->sum(function($p) {
+        $yearlyGross = $yearlyPayrolls->sum(function ($p) {
             return $p->net_salary + $p->total_deduction;
         });
-        
+
         $yearly = $yearlyGross > 0 ? $yearlyGross : ($salary ? $salary->ctc : 0);
-        
+
         // Dynamic Monthly: Gross of latest payroll, fallback to monthly CTC
         $latestPayroll = $payrolls->first();
         if ($latestPayroll) {
@@ -491,7 +517,7 @@ class PayrollController extends Controller
         } else {
             $monthly = $salary ? ($salary->ctc / 12) : 0;
         }
-        
+
         // Dynamic Daily: Average rate based on latest monthly, fallback to standard 30 days
         $daily = $monthly > 0 ? $monthly / 30 : ($yearly / 365);
 
@@ -514,10 +540,10 @@ class PayrollController extends Controller
     {
         $user = auth()->user();
         $payrolls = $user->payrolls()->orderBy('year', 'desc')->orderBy('month', 'desc')->get();
-        
+
         $filename = "My_Salary_History_" . now()->format('Y-m-d') . ".csv";
-        
-        $callback = function() use ($payrolls) {
+
+        $callback = function () use ($payrolls) {
             $file = fopen('php://output', 'w');
             fputcsv($file, ['Month/Year', 'Basic', 'HRA', 'Allowance', 'Bonus', 'Deductions', 'Net Salary', 'Status']);
 
@@ -537,11 +563,11 @@ class PayrollController extends Controller
         };
 
         return response()->stream($callback, 200, [
-            "Content-type"        => "text/csv",
+            "Content-type" => "text/csv",
             "Content-Disposition" => "attachment; filename=$filename",
-            "Pragma"              => "no-cache",
-            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
-            "Expires"             => "0"
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
         ]);
     }
 }

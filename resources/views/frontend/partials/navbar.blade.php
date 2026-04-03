@@ -35,8 +35,7 @@
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Blog</a>
                 <div class="dropdown-menu m-0 border-0 shadow-sm">
-                    <a href="{{ route('front.blog') }}" class="dropdown-item"><i class="fa fa-th-large text-primary me-2"></i>Blog Grid</a>
-                    <a href="{{ route('front.detail') }}" class="dropdown-item"><i class="fa fa-file-alt text-primary me-2"></i>Blog Detail</a>
+                    <a href="{{ route('front.blog') }}" class="dropdown-item"><i class="fa fa-th-large text-primary me-2"></i>Blog List</a>
                 </div>
             </div>
             <div class="nav-item dropdown">
@@ -51,7 +50,6 @@
             </div>
             <a href="{{ route('front.contact') }}" class="nav-item nav-link {{ request()->routeIs('front.contact') ? 'active' : '' }}">Contact</a>
         </div>
-        <button type="button" class="btn text-primary ms-3" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fa fa-search"></i></button>
         <a href="{{ route('login') }}" class="btn btn-primary py-2 px-4 ms-3">Login</a>
     </div>
 </nav>

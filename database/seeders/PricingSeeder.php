@@ -12,45 +12,60 @@ class PricingSeeder extends Seeder
      */
     public function run(): void
     {
-        $free = \App\Models\Pricing::create([
-            'name' => 'Free',
-            'price' => 0.00,
-            'duration' => 'monthly',
-            'status' => true,
-            'is_featured' => false
-        ]);
-        $free->features()->createMany([
-            ['feature_name' => '10 Users'],
-            ['feature_name' => 'Basic Support'],
-            ['feature_name' => '5GB Storage'],
+        // Starter Plan
+        $starter = \App\Models\Pricing::updateOrCreate(
+            ['name' => 'Starter'],
+            [
+                'price' => 0.00,
+                'duration' => 'monthly',
+                'status' => true,
+                'is_featured' => false
+            ]
+        );
+        $starter->features()->delete();
+        $starter->features()->createMany([
+            ['feature_name' => '10 Employees'],
+            ['feature_name' => 'Basic Attendance'],
+            ['feature_name' => 'Core HR Management'],
+            ['feature_name' => 'Community Support'],
         ]);
 
-        $pro = \App\Models\Pricing::create([
-            'name' => 'Professional',
-            'price' => 29.00,
-            'duration' => 'monthly',
-            'status' => true,
-            'is_featured' => true
-        ]);
+        // Professional Plan
+        $pro = \App\Models\Pricing::updateOrCreate(
+            ['name' => 'Professional'],
+            [
+                'price' => 4999.00,
+                'duration' => 'monthly',
+                'status' => true,
+                'is_featured' => true
+            ]
+        );
+        $pro->features()->delete();
         $pro->features()->createMany([
-            ['feature_name' => 'Unlimited Users'],
-            ['feature_name' => 'Priority Support'],
-            ['feature_name' => '50GB Storage'],
-            ['feature_name' => 'Advanced Analytics'],
+            ['feature_name' => 'Up to 50 Employees'],
+            ['feature_name' => 'Bulk Payroll Processing'],
+            ['feature_name' => 'Statutory Compliance'],
+            ['feature_name' => 'Shift Management'],
+            ['feature_name' => 'Priority Email Support'],
         ]);
 
-        $enterprise = \App\Models\Pricing::create([
-            'name' => 'Enterprise',
-            'price' => 99.00,
-            'duration' => 'monthly',
-            'status' => true,
-            'is_featured' => false
-        ]);
+        // Enterprise Plan
+        $enterprise = \App\Models\Pricing::updateOrCreate(
+            ['name' => 'Enterprise'],
+            [
+                'price' => 12499.00,
+                'duration' => 'monthly',
+                'status' => true,
+                'is_featured' => false
+            ]
+        );
+        $enterprise->features()->delete();
         $enterprise->features()->createMany([
-            ['feature_name' => 'Custom solutions'],
+            ['feature_name' => 'Unlimited Employees'],
+            ['feature_name' => 'Geofencing Attendance'],
+            ['feature_name' => 'Advanced Recruitment (ATS)'],
+            ['feature_name' => 'Full Performance Appraisals'],
             ['feature_name' => 'Dedicated Account Manager'],
-            ['feature_name' => 'Unlimited Storage'],
-            ['feature_name' => 'White-labeling'],
         ]);
     }
 }

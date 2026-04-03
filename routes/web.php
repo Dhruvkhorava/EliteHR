@@ -1,289 +1,269 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-/**
- * =======================
- *          Redirect
- * =======================
- */
 use App\Http\Controllers\Auth\AuthController;
-
-/**
- * =======================
- *          Redirect / Auth
- * =======================
- */
-/**
- * =======================
- *          Frontend
- * =======================
- */
 use App\Http\Controllers\FrontendController;
-
-Route::get('/', [FrontendController::class, 'index'])->name('front.index');
-Route::get('/about', [FrontendController::class, 'about'])->name('front.about');
-Route::get('/service', [FrontendController::class, 'service'])->name('front.service');
-Route::get('/product/{slug?}', [FrontendController::class, 'product'])->name('front.product');
-Route::get('/contact', [FrontendController::class, 'contact'])->name('front.contact');
-Route::get('/price', [FrontendController::class, 'price'])->name('front.price');
-Route::get('/feature', [FrontendController::class, 'feature'])->name('front.feature');
-Route::get('/team', [FrontendController::class, 'team'])->name('front.team');
-Route::get('/testimonial', [FrontendController::class, 'testimonial'])->name('front.testimonial');
-Route::get('/quote', [FrontendController::class, 'quote'])->name('front.quote');
-Route::get('/blog', [FrontendController::class, 'blog'])->name('front.blog');
-Route::get('/blog/detail', [FrontendController::class, 'detail'])->name('front.detail');
-
-/**
- * =======================
- *          Redirect / Auth
- * =======================
- */
-Route::get('/login', [AuthController::class, 'showSignIn'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\PerformanceController;
+use App\Http\Controllers\GoalController;
+use App\Http\Controllers\AppraisalController;
+use App\Http\Controllers\PayrollController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\MailController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SalaryComponentController;
+use App\Http\Controllers\SalaryTemplateController;
+use App\Http\Controllers\LoanController;
+use App\Http\Controllers\RecruitmentJobController;
+use App\Http\Controllers\CandidateController;
+use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\InterviewController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminManageController;
 use App\Http\Controllers\Admin\HrManageController;
 use App\Http\Controllers\Admin\EmployeeManageController;
-use App\Http\Controllers\AttendanceController;
-use App\Http\Controllers\GoalController;
-use App\Http\Controllers\PerformanceController;
-use App\Http\Controllers\AppraisalController;
-use App\Http\Controllers\LeaveController;
-use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\DesignationController;
+use App\Http\Controllers\Admin\ManagerManageController;
 use App\Http\Controllers\Admin\ShiftController;
-use App\Http\Controllers\MailController;
+use App\Http\Controllers\Admin\LeaveApprovalController;
+use App\Http\Controllers\Admin\LeaveTypeController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\BlogController;
 
-/**
- * =======================
- *          Dashboard
- * =======================
- */
-Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
 
-    // General Dashboard (Accessible by all authenticated users)
-    Route::get('/analytics', [\App\Http\Controllers\DashboardController::class, 'analytics'])->name('analytics');
-    // Calendar
-    Route::get('/calendar', [\App\Http\Controllers\CalendarController::class, 'index'])->name('calendar.index');
-    Route::get('/calendar/events', [\App\Http\Controllers\CalendarController::class, 'events'])->name('calendar.events');
-    Route::post('/calendar/events', [\App\Http\Controllers\CalendarController::class, 'store'])->name('calendar.events.store');
-    Route::put('/calendar/events/{id}', [\App\Http\Controllers\CalendarController::class, 'update'])->name('calendar.events.update');
-    Route::delete('/calendar/events/{id}', [\App\Http\Controllers\CalendarController::class, 'destroy'])->name('calendar.events.destroy');
-    Route::get('/calendar/google-events', [\App\Http\Controllers\CalendarController::class, 'getGoogleCalendarEvents'])->name('calendar.google-events');
+/*
+|--------------------------------------------------------------------------
+| Frontend Routes
+|--------------------------------------------------------------------------
+*/
+Route::controller(FrontendController::class)->name('front.')->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('/about', 'about')->name('about');
+    Route::get('/service', 'service')->name('service');
+    Route::get('/product/{slug?}', 'product')->name('product');
+    Route::get('/contact', 'contact')->name('contact');
+    Route::get('/price', 'price')->name('price');
+    Route::get('/feature', 'feature')->name('feature');
+    Route::get('/team', 'team')->name('team');
+    Route::get('/testimonial', 'testimonial')->name('testimonial');
+    Route::get('/quote', 'quote')->name('quote');
+    Route::get('/blog', 'blog')->name('blog');
+    Route::get('/blog/{slug}', 'detail')->name('detail');
+});
 
-    // Attendance - My Attendance (Accessible by all authenticated users)
-    Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
-    Route::post('/attendance/check-in', [AttendanceController::class, 'checkIn'])->name('attendance.check-in');
-    Route::post('/attendance/check-out', [AttendanceController::class, 'checkOut'])->name('attendance.check-out');
-    Route::post('/attendance/start-break', [AttendanceController::class, 'startBreak'])->name('attendance.start-break');
-    Route::post('/attendance/stop-break', [AttendanceController::class, 'stopBreak'])->name('attendance.stop-break');
+/*
+|--------------------------------------------------------------------------
+| Authentication Routes
+|--------------------------------------------------------------------------
+*/
+Route::controller(AuthController::class)->group(function () {
+    Route::get('/login', 'showSignIn')->name('login');
+    Route::post('/login', 'login');
+    Route::post('/logout', 'logout')->name('logout');
 
-    // Leave - My Leaves (Accessible by all authenticated users)
-    Route::get('/leaves', [LeaveController::class, 'index'])->name('leaves.index');
-    Route::get('/api/unified-search', [\App\Http\Controllers\SearchController::class, 'unifiedSearch'])->name('api.unified-search');
-    Route::get('/leaves/apply', [LeaveController::class, 'create'])->name('leaves.create');
-    Route::post('/leaves', [LeaveController::class, 'store'])->name('leaves.store');
+    Route::prefix('auth')->group(function () {
+        Route::get('/sign-up', 'showSignUp')->name('register');
+    });
+});
 
-    // Performance (Accessible by all authenticated users)
-    Route::get('/performance', [PerformanceController::class, 'index'])->name('performance.index');
-    Route::post('/performance', [PerformanceController::class, 'store'])->name('performance.store');
-    Route::get('/goals', [GoalController::class, 'index'])->name('performance.goals');
-    Route::post('/goals', [GoalController::class, 'store'])->name('performance.goals.store');
-    Route::put('/goals/{goal}', [GoalController::class, 'update'])->name('performance.goals.update');
-    Route::delete('/goals/{goal}', [GoalController::class, 'destroy'])->name('performance.goals.destroy');
-    Route::get('/appraisals', [AppraisalController::class, 'index'])->name('performance.appraisals');
-    Route::post('/appraisals', [AppraisalController::class, 'store'])->name('performance.appraisals.store');
-    Route::post('/appraisals/{appraisal}/approve', [AppraisalController::class, 'approve'])->name('performance.appraisals.approve');
+/*
+|--------------------------------------------------------------------------
+| Dashboard & Authenticated Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth'])->prefix('dashboard')->group(function () {
 
-    // Management Area (HR & Admin)
-    Route::group(['middleware' => ['role_or_permission:admin|hr|user.view|attendance.manage|leave.view_all']], function () {
+    // General Dashboard Sections
+    Route::controller(DashboardController::class)->group(function () {
+        Route::get('/analytics', 'analytics')->name('analytics');
+        Route::get('/sales', 'sales')->name('sales');
+    });
 
-        // User Management
+    // Calendar & Events
+    Route::controller(CalendarController::class)->prefix('calendar')->as('calendar.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/events', 'events')->name('events');
+        Route::post('/events', 'store')->name('events.store');
+        Route::put('/events/{id}', 'update')->name('events.update');
+        Route::delete('/events/{id}', 'destroy')->name('events.destroy');
+        Route::get('/google-events', 'getGoogleCalendarEvents')->name('google-events');
+    });
+
+    // Attendance Management
+    Route::controller(AttendanceController::class)->prefix('attendance')->as('attendance.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/check-in', 'checkIn')->name('check-in');
+        Route::post('/check-out', 'checkOut')->name('check-out');
+        Route::post('/start-break', 'startBreak')->name('start-break');
+        Route::post('/stop-break', 'stopBreak')->name('stop-break');
+
+        // Admin Attendance Views (Conditional via permissions)
+        Route::middleware(['permission:attendance.manage'])->group(function () {
+            Route::get('/daily', 'daily')->name('daily');
+            Route::get('/summary', 'summary')->name('summary');
+            Route::post('/assign-shift', 'assignShift')->name('assign-shift');
+            Route::post('/record-location', 'recordLocation')->name('record-location');
+            Route::get('/live', 'liveTracking')->name('live');
+            Route::get('/live-data', 'liveTrackingData')->name('live.data');
+        });
+    });
+
+    // Leave Management
+    Route::controller(LeaveController::class)->prefix('leaves')->as('leaves.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/apply', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+    });
+
+    // Search API
+    Route::get('/api/unified-search', [SearchController::class, 'unifiedSearch'])->name('api.unified-search');
+
+    // Performance & Appraisal
+    Route::prefix('performance')->as('performance.')->group(function () {
+        Route::controller(PerformanceController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
+        });
+
+        Route::controller(GoalController::class)->prefix('goals')->group(function () {
+            Route::get('/', 'index')->name('goals');
+            Route::post('/', 'store')->name('goals.store');
+            Route::put('/{goal}', 'update')->name('goals.update');
+            Route::delete('/{goal}', 'destroy')->name('goals.destroy');
+        });
+
+        Route::controller(AppraisalController::class)->prefix('appraisals')->group(function () {
+            Route::get('/', 'index')->name('appraisals');
+            Route::post('/', 'store')->name('appraisals.store');
+            Route::post('/{appraisal}/approve', 'approve')->name('appraisals.approve');
+        });
+    });
+
+    // Profile & Security
+    Route::controller(ProfileController::class)->prefix('profile')->as('profile.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'update')->name('update');
+        Route::post('/password', 'updatePassword')->name('password.update');
+    });
+
+    // Documents
+    Route::middleware(['permission:document.view'])->controller(DocumentController::class)->prefix('documents')->as('documents.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/category/{category}', 'category')->name('category');
+        Route::post('/', 'store')->name('store');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+        Route::get('/{id}/download', 'download')->name('download');
+        Route::get('/{id}/view', 'view')->name('view');
+    });
+
+    // Mail System
+    Route::middleware(['permission:mail.view'])->controller(MailController::class)->prefix('mail')->as('mail.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/sent', 'sent')->name('sent');
+        Route::get('/drafts', 'drafts')->name('drafts');
+        Route::get('/trash', 'trash')->name('trash');
+        Route::get('/compose/{id?}', 'compose')->name('compose');
+        Route::post('/send', 'send')->name('send');
+        Route::get('/{mail}', 'show')->name('show');
+        Route::delete('/{mail}', 'destroy')->name('destroy');
+    });
+
+    // Notifications
+    Route::controller(NotificationController::class)->prefix('notifications')->as('notifications.')->group(function () {
+        Route::post('/{id}/mark-as-read', 'markAsRead')->name('markAsRead');
+        Route::post('/mark-all-as-read', 'markAllAsRead')->name('markAllAsRead');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Management Area (HR & Admin)
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware(['role_or_permission:admin|hr|employee|user.view|attendance.manage|leave.view_all'])->group(function () {
+
+        // Employee & User Administration
         Route::middleware(['permission:user.view'])->group(function () {
             Route::resource('users', UserController::class);
-            Route::resource('designations', \App\Http\Controllers\Admin\DesignationController::class);
-            Route::resource('managers', \App\Http\Controllers\Admin\ManagerManageController::class);
             Route::resource('employees', EmployeeManageController::class);
+            Route::resource('designations', DesignationController::class);
+            Route::resource('managers', ManagerManageController::class);
             Route::post('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
         });
 
-        // Admin Attendance Views
-        Route::middleware(['permission:attendance.manage'])->group(function () {
-            Route::get('/attendance/daily', [AttendanceController::class, 'daily'])->name('attendance.daily');
-            Route::get('/attendance/summary', [AttendanceController::class, 'summary'])->name('attendance.summary');
-            Route::post('/attendance/assign-shift', [AttendanceController::class, 'assignShift'])->name('attendance.assign-shift');
-            Route::resource('shifts', ShiftController::class);
+        // Leave & Attendance Administration
+        Route::controller(LeaveApprovalController::class)->prefix('leaves')->as('admin.leaves.')->group(function () {
+            Route::get('/history', 'history')->name('history')->middleware('permission:leave.view_all');
+
+            Route::middleware(['permission:leave.approve'])->group(function () {
+                Route::get('/pending', 'index')->name('pending');
+                Route::post('/{leave}/action', 'action')->name('action');
+            });
         });
 
-        // Leave Management (View History)
-        Route::get('/leaves/history', [\App\Http\Controllers\Admin\LeaveApprovalController::class, 'history'])->name('admin.leaves.history')->middleware('permission:leave.view_all');
+        Route::middleware(['permission:attendance.manage'])->resource('shifts', ShiftController::class);
+        Route::middleware(['permission:leave_type.manage'])->resource('leave-types', LeaveTypeController::class);
 
-        // STRICT ADMIN ACTIONS (Leave Approval & Leave Types)
-        Route::middleware(['permission:leave.approve'])->group(function () {
-            Route::get('/leaves/pending', [\App\Http\Controllers\Admin\LeaveApprovalController::class, 'index'])->name('admin.leaves.pending');
-            Route::post('/leaves/{leave}/action', [\App\Http\Controllers\Admin\LeaveApprovalController::class, 'action'])->name('admin.leaves.action');
+        // Payroll & Compensation
+        Route::prefix('payroll')->group(function () {
+            Route::controller(PayrollController::class)->group(function () {
+                Route::get('/', 'index')->name('payroll.index');
+                Route::get('/setup', 'setup')->name('payroll.setup');
+                Route::post('/setup', 'storeSetup')->name('payroll.store-setup');
+                Route::get('/generate', 'generate')->name('payroll.generate');
+                Route::post('/generate', 'storeGenerate')->name('payroll.store-generate');
+                Route::get('/statement', 'statement')->name('payroll.statement');
+                Route::get('/bank-transfer', 'bankTransfer')->name('payroll.bank-transfer');
+                Route::post('/bank-transfer', 'storeBankTransfer')->name('payroll.store-bank-transfer');
+                Route::get('/reports', 'reports')->name('payroll.reports');
+                Route::post('/reports/export', 'exportReport')->name('payroll.reports.export');
+                Route::get('/statement/export', 'exportStatement')->name('payroll.statement.export');
+                Route::get('/my-salary', 'mySalary')->name('my-salary')->middleware('permission:payroll.view_own');
+                Route::get('/my-salary/export', 'exportMySalary')->name('my-salary.export')->middleware('permission:payroll.view_own');
+            });
+
+            Route::resource('salary-components', SalaryComponentController::class);
+            Route::resource('salary-templates', SalaryTemplateController::class);
+            Route::resource('loans', LoanController::class);
+
+            // Details & Exports (Wildcard routes at the bottom)
+            Route::controller(PayrollController::class)->group(function () {
+                Route::get('/{id}', 'show')->name('payroll.show');
+                Route::get('/{id}/pdf', 'downloadPdf')->name('payroll.pdf');
+            });
         });
 
-        Route::middleware(['permission:leave_type.manage'])->group(function () {
-            Route::resource('leave-types', \App\Http\Controllers\Admin\LeaveTypeController::class);
+        // Recruitment & Talent
+        Route::middleware(['permission:view recruitment'])->prefix('recruitment')->as('recruitment.')->group(function () {
+            Route::resource('jobs', RecruitmentJobController::class);
+            Route::resource('candidates', CandidateController::class);
+            Route::resource('applications', ApplicationController::class);
+            Route::resource('interviews', InterviewController::class);
+
+            Route::controller(ApplicationController::class)->prefix('applications')->group(function () {
+                Route::post('/{application}/update-status', 'updateStatus')->name('applications.update-status');
+                Route::post('/{application}/convert', 'convertToEmployee')->name('applications.convert');
+            });
         });
 
-        // Payroll Management
-        Route::group(['prefix' => 'payroll'], function () {
-            Route::get('/', [\App\Http\Controllers\PayrollController::class, 'index'])->name('payroll.index');
-            Route::get('/setup', [\App\Http\Controllers\PayrollController::class, 'setup'])->name('payroll.setup');
-            Route::post('/setup', [\App\Http\Controllers\PayrollController::class, 'storeSetup'])->name('payroll.store-setup');
-            Route::get('/generate', [\App\Http\Controllers\PayrollController::class, 'generate'])->name('payroll.generate');
-            Route::post('/generate', [\App\Http\Controllers\PayrollController::class, 'storeGenerate'])->name('payroll.store-generate');
-            Route::get('/statement', [\App\Http\Controllers\PayrollController::class, 'statement'])->name('payroll.statement');
-            Route::get('/bank-transfer', [\App\Http\Controllers\PayrollController::class, 'bankTransfer'])->name('payroll.bank-transfer');
-            Route::post('/bank-transfer', [\App\Http\Controllers\PayrollController::class, 'storeBankTransfer'])->name('payroll.store-bank-transfer');
-            Route::get('/reports', [\App\Http\Controllers\PayrollController::class, 'reports'])->name('payroll.reports');
-            Route::post('/reports/export', [\App\Http\Controllers\PayrollController::class, 'exportReport'])->name('payroll.reports.export');
-            Route::get('/statement/export', [\App\Http\Controllers\PayrollController::class, 'exportStatement'])->name('payroll.statement.export');
+        // System Administration
+        Route::middleware(['permission:admin.view'])->resource('admins', AdminManageController::class);
+        Route::middleware(['permission:hr.view'])->resource('hrs', HrManageController::class);
+        Route::middleware(['role:super_admin'])->resource('roles', RoleController::class);
+        Route::resource('blogs', BlogController::class);
 
-            // Components & Templates
-            Route::resource('salary-components', \App\Http\Controllers\SalaryComponentController::class);
-            Route::resource('salary-templates', \App\Http\Controllers\SalaryTemplateController::class);
-            Route::resource('loans', \App\Http\Controllers\LoanController::class);
 
-            // Wildcard routes must come last
-            Route::get('/{id}', [\App\Http\Controllers\PayrollController::class, 'show'])->name('payroll.show');
-            Route::get('/{id}/pdf', [\App\Http\Controllers\PayrollController::class, 'downloadPdf'])->name('payroll.pdf');
-        });
-
-        // My Salary Route (Individual Employee)
-        Route::get('/my-salary', [\App\Http\Controllers\PayrollController::class, 'mySalary'])->name('my-salary')->middleware('permission:payroll.view_own');
-        Route::get('/my-salary/export', [\App\Http\Controllers\PayrollController::class, 'exportMySalary'])->name('my-salary.export')->middleware('permission:payroll.view_own');
-
-        // Recruitment Management
-        Route::group(['middleware' => ['permission:view recruitment'], 'prefix' => 'recruitment', 'as' => 'recruitment.'], function () {
-            Route::resource('jobs', \App\Http\Controllers\RecruitmentJobController::class);
-            Route::resource('candidates', \App\Http\Controllers\CandidateController::class);
-            Route::resource('applications', \App\Http\Controllers\ApplicationController::class);
-            Route::post('/applications/{application}/update-status', [\App\Http\Controllers\ApplicationController::class, 'updateStatus'])->name('applications.update-status');
-            Route::post('/applications/{application}/convert', [\App\Http\Controllers\ApplicationController::class, 'convertToEmployee'])->name('applications.convert');
-            Route::resource('interviews', \App\Http\Controllers\InterviewController::class);
-        });
-
-        // Advanced User Management (Strictly Admin/HR via permissions)
-        Route::middleware(['permission:admin.view'])->group(function () {
-            Route::resource('admins', AdminManageController::class);
-        });
-        Route::middleware(['permission:hr.view'])->group(function () {
-            Route::resource('hrs', HrManageController::class);
-        });
-
-        // User Profile
-        Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
-        Route::post('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
-        Route::post('/profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password.update');
-
-        // Roles & Permissions
-        Route::middleware(['role:super_admin'])->resource('roles', \App\Http\Controllers\Admin\RoleController::class);
-
-        // General Settings
-        Route::get('/settings', [SettingController::class, 'index'])->name('settings');
-        Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
-        Route::get('/settings/pricing', [SettingController::class, 'pricing'])->name('settings.pricing');
-        Route::post('/settings/pricing', [SettingController::class, 'updatePricing'])->name('settings.pricing.update');
-
-        // Documents
-        Route::get('/documents', [App\Http\Controllers\DocumentController::class, 'index'])->name('documents.index');
-        Route::get('/documents/category/{category}', [App\Http\Controllers\DocumentController::class, 'category'])->name('documents.category');
-        Route::post('/documents', [App\Http\Controllers\DocumentController::class, 'store'])->name('documents.store');
-        Route::delete('/documents/{id}', [App\Http\Controllers\DocumentController::class, 'destroy'])->name('documents.destroy');
-        Route::get('/documents/{id}/download', [App\Http\Controllers\DocumentController::class, 'download'])->name('documents.download');
-        Route::get('/documents/{id}/view', [App\Http\Controllers\DocumentController::class, 'view'])->name('documents.view');
-
-        // Mail
-        Route::group(['prefix' => 'mail', 'as' => 'mail.'], function () {
-            Route::get('/', [MailController::class, 'index'])->name('index');
-            Route::get('/sent', [MailController::class, 'sent'])->name('sent');
-            Route::get('/drafts', [MailController::class, 'drafts'])->name('drafts');
-            Route::get('/trash', [MailController::class, 'trash'])->name('trash');
-            Route::get('/compose/{id?}', [MailController::class, 'compose'])->name('compose');
-            Route::post('/send', [MailController::class, 'send'])->name('send');
-            Route::get('/{mail}', [MailController::class, 'show'])->name('show');
-            Route::delete('/{mail}', [MailController::class, 'destroy'])->name('destroy');
-        });
-
-        // Notification
-        Route::group(['prefix' => 'notifications', 'as' => 'notifications.'], function () {
-            Route::post('/{id}/mark-as-read', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('markAsRead');
-            Route::post('/mark-all-as-read', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('markAllAsRead');
+        // Core Settings
+        Route::controller(SettingController::class)->prefix('settings')->group(function () {
+            Route::get('/', 'index')->name('settings');
+            Route::post('/', 'update')->name('settings.update');
+            Route::get('/pricing', 'pricing')->name('settings.pricing');
+            Route::post('/pricing', 'updatePricing')->name('settings.pricing.update');
         });
     });
-});
-/**
- * =======================
- *          Auth (Refactored)
- * =======================
- */
-Route::prefix('auth')->group(function () {
-    Route::get(
-        '/sign-up',
-        function () {
-            return view(
-                'auth.sign-up',
-                [
-                    'catName' => 'auth',
-                    'title' => 'Sign Up',
-                    "breadcrumbs" => ["Authentication", "Sign Up"],
-                    'scrollspy' => 0,
-                    'simplePage' => 1
-                ]
-            );
-        }
-    )->name('register');
-
-    Route::get(
-        '/lockscreen',
-        function () {
-            return view(
-                'auth.unlock',
-                [
-                    'catName' => 'auth',
-                    'title' => 'LockScreen',
-                    "breadcrumbs" => ["Authentication", "LockScreen"],
-                    'scrollspy' => 0,
-                    'simplePage' => 1
-                ]
-            );
-        }
-    )->name('unlock');
-
-    Route::get(
-        '/password-reset',
-        function () {
-            return view(
-                'auth.reset',
-                [
-                    'catName' => 'auth',
-                    'title' => 'Password Reset',
-                    "breadcrumbs" => ["Authentication", "Password Reset"],
-                    'scrollspy' => 0,
-                    'simplePage' => 1
-                ]
-            );
-        }
-    )->name('password.reset');
-
-    Route::get(
-        '/2-step-verification',
-        function () {
-            return view(
-                'auth.2-step',
-                [
-                    'catName' => 'auth',
-                    'title' => '2 Step Verification',
-                    "breadcrumbs" => ["Authentication", "2 Step Verification"],
-                    'scrollspy' => 0,
-                    'simplePage' => 1
-                ]
-            );
-        }
-    )->name('2sv');
 });

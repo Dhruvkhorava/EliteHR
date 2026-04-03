@@ -60,20 +60,29 @@
                                         <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical text-muted"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <h6 class="dropdown-header">Actions:</h6>
-                                            <a class="dropdown-item" href="{{ route('recruitment.candidates.show', $app->candidate_id) }}">View Profile</a>
+                                        <div class="dropdown-menu dropdown-menu-end p-2 custom-dropdown-glass">
+                                            <h6 class="dropdown-header text-uppercase small font-weight-bold py-2 mb-1">Actions</h6>
+                                            <a class="dropdown-item d-flex align-items-center py-2 rounded" href="{{ route('recruitment.candidates.show', $app->candidate_id) }}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye me-2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                                <span>View Profile</span>
+                                            </a>
                                             @if($stage == 'Selected' || $stage == 'Hired')
-                                            <div class="dropdown-divider"></div>
+                                            <div class="dropdown-divider my-2 opacity-50"></div>
                                             <form action="{{ route('recruitment.applications.convert', $app->id) }}" method="POST">
                                                 @csrf
-                                                <button type="submit" class="dropdown-item text-primary font-weight-bold">Convert to Employee</button>
+                                                <button type="submit" class="dropdown-item d-flex align-items-center py-2 rounded text-primary font-weight-bold">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-check me-2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+                                                    <span>Convert to Employee</span>
+                                                </button>
                                             </form>
                                             @endif
-                                            <div class="dropdown-divider"></div>
-                                            <form action="{{ route('recruitment.applications.destroy', $app->id) }}" method="POST">
+                                            <div class="dropdown-divider my-2 opacity-50"></div>
+                                            <form action="{{ route('recruitment.applications.destroy', $app->id) }}" method="POST" class="m-0">
                                                 @csrf @method('DELETE')
-                                                <button type="submit" class="dropdown-item text-danger">Remove Application</button>
+                                                <button type="submit" class="dropdown-item d-flex align-items-center py-2 rounded text-danger dropdown-item-danger">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 me-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                                    <span>Remove Application</span>
+                                                </button>
                                             </form>
                                         </div>
                                     </div>
@@ -129,13 +138,19 @@
                                         <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical text-muted"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <h6 class="dropdown-header">Actions:</h6>
-                                            <a class="dropdown-item" href="{{ route('recruitment.candidates.show', $app->candidate_id) }}">View Profile</a>
-                                            <div class="dropdown-divider"></div>
-                                            <form action="{{ route('recruitment.applications.destroy', $app->id) }}" method="POST">
+                                        <div class="dropdown-menu dropdown-menu-end p-2 custom-dropdown-glass">
+                                            <h6 class="dropdown-header text-uppercase small font-weight-bold py-2 mb-1">Actions</h6>
+                                            <a class="dropdown-item d-flex align-items-center py-2 rounded" href="{{ route('recruitment.candidates.show', $app->candidate_id) }}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye me-2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                                <span>View Profile</span>
+                                            </a>
+                                            <div class="dropdown-divider my-2 opacity-50"></div>
+                                            <form action="{{ route('recruitment.applications.destroy', $app->id) }}" method="POST" class="m-0">
                                                 @csrf @method('DELETE')
-                                                <button type="submit" class="dropdown-item text-danger">Remove Application</button>
+                                                <button type="submit" class="dropdown-item d-flex align-items-center py-2 rounded text-danger dropdown-item-danger">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 me-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                                    <span>Remove Application</span>
+                                                </button>
                                             </form>
                                         </div>
                                     </div>

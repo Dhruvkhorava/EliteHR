@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             PerformanceSeeder::class,
             RecruitmentSeeder::class,
             MailSeeder::class,
+            BlogSeeder::class,
         ]);
     }
 }

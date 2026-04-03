@@ -8,6 +8,6 @@
 
 @section('page_content')
     <!-- Blog Detail Start -->
-    @include('frontend.partials.blog')
+    @include('frontend.partials.blog_detail')
     <!-- Blog Detail End -->
 @endsection

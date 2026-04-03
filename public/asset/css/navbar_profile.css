@@ -1,0 +1,237 @@
+/* 🌌 Frosted Aurora Design System - User Profile Dropdown */
+
+.user-profile-dropdown .aurora-dropdown {
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(30px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(30px) saturate(180%) !important;
+    border-radius: 24px !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.05) !important;
+    min-width: 300px !important;
+    padding: 0 !important;
+    overflow: visible !important; 
+    margin-top: 45px !important; /* Spacing for the floating avatar */
+    animation: aurora-entrance 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Dark Mode Adaptation */
+.dark-mode .user-profile-dropdown .aurora-dropdown {
+    background: rgba(13, 20, 33, 0.7) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+@keyframes aurora-entrance {
+    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Floating Avatar & Mesh Gradient Header */
+.aurora-header {
+    position: relative;
+    padding: 45px 20px 25px;
+    border-radius: 24px 24px 0 0;
+    overflow: hidden;
+    background: #0d1421;
+}
+
+.aurora-mesh-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(at 0% 0%, #6366f1 0, transparent 50%),
+                radial-gradient(at 100% 0%, #a855f7 0, transparent 50%),
+                radial-gradient(at 50% 100%, #ec4899 0, transparent 50%);
+    opacity: 0.8;
+    filter: blur(40px);
+    animation: aurora-mesh-move 10s infinite alternate;
+}
+
+@keyframes aurora-mesh-move {
+    0% { transform: scale(1) translate(0); }
+    100% { transform: scale(1.1) translate(5%, 5%); }
+}
+
+.aurora-avatar-container {
+    position: absolute;
+    top: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10; /* Ensure it stays above everyone */
+}
+
+.floating-avatar-wrapper {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    padding: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 50%;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.floating-avatar-wrapper img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    object-fit: cover;
+}
+
+.aurora-status {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 16px;
+    height: 16px;
+    background: #10b981;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.6);
+}
+
+.aurora-user-info {
+    position: relative;
+    z-index: 1;
+    margin-top: 5px;
+}
+
+.aurora-name {
+    color: #fff !important;
+    font-weight: 800 !important;
+    font-size: 1.2rem !important;
+    margin-bottom: 5px !important;
+    letter-spacing: -0.5px !important;
+}
+
+.aurora-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(5px);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: 100px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Items List with Staggered Entrance */
+.aurora-items-list {
+    padding: 15px;
+}
+
+.aurora-item {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: aurora-item-fade 0.4s forwards;
+    animation-delay: var(--delay);
+    margin-bottom: 4px;
+}
+
+@keyframes aurora-item-fade {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.aurora-link {
+    display: flex !important;
+    align-items: center !important;
+    padding: 12px 16px !important;
+    text-decoration: none !important;
+    border-radius: 16px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    color: #4b5563 !important;
+    font-weight: 600 !important;
+}
+
+.dark-mode .aurora-link {
+    color: #d1d5db !important;
+}
+
+.aurora-link:hover {
+    background: rgba(99, 102, 241, 0.1) !important;
+    color: #6366f1 !important;
+    transform: translateX(8px) !important;
+}
+
+.aurora-icon-bg {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 12px;
+    margin-right: 15px;
+    transition: all 0.3s ease;
+}
+
+.dark-mode .aurora-icon-bg {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.aurora-link:hover .aurora-icon-bg {
+    background: #6366f1;
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+}
+
+.aurora-icon-bg.danger {
+    color: #ef4444;
+}
+
+.logout-trigger:hover .aurora-icon-bg.danger {
+    background: #ef4444;
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+}
+
+.logout-trigger:hover {
+    color: #ef4444 !important;
+    background: rgba(239, 68, 68, 0.1) !important;
+}
+
+.aurora-text {
+    font-size: 0.95rem;
+}
+
+.aurora-count {
+    margin-left: auto;
+    background: #6366f1;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 100px;
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2);
+}
+
+.aurora-arrow {
+    margin-left: auto;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+}
+
+.aurora-link:hover .aurora-arrow {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.aurora-divider {
+    height: 1px;
+    background: rgba(0, 0, 0, 0.06);
+    margin: 10px 20px;
+    opacity: 0;
+    animation: aurora-item-fade 0.4s forwards;
+    animation-delay: var(--delay);
+}
+
+.dark-mode .aurora-divider {
+    background: rgba(255, 255, 255, 0.06);
+}

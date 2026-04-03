@@ -1,6 +1,3 @@
-{{-- @extends('layouts.app') --}}
-
-{{-- @section('sidebar') --}}
 <div class="sidebar-wrapper sidebar-theme">
 
     <nav id="sidebar">
@@ -145,6 +142,9 @@
                         </li>
                         <li class="{{ Request::routeIs('attendance.summary') ? 'active' : '' }}">
                             <a href="{{ route('attendance.summary') }}"> Monthly Summary </a>
+                        </li>
+                        <li class="{{ Request::routeIs('attendance.live') ? 'active' : '' }}">
+                            <a href="{{ route('attendance.live') }}"> Live Map </a>
                         </li>
                         <li class="{{ Request::routeIs('shifts.index') ? 'active' : '' }}">
                             <a href="{{ route('shifts.index') }}"> Shift Management </a>
@@ -505,4 +505,3 @@
     </nav>
 
 </div>
-{{-- @endsection --}}

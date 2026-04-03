@@ -64,11 +64,17 @@ class AppServiceProvider extends ServiceProvider
                 $unreadNotifications = $user->unreadNotifications()->take(5)->get();
                 $unreadNotificationsCount = $user->unreadNotifications()->count();
 
+                // Get birthdays today
+                $todayBirthdays = \App\Models\User::whereMonth('date_of_birth', now()->month)
+                    ->whereDay('date_of_birth', now()->day)
+                    ->get();
+
                 $view->with([
                     'unreadMails' => $unreadMails,
                     'unreadMailsCount' => $unreadMailsCount,
                     'unreadNotifications' => $unreadNotifications,
                     'unreadNotificationsCount' => $unreadNotificationsCount,
+                    'todayBirthdays' => $todayBirthdays,
                 ]);
             }
         });

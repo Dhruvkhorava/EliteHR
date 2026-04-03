@@ -53,6 +53,8 @@
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
     @yield('styles')
     @stack('styles')
+    <link rel="stylesheet" href="{{ asset('asset/css/navbar_profile.css') }}">
+    <link rel="stylesheet" href="{{ asset('asset/css/live_monitoring.css') }}">
     <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
 
 </head>
@@ -189,6 +191,7 @@
     <script>
         window.appData = {
             csrfToken: "{{ csrf_token() }}",
+            recordLocationUrl: "{{ route('attendance.record-location') }}",
             success: "{{ session('success') }}",
             error: "{{ session('error') }}",
             warning: "{{ session('warning') }}",
@@ -197,6 +200,9 @@
         };
     </script>
     <script src="{{ asset('asset/js/app_global.js') }}"></script>
+    @auth
+        <script src="{{ asset('asset/js/location_tracker.js') }}"></script>
+    @endauth
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
 
 </body>

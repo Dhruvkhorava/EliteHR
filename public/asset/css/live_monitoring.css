@@ -1,0 +1,59 @@
+.sync-indicator-container {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    z-index: 9999;
+    display: none; /* Hidden by default, shown via JS */
+}
+
+.sync-status-box {
+    background: #ebf8ff;
+    border: 1px dashed #bee3f8;
+    border-radius: 12px;
+    padding: 15px 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    min-width: 280px;
+    transition: all 0.5s ease;
+}
+
+.sync-status-box h6 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #2c5282;
+    margin-bottom: 4px;
+}
+
+.sync-status-box p {
+    font-size: 0.85rem;
+    color: #4299e1;
+    margin-bottom: 0;
+}
+
+.sync-status-box.success {
+    background: #f0fff4;
+    border-color: #9ae6b4;
+}
+
+.sync-status-box.success h6 {
+    color: #276749;
+}
+
+.sync-status-box.success p {
+    color: #38a169;
+}
+
+.pulse-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4299e1;
+    margin-right: 8px;
+    animation: alert-pulse 1.5s infinite;
+}
+
+@keyframes alert-pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.5; }
+    100% { transform: scale(1); opacity: 1; }
+}

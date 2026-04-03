@@ -28,14 +28,14 @@
                         </h1>
                         <p class="text-white-50 mb-5 fs-5" style="max-width: 500px; line-height: 1.6;">Unified platform for global recruitment, borderless payroll, and legendary employee engagement.</p>
                         
-                        <div class="d-flex flex-wrap gap-3">
+                        {{-- <div class="d-flex flex-wrap gap-3">
                             <a href="{{ route('front.quote') }}" class="btn btn-primary py-3 px-5 shadow-lg" style="border-radius: 50px; font-weight: 700; background: linear-gradient(45deg, #06A3DA, #00D2FF); border: none;">
                                 Start Free Trial <i class="fa fa-chevron-right ms-2 scale-hover"></i>
                             </a>
                             <a href="{{ route('front.contact') }}" class="btn btn-outline-light py-3 px-5 hover-bg-primary" style="border-radius: 50px; font-weight: 600; backdrop-filter: blur(5px);">
                                 Explore Platform
                             </a>
-                        </div>
+                        </div> --}}
 
                         <div class="mt-5 d-flex align-items-center">
                             <img src="{{ asset('frontend/img/testimonial-1.jpg') }}" class="rounded-circle border border-2 border-white" style="width: 40px; height: 40px; margin-right: -10px; z-index: 3;" alt="User">

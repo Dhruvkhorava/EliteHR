@@ -63,3 +63,56 @@
 .modal-content-rounded {
     border-radius: 15px;
 }
+
+/* Modern Glassmorphism Dropdown */
+.custom-dropdown-glass {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+}
+
+.custom-dropdown-glass .dropdown-item {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #3b4559;
+    transition: all 0.2s ease;
+}
+
+.custom-dropdown-glass .dropdown-item:hover {
+    background: rgba(67, 97, 238, 0.08);
+    color: #4361ee;
+    transform: translateX(4px);
+}
+
+.custom-dropdown-glass .dropdown-item svg {
+    color: #888ea8;
+    transition: all 0.2s ease;
+}
+
+.custom-dropdown-glass .dropdown-item:hover svg {
+    color: #4361ee;
+    transform: scale(1.1);
+}
+
+.custom-dropdown-glass .dropdown-item-danger:hover {
+    background: rgba(231, 81, 90, 0.08) !important;
+    color: #e7515a !important;
+}
+
+.custom-dropdown-glass .dropdown-item-danger:hover svg {
+    color: #e7515a !important;
+}
+
+.custom-dropdown-glass .dropdown-header {
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    color: #94a3b8;
+    padding-top: 10px;
+}
+
+.custom-dropdown-glass .dropdown-divider {
+    border-top: 1px solid rgba(226, 232, 240, 0.6);
+}

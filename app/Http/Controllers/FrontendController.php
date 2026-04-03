@@ -3,12 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Blog;
+
 
 class FrontendController extends Controller
 {
     public function index()
     {
-        return view('frontend.index', ['title' => 'Home']);
+        $blogs = Blog::with('author')->where('is_published', true)->latest()->take(3)->get();
+        return view('frontend.index', [
+            'title' => 'Home',
+            'blogs' => $blogs
+        ]);
     }
 
     public function about()
@@ -53,12 +59,20 @@ class FrontendController extends Controller
 
     public function blog()
     {
-        return view('frontend.blog', ['title' => 'Latest Blog']);
+        $blogs = Blog::with('author')->where('is_published', true)->latest()->paginate(6);
+        return view('frontend.blog', [
+            'title' => 'Latest Blog',
+            'blogs' => $blogs
+        ]);
     }
 
-    public function detail()
+    public function detail($slug)
     {
-        return view('frontend.detail', ['title' => 'Blog Detail']);
+        $blog = Blog::with('author')->where('slug', $slug)->firstOrFail();
+        return view('frontend.detail', [
+            'title' => $blog->title,
+            'blog' => $blog
+        ]);
     }
 
     public function product($slug = 'hr-software')

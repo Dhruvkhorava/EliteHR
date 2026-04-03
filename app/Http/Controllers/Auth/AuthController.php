@@ -20,6 +20,17 @@ class AuthController extends Controller
         ]);
     }
 
+    public function showSignUp()
+    {
+        return view('auth.sign-up', [
+            'catName' => 'auth',
+            'title' => 'Sign Up',
+            'breadcrumbs' => ['Authentication', 'Sign Up'],
+            'scrollspy' => 0,
+            'simplePage' => 1
+        ]);
+    }
+
     public function login(Request $request)
     {
         $credentials = $request->validate([

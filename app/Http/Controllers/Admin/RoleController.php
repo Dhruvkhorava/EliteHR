@@ -11,7 +11,7 @@ class RoleController extends Controller
 {
     public function index()
     {
-        $roles = Role::all();
+        $roles = Role::where('name', '!=', 'super_admin')->get();
         return view('admin.roles.index', [
             'roles' => $roles,
             'catName' => 'settings',
@@ -22,6 +22,10 @@ class RoleController extends Controller
 
     public function edit(Role $role)
     {
+        if ($role->name === 'super_admin') {
+            abort(403, 'The super_admin role cannot be modified.');
+        }
+
         $permissions = Permission::all();
         
         // Group permissions by module
@@ -38,6 +42,10 @@ class RoleController extends Controller
 
     public function update(Request $request, Role $role)
     {
+        if ($role->name === 'super_admin') {
+            abort(403, 'The super_admin role cannot be modified.');
+        }
+
         $permissions = $request->input('permissions', []);
         $role->syncPermissions($permissions);
 

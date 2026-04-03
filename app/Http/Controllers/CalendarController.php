@@ -32,9 +32,9 @@ class CalendarController extends Controller
         $interviews = Interview::with(['application.candidate', 'application.job'])->get();
         foreach ($interviews as $interview) {
             $description = "<strong>Candidate:</strong> " . ($interview->application?->candidate?->name ?? 'Unknown') . "<br>" .
-                           "<strong>Job:</strong> " . ($interview->application?->job?->title ?? 'N/A') . "<br>" .
-                           "<strong>Interviewer:</strong> " . ($interview->interviewer?->name ?? 'N/A') . "<br>" .
-                           "<strong>Level:</strong> " . $interview->level;
+                "<strong>Job:</strong> " . ($interview->application?->job?->title ?? 'N/A') . "<br>" .
+                "<strong>Interviewer:</strong> " . ($interview->interviewer?->name ?? 'N/A') . "<br>" .
+                "<strong>Level:</strong> " . $interview->level;
 
             $events[] = [
                 'id' => 'interview_' . $interview->id,
@@ -50,14 +50,16 @@ class CalendarController extends Controller
         $leaves = Leave::with(['user', 'leaveType'])->get();
         foreach ($leaves as $leave) {
             $colorClass = 'fc-bg-warning'; // Pending
-            if ($leave->status === 'Approved') $colorClass = 'fc-bg-success';
-            if ($leave->status === 'Rejected') $colorClass = 'fc-bg-danger';
+            if ($leave->status === 'Approved')
+                $colorClass = 'fc-bg-success';
+            if ($leave->status === 'Rejected')
+                $colorClass = 'fc-bg-danger';
 
             $description = "<strong>Employee:</strong> " . ($leave->user->name ?? 'Unknown') . "<br>" .
-                           "<strong>Type:</strong> " . ($leave->leaveType->name ?? 'N/A') . "<br>" .
-                           "<strong>Status:</strong> " . $leave->status . "<br>" .
-                           "<strong>Duration:</strong> " . $leave->total_days . " days<br>" .
-                           "<strong>Reason:</strong> " . $leave->reason;
+                "<strong>Type:</strong> " . ($leave->leaveType->name ?? 'N/A') . "<br>" .
+                "<strong>Status:</strong> " . $leave->status . "<br>" .
+                "<strong>Duration:</strong> " . $leave->total_days . " days<br>" .
+                "<strong>Reason:</strong> " . $leave->reason;
 
             $events[] = [
                 'id' => 'leave_' . $leave->id,
@@ -73,14 +75,17 @@ class CalendarController extends Controller
         // 3. Fetch Custom Calendar Events
         $customEvents = CalendarEvent::where('user_id', auth()->id())->get();
         foreach ($customEvents as $customEvent) {
-             // Map category to color class
-             $colorClass = 'fc-bg-primary'; // default Work
-             if ($customEvent->category === 'Personal') $colorClass = 'fc-bg-success';
-             if ($customEvent->category === 'Important') $colorClass = 'fc-bg-danger';
-             if ($customEvent->category === 'Travel') $colorClass = 'fc-bg-warning';
+            // Map category to color class
+            $colorClass = 'fc-bg-primary'; // default Work
+            if ($customEvent->category === 'Personal')
+                $colorClass = 'fc-bg-success';
+            if ($customEvent->category === 'Important')
+                $colorClass = 'fc-bg-danger';
+            if ($customEvent->category === 'Travel')
+                $colorClass = 'fc-bg-warning';
 
             $events[] = [
-                'id' => $customEvent->id, 
+                'id' => $customEvent->id,
                 'title' => $customEvent->title,
                 'start' => Carbon::parse($customEvent->start_date)->toIso8601String(),
                 'end' => $customEvent->end_date ? Carbon::parse($customEvent->end_date)->toIso8601String() : null,
@@ -122,8 +127,8 @@ class CalendarController extends Controller
             foreach ($holidayEvents->getItems() as $holiday) {
                 $start = $holiday->start->dateTime ?: $holiday->start->date;
                 $description = "<strong>🎉 " . $holiday->getSummary() . "</strong><br>" .
-                               "<strong>Date:</strong> " . Carbon::parse($start)->format('d M Y') . "<br>" .
-                               "<strong>Type:</strong> Indian Public Holiday";
+                    "<strong>Date:</strong> " . Carbon::parse($start)->format('d M Y') . "<br>" .
+                    "<strong>Type:</strong> Indian Public Holiday";
 
                 $events[] = [
                     'id' => 'gcal_holiday_' . md5($holiday->getId()),
@@ -137,6 +142,43 @@ class CalendarController extends Controller
         } catch (\Exception $e) {
             // Silently fail — calendar still loads without holidays
             \Log::warning('Google Calendar holiday fetch failed: ' . $e->getMessage());
+        }
+
+        // 5. Fetch Employee Birthdays
+        $usersWithBirthdays = User::whereNotNull('date_of_birth')->get();
+        $currentYear = Carbon::now()->year;
+
+        foreach ($usersWithBirthdays as $user) {
+            $dob = Carbon::parse($user->date_of_birth);
+
+            // Birthday for current year
+            $birthdayThisYear = $dob->copy()->year($currentYear);
+
+            $description = "<strong>🎂 Happy Birthday " . $user->name . "!</strong><br>" .
+                "<strong>Date:</strong> " . $birthdayThisYear->format('d M') . "<br>" .
+                "<strong>Email:</strong> " . $user->email;
+
+            $events[] = [
+                'id' => 'birthday_' . $user->id,
+                'title' => '🎂 ' . $user->name . "'s Birthday",
+                'start' => $birthdayThisYear->format('Y-m-d'),
+                'className' => 'fc-bg-danger',
+                'description' => $description,
+                'type' => 'birthday',
+                'allDay' => true
+            ];
+
+            // Also add for next year if the current month is late in the year (optional but helpful for fullcalendar)
+            $birthdayNextYear = $dob->copy()->year($currentYear + 1);
+            $events[] = [
+                'id' => 'birthday_next_' . $user->id,
+                'title' => '🎂 ' . $user->name . "'s Birthday",
+                'start' => $birthdayNextYear->format('Y-m-d'),
+                'className' => 'fc-bg-danger',
+                'description' => $description,
+                'type' => 'birthday',
+                'allDay' => true
+            ];
         }
 
         return response()->json($events);
@@ -211,14 +253,14 @@ class CalendarController extends Controller
         $client = new \Google_Client();
         $client->setApplicationName('EliteHR Google Calendar Sync');
         $client->setScopes([\Google_Service_Calendar::CALENDAR]);
-        
+
         // Ensure you have credentials saved in this path:
         $credentialsPath = storage_path('app/google-credentials.json.json');
         if (!file_exists($credentialsPath)) {
             return response()->json(['error' => 'Google credentials file not found. Expected at: storage/app/google-credentials.json.json'], 404);
         }
         $client->setAuthConfig($credentialsPath);
-        
+
         // Fix SSL certificate issue on WAMP/Windows local dev
         $caCertPath = storage_path('app/cacert.pem');
         if (file_exists($caCertPath)) {
@@ -231,7 +273,7 @@ class CalendarController extends Controller
         try {
             // 1st API: Get all calendars accessible by the service account
             $calendarList = $service->calendarList->listCalendarList();
-            
+
             $ownerCalendarId = null;
 
             // 2nd API: By using owner calendar 1 record get calendar id
@@ -254,14 +296,14 @@ class CalendarController extends Controller
                 'timeMin' => date('c', strtotime('-1 month')), // Fetch events from 1 month ago
             );
             $events = $service->events->listEvents($ownerCalendarId, $optParams);
-            
+
             $eventsFormatted = [];
             foreach ($events->getItems() as $event) {
                 $start = $event->start->dateTime;
                 if (empty($start)) {
                     $start = $event->start->date;
                 }
-                
+
                 $eventsFormatted[] = [
                     'id' => $event->getId(),
                     'title' => $event->getSummary(),

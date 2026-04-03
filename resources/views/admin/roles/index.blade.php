@@ -34,7 +34,7 @@
                         <table id="roles-table" class="table dt-table-hover" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>IDXX</th>
+                                    <th>ID</th>
                                     <th>Name</th>
                                     <th>Created At</th>
                                     <th class="no-content">Action</th>
